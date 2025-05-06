@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { getCategories, Category } from '../../api/products';
+import { getCategories, Category, getCategoryImageUrl } from '../../api/products';
 
 const CategoriesNav: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -15,9 +15,16 @@ const CategoriesNav: React.FC = () => {
       try {
         setLoading(true);
         const data = await getCategories();
-        setCategories(data);
+        // S'assurer que data est un tableau
+        if (Array.isArray(data)) {
+          setCategories(data);
+        } else {
+          console.error('Les données reçues ne sont pas un tableau :', data);
+          setCategories([]);
+        }
       } catch (error) {
         console.error('Erreur lors du chargement des catégories:', error);
+        setCategories([]);
       } finally {
         setLoading(false);
       }
@@ -61,9 +68,8 @@ const CategoriesNav: React.FC = () => {
     );
   }
 
-  if (categories.length === 0) {
-    return null;
-  }
+  // Protection supplémentaire contre les erreurs de données
+  const categoryItems = Array.isArray(categories) ? categories : [];
 
   return (
     <div className="w-full bg-white shadow-sm overflow-hidden sticky top-16 z-30 border-b border-gray-100">
@@ -76,13 +82,13 @@ const CategoriesNav: React.FC = () => {
             imageSrc={null}
           />
           
-          {categories.map((category) => (
+          {categoryItems.map((category) => (
             <CategoryButton
               key={category.id}
               name={category.name}
               slug={category.slug}
               isActive={activeCategory === category.slug}
-              imageSrc={category.image}
+              imageSrc={getCategoryImageUrl(category)}
             />
           ))}
         </div>
@@ -115,7 +121,16 @@ const CategoryButton: React.FC<CategoryButtonProps> = ({ name, slug, isActive, i
         <div className="flex items-center space-x-2">
           {imageSrc && (
             <div className="w-6 h-6 rounded-full overflow-hidden bg-white flex-shrink-0">
-              <img src={imageSrc} alt={name} className="w-full h-full object-cover" />
+              <img 
+                src={imageSrc} 
+                alt={name} 
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  // Fallback en cas d'erreur de chargement d'image
+                  const target = e.target as HTMLImageElement;
+                  target.src = "https://via.placeholder.com/60x60?text=Catégorie";
+                }}
+              />
             </div>
           )}
           <span className="whitespace-nowrap">{name}</span>

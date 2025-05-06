@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Category, Product, getProductsByCategory, getCategories } from '../api/products';
+import { Category, Product, getProductsByCategory, getCategories, getCategoryImageUrl } from '../api/products';
 import ProductsGrid from '../components/ProductsGrid';
 import { fadeIn, fadeInUp, staggeredList, staggeredItem } from '../utils/animations';
 
@@ -27,20 +27,31 @@ const CategoryPage: React.FC = () => {
         setLoading(true);
         
         // Charger toutes les catégories pour pouvoir afficher les catégories connexes
-        const allCategories = await getCategories();
+        const allCategoriesData = await getCategories();
+        // S'assurer que c'est un tableau
+        const allCategories = Array.isArray(allCategoriesData) ? allCategoriesData : [];
+        
+        if (allCategories.length === 0) {
+          setError('Aucune catégorie disponible');
+          setLoading(false);
+          return;
+        }
         
         // Trouver la catégorie actuelle
         const currentCategory = allCategories.find(cat => cat.slug === slug);
         
         if (!currentCategory) {
           setError('Catégorie non trouvée');
+          setLoading(false);
           return;
         }
         
         setCategory(currentCategory);
         
         // Charger les produits de cette catégorie
-        const categoryProducts = await getProductsByCategory(slug);
+        const categoryProductsData = await getProductsByCategory(slug);
+        // S'assurer que c'est un tableau
+        const categoryProducts = Array.isArray(categoryProductsData) ? categoryProductsData : [];
         setProducts(categoryProducts);
         
         // Sélectionner quelques catégories connexes (toutes sauf la catégorie actuelle)
@@ -55,6 +66,8 @@ const CategoryPage: React.FC = () => {
       } catch (err) {
         console.error('Erreur lors du chargement de la catégorie:', err);
         setError('Erreur lors du chargement de la catégorie. Veuillez réessayer plus tard.');
+        setProducts([]);
+        setRelatedCategories([]);
       } finally {
         setLoading(false);
       }
@@ -128,17 +141,20 @@ const CategoryPage: React.FC = () => {
           className="md:w-1/3 lg:w-1/4"
           variants={fadeInUp}
         >
-          {category.image && (
-            <div className="rounded-2xl overflow-hidden h-40 md:h-56 lg:h-64 shadow-md">
-              <motion.img 
-                src={category.image} 
-                alt={category.name} 
-                className="w-full h-full object-cover"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.3 }}
-              />
-            </div>
-          )}
+          <div className="rounded-2xl overflow-hidden h-40 md:h-56 lg:h-64 shadow-md">
+            <motion.img 
+              src={getCategoryImageUrl(category)} 
+              alt={category.name} 
+              className="w-full h-full object-cover"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+              onError={(e) => {
+                // Fallback en cas d'erreur de chargement d'image
+                const target = e.target as HTMLImageElement;
+                target.src = `https://via.placeholder.com/600x400?text=${category.name}`;
+              }}
+            />
+          </div>
         </motion.div>
         
         <motion.div 
@@ -183,7 +199,7 @@ const CategoryPage: React.FC = () => {
       </div>
       
       {/* Catégories connexes */}
-      {relatedCategories.length > 0 && (
+      {Array.isArray(relatedCategories) && relatedCategories.length > 0 && (
         <motion.div 
           className="mb-12"
           variants={fadeInUp}
@@ -204,15 +220,18 @@ const CategoryPage: React.FC = () => {
                     className="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-200 h-full"
                     whileHover={{ y: -5, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)' }}
                   >
-                    {relatedCategory.image && (
-                      <div className="aspect-w-16 aspect-h-9 w-full">
-                        <img 
-                          src={relatedCategory.image} 
-                          alt={relatedCategory.name} 
-                          className="w-full h-32 object-cover object-center"
-                        />
-                      </div>
-                    )}
+                    <div className="aspect-w-16 aspect-h-9 w-full">
+                      <img 
+                        src={getCategoryImageUrl(relatedCategory)} 
+                        alt={relatedCategory.name} 
+                        className="w-full h-32 object-cover object-center"
+                        onError={(e) => {
+                          // Fallback en cas d'erreur de chargement d'image
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://via.placeholder.com/300x200?text=${relatedCategory.name}`;
+                        }}
+                      />
+                    </div>
                     <div className="p-4">
                       <h3 className="font-medium text-center text-gray-900">{relatedCategory.name}</h3>
                     </div>
