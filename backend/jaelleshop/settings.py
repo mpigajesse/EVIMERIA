@@ -8,6 +8,9 @@ from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Chemin vers le dossier du frontend
+FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', 'frontend'))
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -18,7 +21,7 @@ SECRET_KEY = 'django-insecure-c+h11ba43(notowv31(&=+)5^-h&$_2)9@#l4$_04ub5nr=53c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
@@ -61,7 +64,7 @@ ROOT_URLCONF = 'jaelleshop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(FRONTEND_DIR, 'dist')],  # Chemin vers les fichiers du build React
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -135,14 +138,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# Configuration pour les fichiers statiques du frontend
+STATICFILES_DIRS = [
+    os.path.join(FRONTEND_DIR, 'dist', 'assets'),  # Chemin vers les assets du build React
+]
 
 # Cloudinary settings
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dmcaguchx',
     'API_KEY': '238869761337271',
     'API_SECRET': 'G1AQ85xIMHSFSLgPOXeNsGFnfJA',
+    'MEDIA_TAG': 'jaelleshop',
+    'STATIC_TAG': 'static',
+    'STATICFILES_MANIFEST_ROOT': os.path.join(BASE_DIR, 'manifest'),
+    'FOLDER': 'jaelleshop',  # Dossier racine pour tous les uploads
+    'AUTO_CREATE_FOLDERS': True,  # Créer automatiquement les dossiers
 }
 
 # Configure Cloudinary
@@ -204,7 +217,12 @@ SIMPLE_JWT = {
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite React frontend
+    "http://127.0.0.1:5173",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True  # Pour le développement seulement
 
 # Configuration du modèle utilisateur personnalisé
 AUTH_USER_MODEL = 'users.User'

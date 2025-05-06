@@ -3,6 +3,7 @@ import random
 import requests
 import io
 from decimal import Decimal
+import cloudinary.uploader
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils.text import slugify
 from products.models import Category, Product, ProductImage
@@ -197,22 +198,24 @@ PRODUCTS = {
     ]
 }
 
-def download_image(url):
-    """Télécharge une image depuis une URL"""
+def download_image(url, folder=''):
+    """Télécharge une image depuis une URL et l'upload sur Cloudinary"""
     response = requests.get(url)
     if response.status_code == 200:
         file_name = os.path.basename(url.split('?')[0])
         if not file_name.endswith(('.jpg', '.jpeg', '.png')):
             file_name += '.jpg'
         
-        return InMemoryUploadedFile(
-            io.BytesIO(response.content),
-            None,  # field_name
-            file_name,  # file_name
-            'image/jpeg',  # content_type
-            len(response.content),  # size
-            None  # charset
+        # Upload directement vers Cloudinary avec le dossier spécifié
+        upload_result = cloudinary.uploader.upload(
+            response.content,
+            folder=folder,
+            public_id=os.path.splitext(file_name)[0],  # Nom du fichier sans extension
+            resource_type="image"
         )
+        
+        # Retourne l'URL pour le modèle Django
+        return upload_result['url']
     return None
 
 def seed_categories():
@@ -223,8 +226,8 @@ def seed_categories():
     for category_data in CATEGORIES:
         # Vérifie si la catégorie existe déjà
         if not Category.objects.filter(name=category_data['name']).exists():
-            # Télécharge l'image de la catégorie
-            image_file = download_image(category_data['image_url'])
+            # Télécharge l'image de la catégorie vers Cloudinary
+            image_url = download_image(category_data['image_url'], folder='jaelleshop/categories')
             
             # Crée la catégorie avec l'image
             category = Category(
@@ -232,8 +235,8 @@ def seed_categories():
                 description=category_data['description']
             )
             
-            if image_file:
-                category.image = image_file
+            if image_url:
+                category.image = image_url
             
             category.save()
             created_categories.append(category)
@@ -273,13 +276,13 @@ def seed_products(categories):
                 
                 # Ajoute les images au produit
                 for i, image_url in enumerate(product_data['images']):
-                    image_file = download_image(image_url)
-                    if image_file:
+                    cloudinary_url = download_image(image_url, folder='jaelleshop/products')
+                    if cloudinary_url:
                         product_image = ProductImage(
                             product=product,
                             is_main=(i == 0)  # première image définie comme principale
                         )
-                        product_image.image = image_file
+                        product_image.image = cloudinary_url
                         product_image.save()
                 
                 print(f"Produit '{product.name}' créé avec succès.")

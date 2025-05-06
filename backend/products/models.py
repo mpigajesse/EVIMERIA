@@ -6,6 +6,7 @@ class Category(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to='categories/', blank=True, null=True)
+    is_published = models.BooleanField(default=False, verbose_name="Publié")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -31,6 +32,7 @@ class Product(models.Model):
     stock = models.PositiveIntegerField(default=0)
     available = models.BooleanField(default=True)
     featured = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=False, verbose_name="Publié")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

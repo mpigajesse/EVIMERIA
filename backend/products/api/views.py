@@ -20,8 +20,8 @@ class CategoryListAPIView(APIView):
     permission_classes = [AllowAny]
     
     def get(self, request):
-        """Récupère la liste de toutes les catégories"""
-        categories = Category.objects.all()
+        """Récupère la liste de toutes les catégories publiées"""
+        categories = Category.objects.filter(is_published=True)
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data)
 
@@ -29,8 +29,8 @@ class CategoryDetailAPIView(APIView):
     permission_classes = [AllowAny]
     
     def get(self, request, slug):
-        """Récupère les détails d'une catégorie spécifique"""
-        category = get_object_or_404(Category, slug=slug)
+        """Récupère les détails d'une catégorie spécifique publiée"""
+        category = get_object_or_404(Category, slug=slug, is_published=True)
         serializer = CategorySerializer(category)
         return Response(serializer.data)
 
@@ -38,9 +38,9 @@ class CategoryProductsAPIView(APIView):
     permission_classes = [AllowAny]
     
     def get(self, request, slug):
-        """Récupère tous les produits d'une catégorie spécifique"""
-        category = get_object_or_404(Category, slug=slug)
-        products = Product.objects.filter(category=category, available=True)
+        """Récupère tous les produits d'une catégorie spécifique publiée"""
+        category = get_object_or_404(Category, slug=slug, is_published=True)
+        products = Product.objects.filter(category=category, available=True, is_published=True)
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
 
@@ -48,13 +48,13 @@ class ProductListAPIView(APIView):
     permission_classes = [AllowAny]
     
     def get(self, request):
-        """Récupère la liste de tous les produits"""
-        products = Product.objects.filter(available=True)
+        """Récupère la liste de tous les produits publiés"""
+        products = Product.objects.filter(available=True, is_published=True)
         
         # Filtrage par catégorie
         category = request.query_params.get('category')
         if category:
-            products = products.filter(category__slug=category)
+            products = products.filter(category__slug=category, category__is_published=True)
             
         # Filtrage par prix
         min_price = request.query_params.get('min_price')
@@ -89,8 +89,8 @@ class ProductDetailAPIView(APIView):
     permission_classes = [AllowAny]
     
     def get(self, request, slug):
-        """Récupère les détails d'un produit spécifique"""
-        product = get_object_or_404(Product, slug=slug, available=True)
+        """Récupère les détails d'un produit spécifique publié"""
+        product = get_object_or_404(Product, slug=slug, available=True, is_published=True)
         serializer = ProductDetailSerializer(product)
         return Response(serializer.data)
 
@@ -98,8 +98,8 @@ class FeaturedProductsAPIView(APIView):
     permission_classes = [AllowAny]
     
     def get(self, request):
-        """Récupère les produits mis en avant"""
-        products = Product.objects.filter(featured=True, available=True)[:8]
+        """Récupère les produits mis en avant et publiés"""
+        products = Product.objects.filter(featured=True, available=True, is_published=True)[:8]
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
 
@@ -107,7 +107,7 @@ class ProductSearchAPIView(APIView):
     permission_classes = [AllowAny]
     
     def get(self, request):
-        """Recherche de produits"""
+        """Recherche de produits publiés"""
         query = request.query_params.get('q', '')
         if not query:
             return Response(
@@ -117,7 +117,8 @@ class ProductSearchAPIView(APIView):
             
         products = Product.objects.filter(
             Q(name__icontains=query) | Q(description__icontains=query),
-            available=True
+            available=True,
+            is_published=True
         )
         
         serializer = ProductSerializer(products, many=True)

@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+/* Ajout d'une classe pour masquer la barre de défilement tout en gardant la fonctionnalité de défilement */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
