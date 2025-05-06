@@ -1,134 +1,356 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import ProductsGrid from '../components/ProductsGrid';
 import CategoryCarousel from '../components/CategoryCarousel';
+import { components, typography, animations, colors } from '../utils/designSystem';
+import { Button, Card, Input, Badge, SectionTitle } from '../components/ui';
+import ProductRecommendations from '../components/ProductRecommendations';
+import PromoSection from '../components/PromoSection';
 
 const HomePage = () => {
   return (
-    <div className="bg-gradient-to-br from-gray-100 to-gray-200 min-h-screen py-12 px-4 sm:px-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Hero Section inspirée du design moderne */}
-        <div className="bg-white rounded-3xl shadow-lg overflow-hidden mb-8">
-          <div className="flex flex-col md:flex-row">
-            <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-              <div className="inline-block bg-primary-100 text-primary-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
-                Mode tendance
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-4">
-                JaelleShop Inspiring Fashion.
-              </h1>
-              <p className="text-gray-600 mb-8 max-w-lg">
-                Découvrez notre collection exclusive et faites de votre style une déclaration de mode unique.
-              </p>
-              <div className="flex space-x-4">
-                <Link
-                  to="/products"
-                  className="bg-primary-600 text-white px-6 py-3 rounded-full hover:bg-primary-700 transition-colors flex items-center"
-                >
-                  Voir tous les produits
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </Link>
-              </div>
-            </div>
-            <div className="md:w-1/2 relative">
-              <img
-                src="https://res.cloudinary.com/dmcaguchx/image/upload/v1746496377/jaelleshop/products/photo-1556306535-0f09a537f0a3.jpg"
-                alt="Featured product"
-                className="w-full h-full object-cover object-center"
-              />
-              {/* Éléments décoratifs */}
-              <div className="absolute top-1/4 left-1/4 w-12 h-12 bg-primary-500 rounded-full opacity-20"></div>
-              <div className="absolute bottom-1/3 right-1/3 w-8 h-8 bg-secondary-500 rounded-full opacity-20"></div>
-            </div>
-          </div>
-        </div>
+    <div className={components.containers.page}>
+      {/* Éléments décoratifs d'arrière-plan */}
+      <div className={`${components.decorations.blobs} w-96 h-96 bg-primary-400 top-20 -left-48`}></div>
+      <div className={`${components.decorations.blobs} w-80 h-80 bg-secondary-400 bottom-40 -right-40`}></div>
+      
+      <div className={components.containers.maxWidth}>
+        {/* Hero Section avec design moderne et animations */}
+        <motion.div 
+          initial="hidden"
+          animate="visible"
+          variants={animations.staggerChildren}
+          className="mb-16"
+        >
+          <Card className="overflow-hidden" padding="none" elevation="high">
+            <div className="flex flex-col md:flex-row">
+              <motion.div 
+                className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center"
+                variants={animations.slideInLeft}
+              >
+                <Badge variant="primary" className="mb-4 animate-pulse">Nouvelle collection</Badge>
+                <h1 className={typography.headings.display}>
+                  JaelleShop <span className="text-primary-600">Inspiring</span> Fashion.
+                </h1>
+                <p className={`${typography.body.medium} mb-8 max-w-lg mt-4`}>
+                  Découvrez notre collection exclusive et faites de votre style une déclaration de mode unique.
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  <Button 
+                    variant="primary"
+                    size="lg"
+                    to="/products"
+                    className={colors.gradients.primary}
+                    icon={
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
+                    }
+                  >
+                    Explorer nos produits
+                  </Button>
+                  <Button 
+                    variant="secondary"
+                    size="lg"
+                    to="/categories"
+                  >
+                    Nos catégories
+                  </Button>
+                </div>
 
-        {/* Catégories populaires - remplacé par le carrousel de catégories dynamique */}
+                {/* Indicateurs de confiance */}
+                <div className="flex flex-wrap gap-6 mt-12">
+                  <motion.div 
+                    className="flex items-center text-sm"
+                    variants={animations.fadeInUp}
+                    transition={{ delay: 0.3 }}
+                  >
+                    <div className="bg-primary-100 p-2 rounded-full mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <span className={typography.body.medium}>Livraison 24h</span>
+                  </motion.div>
+                  
+                  <motion.div 
+                    className="flex items-center text-sm"
+                    variants={animations.fadeInUp}
+                    transition={{ delay: 0.4 }}
+                  >
+                    <div className="bg-primary-100 p-2 rounded-full mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                      </svg>
+                    </div>
+                    <span className={typography.body.medium}>Garantie qualité</span>
+                  </motion.div>
+                </div>
+              </motion.div>
+              
+              <motion.div 
+                className="md:w-1/2 relative h-96 md:h-auto overflow-hidden"
+                variants={animations.scaleIn}
+              >
+                <motion.img
+                  src="https://res.cloudinary.com/dmcaguchx/image/upload/v1746496377/jaelleshop/products/photo-1556306535-0f09a537f0a3.jpg"
+                  alt="Featured product"
+                  className="w-full h-full object-cover object-center"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.7 }}
+                />
+                {/* Badges flottants avec animation */}
+                <motion.div 
+                  className="absolute top-8 right-8 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg"
+                  variants={animations.fadeInDown}
+                  transition={{ delay: 0.3 }}
+                  animate={animations.float}
+                >
+                  <span className="font-bold text-primary-600">Collection limitée</span>
+                </motion.div>
+                
+                {/* Cercles décoratifs */}
+                <motion.div 
+                  className="absolute top-1/4 left-1/4 w-16 h-16 bg-primary-500 rounded-full opacity-20"
+                  animate={animations.pulse}
+                ></motion.div>
+                <motion.div 
+                  className="absolute bottom-1/3 right-1/3 w-12 h-12 bg-secondary-500 rounded-full opacity-20"
+                  animate={animations.pulse}
+                  transition={{ delay: 0.5 }}
+                ></motion.div>
+              </motion.div>
+            </div>
+          </Card>
+        </motion.div>
+
+        {/* Catégories populaires avec le nouveau carrousel */}
         <CategoryCarousel />
 
-        {/* Produits en vedette */}
-        <div className="bg-white rounded-3xl shadow p-6 mb-12" id="featured">
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <div className="inline-block bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-medium mb-2">
-                Populaire
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900">Produits en vedette</h2>
-            </div>
-            <Link to="/products" className="text-primary-600 font-medium flex items-center hover:text-primary-700">
-              Voir tout
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-              </svg>
-            </Link>
-          </div>
+        {/* Produits en vedette avec design amélioré */}
+        <div id="featured" className="relative">
+          {/* Élément décoratif */}
+          <div className={`${components.decorations.blobs} w-64 h-64 bg-amber-300 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}></div>
           
-          <ProductsGrid featuredOnly={true} limit={4} title="" />
+          <Card className={components.containers.glass}>
+            <SectionTitle
+              title="Produits en vedette"
+              badge="Populaire"
+              badgeVariant="warning"
+              size="lg"
+              action={{
+                label: "Voir tout",
+                to: "/products"
+              }}
+            />
+            
+            <ProductsGrid featuredOnly={true} limit={4} title="" />
+          </Card>
         </div>
 
-        {/* Avantages */}
-        <div className="bg-white rounded-3xl shadow p-6 mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Pourquoi nous choisir</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Avantage 1 */}
-            <div className="text-center">
-              <div className="bg-primary-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Qualité Premium</h3>
-              <p className="text-gray-600">Des vêtements fabriqués avec les meilleurs matériaux pour une durabilité et un confort incomparables.</p>
-            </div>
+        {/* Section de promotions avec compte à rebours */}
+        <div className="my-16">
+          <Card className={`${colors.gradients.warm} p-8 sm:p-10 text-white overflow-hidden relative`}>
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full translate-x-32 -translate-y-32"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full -translate-x-32 translate-y-32"></div>
             
-            {/* Avantage 2 */}
-            <div className="text-center">
-              <div className="bg-primary-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Livraison Rapide</h3>
-              <p className="text-gray-600">Recevez votre commande en un temps record grâce à notre service de livraison express.</p>
-            </div>
-            
-            {/* Avantage 3 */}
-            <div className="text-center">
-              <div className="bg-primary-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Retours Gratuits</h3>
-              <p className="text-gray-600">Insatisfait ? Retournez votre article dans les 30 jours pour un remboursement complet.</p>
-            </div>
-          </div>
+            <PromoSection 
+              title="Offres flash" 
+              subtitle="Ne manquez pas ces offres exceptionnelles à durée limitée" 
+              variant="countdown"
+              endsIn={24}
+              minDiscount={15}
+              limit={3}
+              className="relative z-10"
+            />
+          </Card>
         </div>
 
-        {/* Newsletter */}
-        <div className="bg-primary-600 rounded-3xl shadow p-8 text-white overflow-hidden relative">
+        {/* Recommandations de produits */}
+        <div className="my-16">
+          <ProductRecommendations 
+            title="Nos meilleures offres" 
+            subtitle="Découvrez les promotions et articles populaires" 
+            variant="carousel" 
+            limit={5} 
+          />
+        </div>
+
+        {/* Avantages avec design moderne */}
+        <div className="relative overflow-hidden">
+          <Card className={components.containers.feature}>
+            <SectionTitle
+              title="Pourquoi nous choisir"
+              align="center"
+              size="lg"
+              badge="Avantages"
+              badgeVariant="success"
+            />
+            
+            <div className={components.gridLayouts.features}>
+              {/* Avantage 1 */}
+              <motion.div 
+                className="text-center p-6 rounded-2xl hover:bg-white hover:shadow-md transition-all"
+                variants={animations.fadeInUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                whileHover={{ y: -5 }}
+              >
+                <div className={`${colors.gradients.primary} w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h3 className={typography.headings.h3}>Qualité Premium</h3>
+                <p className={`${typography.body.regular} mt-2`}>Des vêtements fabriqués avec les meilleurs matériaux pour une durabilité et un confort incomparables.</p>
+              </motion.div>
+              
+              {/* Avantage 2 */}
+              <motion.div 
+                className="text-center p-6 rounded-2xl hover:bg-white hover:shadow-md transition-all"
+                variants={animations.fadeInUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                whileHover={{ y: -5 }}
+              >
+                <div className={`${colors.gradients.ocean} w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className={typography.headings.h3}>Livraison Rapide</h3>
+                <p className={`${typography.body.regular} mt-2`}>Recevez votre commande en un temps record grâce à notre service de livraison express.</p>
+              </motion.div>
+              
+              {/* Avantage 3 */}
+              <motion.div 
+                className="text-center p-6 rounded-2xl hover:bg-white hover:shadow-md transition-all"
+                variants={animations.fadeInUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                whileHover={{ y: -5 }}
+              >
+                <div className={`${colors.gradients.sunset} w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </div>
+                <h3 className={typography.headings.h3}>Retours Gratuits</h3>
+                <p className={`${typography.body.regular} mt-2`}>Insatisfait ? Retournez votre article dans les 30 jours pour un remboursement complet.</p>
+              </motion.div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Newsletter avec design amélioré */}
+        <Card className={`${colors.gradients.cosmic} p-10 text-white overflow-hidden relative mb-16 shadow-xl`}>
           {/* Éléments décoratifs */}
-          <div className="absolute top-0 right-0 w-40 h-40 bg-primary-500 rounded-full translate-x-16 -translate-y-16 opacity-30"></div>
-          <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary-700 rounded-full -translate-x-16 translate-y-16 opacity-30"></div>
+          <motion.div 
+            className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full translate-x-32 -translate-y-32"
+            animate={animations.pulse}
+          ></motion.div>
+          <motion.div 
+            className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full -translate-x-24 translate-y-24"
+            animate={animations.pulse}
+            transition={{ delay: 0.5 }}
+          ></motion.div>
           
-          <div className="max-w-3xl mx-auto text-center relative z-10">
-            <h2 className="text-3xl font-bold mb-4">Restez informé</h2>
-            <p className="mb-8 text-primary-100">Inscrivez-vous à notre newsletter pour recevoir nos offres exclusives et les dernières tendances</p>
-            <div className="flex flex-col sm:flex-row gap-2 max-w-lg mx-auto">
-              <input 
+          <motion.div 
+            className="max-w-3xl mx-auto text-center relative z-10"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={animations.fadeInUp}
+          >
+            <Badge variant="primary" className="bg-white/20 backdrop-blur-sm mb-4">Newsletter</Badge>
+            <h2 className={`${typography.headings.h1} text-white mb-4`}>Restez informé</h2>
+            <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
+              Inscrivez-vous à notre newsletter pour recevoir nos offres exclusives et les dernières tendances
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto mt-8 bg-white/10 backdrop-blur-sm p-2 rounded-full">
+              <Input
                 type="email" 
-                placeholder="Votre adresse email" 
-                className="flex-grow px-4 py-3 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-white"
+                placeholder="Votre adresse email"
+                fullWidth
+                className="focus:ring-white bg-white/60 placeholder:text-gray-500"
+                variant="outlined"
+                size="lg"
               />
-              <button className="bg-white text-primary-600 hover:bg-primary-50 px-6 py-3 rounded-full font-semibold transition-colors">
+              <Button variant="primary" size="lg" className="bg-white text-primary-600 hover:bg-gray-100">
                 S'inscrire
-              </button>
+              </Button>
             </div>
+            
+            <p className="text-white/70 text-sm mt-4">
+              En vous inscrivant, vous acceptez de recevoir nos emails et confirmez avoir lu notre politique de confidentialité.
+            </p>
+          </motion.div>
+        </Card>
+
+        {/* Section témoignages */}
+        <Card className={components.containers.glass} padding="lg">
+          <SectionTitle
+            title="Ce que nos clients disent"
+            badge="Témoignages"
+            badgeVariant="info"
+            align="center"
+          />
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+            {[
+              {
+                name: "Sophie Dupont",
+                avatar: "https://randomuser.me/api/portraits/women/12.jpg",
+                text: "Je suis fan de JaelleShop ! La qualité des vêtements est exceptionnelle et le service client est toujours à l'écoute.",
+                rating: 5,
+              },
+              {
+                name: "Thomas Laurent",
+                avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+                text: "Livraison ultra rapide et emballage soigné. Les produits correspondent parfaitement aux descriptions. Je recommande !",
+                rating: 5,
+              }
+            ].map((testimonial, index) => (
+              <motion.div 
+                key={index}
+                className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+                whileHover={{ y: -5, boxShadow: "0 12px 24px rgba(0, 0, 0, 0.1)" }}
+              >
+                <div className="flex items-center mb-4">
+                  <img src={testimonial.avatar} alt={testimonial.name} className="w-12 h-12 rounded-full mr-4" />
+                  <div>
+                    <h4 className="font-medium">{testimonial.name}</h4>
+                    <div className="flex mt-1">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <svg 
+                          key={i}
+                          xmlns="http://www.w3.org/2000/svg" 
+                          className={`h-4 w-4 ${i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                          viewBox="0 0 20 20" 
+                          fill="currentColor"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-600 italic">{testimonial.text}</p>
+              </motion.div>
+            ))}
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   );

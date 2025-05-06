@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+/* Base styles for better responsiveness */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  font-size: 16px;
+}
+
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* Styles pour que les images soient bien responsives */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 /* Ajout d'une classe pour masquer la barre de défilement tout en gardant la fonctionnalité de défilement */
 .scrollbar-hide {
   -ms-overflow-style: none;  /* IE and Edge */
@@ -8,4 +27,46 @@
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;  /* Chrome, Safari and Opera */
+}
+
+/* Fix pour les problèmes de flex sur Safari */
+@supports (-webkit-touch-callout: none) {
+  .safari-flex-fix {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Styles d'utilité pour résoudre des problèmes de responsivité spécifiques */
+.responsive-container {
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .responsive-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Améliorations pour les inputs tactiles */
+input, 
+select, 
+textarea, 
+button {
+  font-size: 16px; /* Empêche le zoom automatique sur iOS */
+}
+
+/* Styles pour transitions fluides */
+.transition-smooth {
+  transition: all 0.3s ease;
 }
