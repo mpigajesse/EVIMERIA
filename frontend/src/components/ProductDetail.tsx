@@ -15,6 +15,7 @@ import { Badge, Button, Loader } from './ui';
 import { components, typography } from '../utils/designSystem';
 import CurrencySwitcher from './CurrencySwitcher';
 import { CurrencyCode, useCurrencyFormatter, currencies } from '../utils/currency';
+import ProductBuyButton from './ProductBuyButton';
 
 // Extension du type Product avec les propriétés additionnelles
 interface ProductWithDetails extends Product {
@@ -42,6 +43,7 @@ const ProductDetail: React.FC = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
   const [currencyCode, setCurrencyCode] = useState<CurrencyCode>('EUR');
+  const [isInWishlist, setIsInWishlist] = useState(false);
   
   // Récupérer la devise préférée du localStorage au chargement
   useEffect(() => {
@@ -142,6 +144,10 @@ const ProductDetail: React.FC = () => {
   // Gérer le changement de devise
   const handleCurrencyChange = (currency: typeof currencies[CurrencyCode]) => {
     setCurrencyCode(currency.code);
+  };
+
+  const handleToggleWishlist = () => {
+    setIsInWishlist(!isInWishlist);
   };
 
   if (loading) {
@@ -406,72 +412,82 @@ const ProductDetail: React.FC = () => {
               />
             </div>
             
-            {/* Options d'achat */}
-            {product.stock > 0 && (
-              <motion.div 
-                className="mt-8"
-                variants={fadeInUp}
-              >
-                <div className="flex flex-col sm:flex-row gap-4 items-center mb-6">
-                  {/* Sélecteur de quantité */}
-                  <div className="w-full sm:w-1/3 flex items-center border border-gray-300 rounded-full overflow-hidden bg-white">
-                    <button 
-                      onClick={decrementQuantity}
-                      className="px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none"
-                      disabled={quantity <= 1}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                      </svg>
-                    </button>
-                    <input 
-                      type="number" 
-                      value={quantity} 
-                      onChange={handleQuantityChange}
-                      min="1" 
-                      max={product.stock} 
-                      className="flex-1 text-center border-none focus:ring-0 py-2"
-                    />
-                    <button 
-                      onClick={incrementQuantity}
-                      className="px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none"
-                      disabled={quantity >= product.stock}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                    </button>
-                  </div>
-                  
-                  {/* Bouton d'ajout au panier */}
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    onClick={handleAddToCart}
-                    className="w-full sm:w-2/3 rounded-full"
-                    disabled={product.stock <= 0}
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                    Ajouter au panier
-                  </Button>
-                </div>
-                
-                {/* Bouton d'achat rapide */}
-                <Button
-                  variant="secondary"
-                  size="lg"
-                  className="w-full rounded-full"
-                  disabled={product.stock <= 0}
+            {/* Options de quantité */}
+            <div className="mt-4 mb-6">
+              <p className="text-sm font-medium text-gray-700 mb-2">Quantité</p>
+              <div className="w-full sm:w-1/3 flex items-center border border-gray-300 rounded-full overflow-hidden bg-white shadow-sm">
+                <button 
+                  onClick={decrementQuantity}
+                  className="px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none"
+                  disabled={quantity <= 1}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                   </svg>
-                  Acheter maintenant ({formatPrice(discountedPriceValue || priceValue)})
-                </Button>
-              </motion.div>
-            )}
+                </button>
+                <input 
+                  type="number" 
+                  value={quantity} 
+                  onChange={handleQuantityChange}
+                  min="1" 
+                  max={product.stock} 
+                  className="flex-1 text-center border-none focus:ring-0 py-2"
+                />
+                <button 
+                  onClick={incrementQuantity}
+                  className="px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none"
+                  disabled={quantity >= product.stock}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            {/* Section des actions (acheter, ajouter au panier, etc.) */}
+            <div className="flex flex-col sm:flex-row gap-3 mt-6">
+              <ProductBuyButton 
+                product={product} 
+                quantity={quantity}
+                size="lg"
+                className="sm:flex-1"
+              />
+              
+              <Button
+                variant="outlined" 
+                size="lg"
+                onClick={handleAddToCart}
+                className="sm:flex-1 !text-black !border-2 !border-primary-600"
+                icon={
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                }
+              >
+                Ajouter au panier
+              </Button>
+              
+              <Button
+                variant="icon"
+                size="lg"
+                className="bg-gray-100 hover:bg-gray-200"
+                onClick={handleToggleWishlist}
+                icon={
+                  isInWishlist ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                    </svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                  )
+                }
+              >
+                <span className="sr-only">{isInWishlist ? 'Retirer des favoris' : 'Ajouter aux favoris'}</span>
+              </Button>
+            </div>
             
             {/* Caractéristiques du produit */}
             {product.features && product.features.length > 0 && (

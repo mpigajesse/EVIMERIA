@@ -57,7 +57,7 @@ const RegisterPage = () => {
                 className="mb-6 sm:mb-8"
               />
             </motion.div>
-            
+        
             <motion.form 
               className="space-y-4 sm:space-y-6" 
               onSubmit={handleSubmit}
@@ -65,115 +65,115 @@ const RegisterPage = () => {
               transition={{ delay: 0.1 }}
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div>
+            <div>
                   <label htmlFor="first-name" className={`block text-sm font-medium ${typography.body.medium} mb-1`}>
-                    Prénom
-                  </label>
-                  <input
-                    id="first-name"
-                    name="first-name"
-                    type="text"
-                    autoComplete="given-name"
-                    required
+                Prénom
+              </label>
+              <input
+                id="first-name"
+                name="first-name"
+                type="text"
+                autoComplete="given-name"
+                required
                     className={components.inputs.base}
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                  />
-                </div>
-                
-                <div>
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div>
+            
+            <div>
                   <label htmlFor="last-name" className={`block text-sm font-medium ${typography.body.medium} mb-1`}>
-                    Nom
-                  </label>
-                  <input
-                    id="last-name"
-                    name="last-name"
-                    type="text"
-                    autoComplete="family-name"
-                    required
+                Nom
+              </label>
+              <input
+                id="last-name"
+                name="last-name"
+                type="text"
+                autoComplete="family-name"
+                required
                     className={components.inputs.base}
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                  />
-                </div>
-              </div>
-              
-              <div>
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </div>
+          </div>
+          
+          <div>
                 <label htmlFor="email" className={`block text-sm font-medium ${typography.body.medium} mb-1`}>
-                  Adresse email
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
+              Adresse email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
                   className={components.inputs.base}
-                  placeholder="votre@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              
-              <div>
+              placeholder="votre@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          
+          <div>
                 <label htmlFor="password" className={`block text-sm font-medium ${typography.body.medium} mb-1`}>
-                  Mot de passe
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="new-password"
-                  required
+              Mot de passe
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="new-password"
+              required
                   className={components.inputs.base}
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
                 <p className="mt-1 text-xs text-gray-500">Au moins 8 caractères avec lettres, chiffres et symboles</p>
-              </div>
-              
-              <div>
+          </div>
+          
+          <div>
                 <label htmlFor="confirm-password" className={`block text-sm font-medium ${typography.body.medium} mb-1`}>
-                  Confirmer le mot de passe
-                </label>
-                <input
-                  id="confirm-password"
-                  name="confirm-password"
-                  type="password"
-                  autoComplete="new-password"
-                  required
+              Confirmer le mot de passe
+            </label>
+            <input
+              id="confirm-password"
+              name="confirm-password"
+              type="password"
+              autoComplete="new-password"
+              required
                   className={components.inputs.base}
-                  placeholder="••••••••"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </div>
-              
+              placeholder="••••••••"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div>
+          
               <div className="flex items-start">
                 <div className="flex items-center h-5">
-                  <input
-                    id="agree-terms"
-                    name="agree-terms"
-                    type="checkbox"
-                    className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                    checked={agreeTerms}
-                    onChange={(e) => setAgreeTerms(e.target.checked)}
-                    required
-                  />
+            <input
+              id="agree-terms"
+              name="agree-terms"
+              type="checkbox"
+              className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              checked={agreeTerms}
+              onChange={(e) => setAgreeTerms(e.target.checked)}
+              required
+            />
                 </div>
                 <label htmlFor="agree-terms" className="ml-2 block text-xs sm:text-sm text-gray-500">
-                  J'accepte les {' '}
+              J'accepte les {' '}
                   <Link to="#" className="text-primary-600 hover:text-primary-500 underline">
-                    conditions générales
-                  </Link>
+                conditions générales
+              </Link>
                   {' '} et la {' '}
                   <Link to="#" className="text-primary-600 hover:text-primary-500 underline">
                     politique de confidentialité
                   </Link>
-                </label>
-              </div>
-              
+            </label>
+          </div>
+          
               <motion.div 
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -182,9 +182,9 @@ const RegisterPage = () => {
                 <Button
                   variant="primary"
                   className="w-full py-2.5 sm:py-3"
-                  type="submit"
-                >
-                  Créer un compte
+              type="submit"
+            >
+              Créer un compte
                 </Button>
               </motion.div>
               
@@ -209,20 +209,20 @@ const RegisterPage = () => {
                   </svg>
                   S'inscrire avec Google
                 </Button>
-              </div>
+          </div>
             </motion.form>
-            
+        
             <motion.div 
               className="text-center mt-4 sm:mt-6"
               variants={animations.fadeInUp}
               transition={{ delay: 0.2 }}
             >
               <p className={typography.body.small}>
-                Vous avez déjà un compte ?{' '}
+            Vous avez déjà un compte ?{' '}
                 <Link to="/login" className="text-primary-600 hover:text-primary-500 underline">
-                  Se connecter
-                </Link>
-              </p>
+              Se connecter
+            </Link>
+          </p>
             </motion.div>
             
             {/* Badge */}
@@ -232,7 +232,7 @@ const RegisterPage = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
-              <Badge variant="primary" className={`${colors.gradients.primary} text-white`}>
+              <Badge variant="primary" className={`${colors.gradients.primary} !text-black`}>
                 <span className="mr-1">✨</span> Nouveau
               </Badge>
             </motion.div>

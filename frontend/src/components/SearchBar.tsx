@@ -70,7 +70,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         setShowResults(false);
       }
     };
-    
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -86,7 +86,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         setResults([]);
       }
     }, 300);
-    
+
     return () => {
       clearTimeout(timer);
     };
@@ -108,11 +108,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
         onSearch(query);
       } else {
         navigate(`/products?search=${encodeURIComponent(query)}`);
-        setShowResults(false);
+      setShowResults(false);
       }
     }
   };
-  
+
   const handleProductClick = (slug: string) => {
     navigate(`/products/${slug}`);
     setShowResults(false);
@@ -186,12 +186,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
             {isLoading ? loadingIcon : searchIcon}
           </div>
           
-          <input
-            ref={inputRef}
-            type="text"
+            <input
+              ref={inputRef}
+              type="text"
             className="w-full py-2 px-3 bg-transparent outline-none"
             placeholder={placeholder}
-            value={query}
+              value={query}
             onChange={handleInputChange}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
@@ -217,7 +217,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       </form>
 
       <AnimatePresence>
-        {showResults && results.length > 0 && (
+      {showResults && results.length > 0 && (
           <motion.div
             className="absolute left-0 right-0 mt-2 z-50"
             variants={animations.fadeInDown}
@@ -227,30 +227,30 @@ const SearchBar: React.FC<SearchBarProps> = ({
           >
             <Card padding="none" elevation="high" rounded="md" animate={false}>
               <ul className="max-h-96 overflow-y-auto divide-y divide-gray-100">
-                {results.map((product) => (
+            {results.map((product) => (
                   <motion.li
-                    key={product.id}
+                key={product.id}
                     className="transition-colors hover:bg-gray-50 cursor-pointer"
-                    onClick={() => handleProductClick(product.slug)}
+                onClick={() => handleProductClick(product.slug)}
                     whileHover={{ backgroundColor: "rgba(243, 244, 246, 1)" }}
-                  >
-                    <div className="flex items-center p-3">
-                      <div className="h-12 w-12 bg-gray-100 rounded-lg overflow-hidden mr-3 flex-shrink-0">
-                        {product.images && product.images.length > 0 ? (
-                          <img
-                            src={product.images.find(img => img.is_main)?.image_url || product.images[0].image_url}
-                            alt={product.name}
-                            className="h-full w-full object-cover"
+              >
+                <div className="flex items-center p-3">
+                  <div className="h-12 w-12 bg-gray-100 rounded-lg overflow-hidden mr-3 flex-shrink-0">
+                    {product.images && product.images.length > 0 ? (
+                      <img
+                        src={product.images.find(img => img.is_main)?.image_url || product.images[0].image_url}
+                        alt={product.name}
+                        className="h-full w-full object-cover"
                             loading="lazy"
-                          />
-                        ) : (
-                          <div className="flex items-center justify-center h-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                          </div>
-                        )}
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
                       </div>
+                    )}
+                  </div>
                       
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate">
@@ -266,22 +266,22 @@ const SearchBar: React.FC<SearchBarProps> = ({
                       </div>
                     </div>
                   </motion.li>
-                ))}
-              </ul>
+            ))}
+          </ul>
               <div className="p-2 bg-gray-50 border-t border-gray-100 text-center">
-                <button
+            <button
                   className="text-xs text-primary-600 hover:text-primary-800 font-medium focus:outline-none"
                   onClick={() => {
                     navigate(`/products?search=${encodeURIComponent(query)}`);
                     setShowResults(false);
                   }}
-                >
+            >
                   Voir tous les résultats
-                </button>
-              </div>
+            </button>
+          </div>
             </Card>
           </motion.div>
-        )}
+      )}
 
         {showResults && query.trim().length >= 2 && results.length === 0 && !isLoading && (
           <motion.div
@@ -295,10 +295,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
               <div className="text-center py-3">
                 <p className="text-gray-500">Aucun résultat pour "{query}"</p>
                 <p className="text-xs text-gray-400 mt-1">Essayez avec d'autres mots-clés</p>
-              </div>
+        </div>
             </Card>
           </motion.div>
-        )}
+      )}
       </AnimatePresence>
     </div>
   );

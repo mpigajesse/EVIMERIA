@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>DESIGN_SYSTEM.md</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+html,footer,header{
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Custom MD PDF CSS
+ */
+html,footer,header{
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+
+ }
+body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+<link rel="stylesheet" href="file:///r%3A/2.Travail/1.Enseignement/Cours/_1.Outils/2.Developpement/1.SCSS/main.css" type="text/css"><link rel="stylesheet" href="file:///d%3A/rdaros/Cours/_1.Outils/2.Developpement/1.SCSS/main.css" type="text/css">
+</head>
+
+<body>
+    <h1 id="syst%C3%A8me-de-design-jaelleshop">Système de Design JaelleShop</h1>
+<p>Ce document sert de référence pour l'utilisation du système de design uniforme dans le projet JaelleShop.</p>
+<h2 id="principes-fondamentaux">Principes fondamentaux</h2>
+<p>Le système de design JaelleShop est basé sur les principes suivants :</p>
+<ol>
+<li><strong>Cohérence</strong> : Tous les composants et pages doivent partager un langage visuel commun</li>
+<li><strong>Accessibilité</strong> : Les composants sont conçus pour être accessibles à tous les utilisateurs</li>
+<li><strong>Réutilisabilité</strong> : Des composants modulaires qui peuvent être utilisés dans différents contextes</li>
+<li><strong>Responsive</strong> : Adaptation fluide à tous les appareils</li>
+<li><strong>Animation subtile</strong> : Animations légères pour améliorer l'expérience utilisateur</li>
+</ol>
+<h2 id="palette-de-couleurs">Palette de couleurs</h2>
+<p>Notre palette de couleurs est définie dans le fichier <code>tailwind.config.js</code> et accessible via le système de design :</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { colors } <span class="hljs-keyword">from</span> <span class="hljs-string">'../utils/designSystem'</span>;
+
+<span class="hljs-comment">// Utilisation</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"bg-primary-600"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+</div></code></pre>
+<h3 id="couleurs-principales">Couleurs principales</h3>
+<ul>
+<li><strong>Primary</strong> : Nuances de bleu (50-950)</li>
+<li><strong>Secondary</strong> : Nuances de rose (50-950)</li>
+</ul>
+<h3 id="couleurs-daccentuation">Couleurs d'accentuation</h3>
+<ul>
+<li><strong>Success</strong> : Vert</li>
+<li><strong>Danger</strong> : Rouge</li>
+<li><strong>Warning</strong> : Jaune/Orange</li>
+<li><strong>Info</strong> : Bleu clair</li>
+</ul>
+<h2 id="typographie">Typographie</h2>
+<p>La hiérarchie typographique est définie dans le système de design :</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { typography } <span class="hljs-keyword">from</span> <span class="hljs-string">'../utils/designSystem'</span>;
+
+<span class="hljs-comment">// Utilisation</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{typography.headings.h1}</span>&gt;</span>Titre principal<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{typography.body.regular}</span>&gt;</span>Texte normal<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>
+</div></code></pre>
+<h2 id="composants-ui">Composants UI</h2>
+<h3 id="button">Button</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { Button } <span class="hljs-keyword">from</span> <span class="hljs-string">'../components/ui'</span>;
+
+<span class="hljs-comment">// Variantes</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span>&gt;</span>Bouton primaire<span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"secondary"</span>&gt;</span>Bouton secondaire<span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"accent"</span>&gt;</span>Bouton d'accent<span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"outlined"</span>&gt;</span>Bouton contour<span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"text"</span>&gt;</span>Bouton texte<span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span></span>
+
+<span class="hljs-comment">// Tailles</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">size</span>=<span class="hljs-string">"sm"</span>&gt;</span>Petit<span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">size</span>=<span class="hljs-string">"md"</span>&gt;</span>Moyen<span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">size</span>=<span class="hljs-string">"lg"</span>&gt;</span>Grand<span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span></span>
+
+<span class="hljs-comment">// Avec icône</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> 
+  <span class="hljs-attr">icon</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">svg</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span>} 
+  iconPosition="left"
+&gt;
+  Avec icône
+<span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span></span>
+
+<span class="hljs-comment">// Comme lien</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">to</span>=<span class="hljs-string">"/products"</span>&gt;</span>Aller aux produits<span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span></span>
+
+<span class="hljs-comment">// État de chargement</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">isLoading</span>=<span class="hljs-string">{true}</span>&gt;</span>Chargement<span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span></span>
+</div></code></pre>
+<h3 id="card">Card</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { Card } <span class="hljs-keyword">from</span> <span class="hljs-string">'../components/ui'</span>;
+
+<span class="hljs-comment">// Basique</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Card</span>&gt;</span>
+  Contenu de la carte
+<span class="hljs-tag">&lt;/<span class="hljs-name">Card</span>&gt;</span></span>
+
+<span class="hljs-comment">// Variantes</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Card</span> <span class="hljs-attr">padding</span>=<span class="hljs-string">"lg"</span> <span class="hljs-attr">elevation</span>=<span class="hljs-string">"high"</span> <span class="hljs-attr">rounded</span>=<span class="hljs-string">"xl"</span>&gt;</span>
+  Carte avec grand padding, ombre forte et coins très arrondis
+<span class="hljs-tag">&lt;/<span class="hljs-name">Card</span>&gt;</span></span>
+
+<span class="hljs-comment">// Comme lien</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Card</span> <span class="hljs-attr">to</span>=<span class="hljs-string">"/product/123"</span>&gt;</span>
+  Carte cliquable
+<span class="hljs-tag">&lt;/<span class="hljs-name">Card</span>&gt;</span></span>
+
+<span class="hljs-comment">// Avec badge</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Card</span> 
+  <span class="hljs-attr">badge</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">Badge</span>&gt;</span>Nouveau<span class="hljs-tag">&lt;/<span class="hljs-name">Badge</span>&gt;</span>}
+  badgePosition="top-right"
+&gt;
+  Carte avec badge
+<span class="hljs-tag">&lt;/<span class="hljs-name">Card</span>&gt;</span></span>
+</div></code></pre>
+<h3 id="input">Input</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { Input } <span class="hljs-keyword">from</span> <span class="hljs-string">'../components/ui'</span>;
+
+<span class="hljs-comment">// Basique</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Input</span>
+  <span class="hljs-attr">label</span>=<span class="hljs-string">"Email"</span>
+  <span class="hljs-attr">placeholder</span>=<span class="hljs-string">"Entrez votre email"</span>
+  <span class="hljs-attr">helperText</span>=<span class="hljs-string">"Nous ne partagerons jamais votre email"</span>
+/&gt;</span></span>
+
+<span class="hljs-comment">// Avec icône</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Input</span>
+  <span class="hljs-attr">leftIcon</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">svg</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span>}
+  rightIcon={<span class="hljs-tag">&lt;<span class="hljs-name">svg</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span>}
+  iconClickable={true}
+  onIconClick={() =&gt; console.log('Icon clicked')}
+/&gt;</span>
+
+<span class="hljs-comment">// Avec erreur</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Input</span>
+  <span class="hljs-attr">error</span>=<span class="hljs-string">"Ce champ est requis"</span>
+/&gt;</span></span>
+
+<span class="hljs-comment">// Variantes</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Input</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"filled"</span> /&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Input</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"outlined"</span> /&gt;</span></span>
+
+<span class="hljs-comment">// Tailles</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Input</span> <span class="hljs-attr">size</span>=<span class="hljs-string">"sm"</span> /&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Input</span> <span class="hljs-attr">size</span>=<span class="hljs-string">"md"</span> /&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Input</span> <span class="hljs-attr">size</span>=<span class="hljs-string">"lg"</span> /&gt;</span></span>
+</div></code></pre>
+<h3 id="badge">Badge</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { Badge } <span class="hljs-keyword">from</span> <span class="hljs-string">'../components/ui'</span>;
+
+<span class="hljs-comment">// Variantes</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Badge</span>&gt;</span>Par défaut<span class="hljs-tag">&lt;/<span class="hljs-name">Badge</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Badge</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"secondary"</span>&gt;</span>Secondaire<span class="hljs-tag">&lt;/<span class="hljs-name">Badge</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Badge</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"success"</span>&gt;</span>Succès<span class="hljs-tag">&lt;/<span class="hljs-name">Badge</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Badge</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"danger"</span>&gt;</span>Danger<span class="hljs-tag">&lt;/<span class="hljs-name">Badge</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Badge</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"warning"</span>&gt;</span>Attention<span class="hljs-tag">&lt;/<span class="hljs-name">Badge</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Badge</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"info"</span>&gt;</span>Info<span class="hljs-tag">&lt;/<span class="hljs-name">Badge</span>&gt;</span></span>
+
+<span class="hljs-comment">// Contour</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Badge</span> <span class="hljs-attr">outline</span>&gt;</span>Contour<span class="hljs-tag">&lt;/<span class="hljs-name">Badge</span>&gt;</span></span>
+
+<span class="hljs-comment">// Tailles</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Badge</span> <span class="hljs-attr">size</span>=<span class="hljs-string">"xs"</span>&gt;</span>Très petit<span class="hljs-tag">&lt;/<span class="hljs-name">Badge</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Badge</span> <span class="hljs-attr">size</span>=<span class="hljs-string">"sm"</span>&gt;</span>Petit<span class="hljs-tag">&lt;/<span class="hljs-name">Badge</span>&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Badge</span> <span class="hljs-attr">size</span>=<span class="hljs-string">"md"</span>&gt;</span>Moyen<span class="hljs-tag">&lt;/<span class="hljs-name">Badge</span>&gt;</span></span>
+
+<span class="hljs-comment">// Avec icône</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Badge</span> <span class="hljs-attr">icon</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">svg</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span>}&gt;Avec icône<span class="hljs-tag">&lt;/<span class="hljs-name">Badge</span>&gt;</span></span>
+
+<span class="hljs-comment">// Alternative via les composants prédéfinis</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Badge.Success</span>&gt;</span>Succès<span class="hljs-tag">&lt;/<span class="hljs-name">Badge.Success</span>&gt;</span></span>
+</div></code></pre>
+<h2 id="layouts-et-grilles">Layouts et grilles</h2>
+<p>Le système de design inclut des classes prédéfinies pour les mises en page courantes :</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { components } <span class="hljs-keyword">from</span> <span class="hljs-string">'../utils/designSystem'</span>;
+
+<span class="hljs-comment">// Grille de produits</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{components.gridLayouts.products}</span>&gt;</span>
+  {/* Cartes de produits */}
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+
+<span class="hljs-comment">// Grille de fonctionnalités</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{components.gridLayouts.features}</span>&gt;</span>
+  {/* Fonctionnalités */}
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+
+<span class="hljs-comment">// Layout de formulaire</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{components.gridLayouts.form}</span>&gt;</span>
+  {/* Champs de formulaire */}
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+</div></code></pre>
+<h2 id="espacement">Espacement</h2>
+<p>L'espacement est standardisé à travers l'application :</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { spacing } <span class="hljs-keyword">from</span> <span class="hljs-string">'../utils/designSystem'</span>;
+
+<span class="hljs-comment">// Espacement entre sections</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{spacing.section}</span>&gt;</span>
+  {/* Une section */}
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+
+<span class="hljs-comment">// Espacement entre composants</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{spacing.component}</span>&gt;</span>
+  {/* Un composant */}
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+
+<span class="hljs-comment">// Espacement entre éléments</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{spacing.element}</span>&gt;</span>
+  {/* Un élément */}
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+
+<span class="hljs-comment">// Padding interne</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{spacing.inner}</span>&gt;</span>
+  {/* Contenu avec padding */}
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+</div></code></pre>
+<h2 id="animations">Animations</h2>
+<p>Le système utilise Framer Motion pour des animations cohérentes :</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { motion } <span class="hljs-keyword">from</span> <span class="hljs-string">'framer-motion'</span>;
+<span class="hljs-keyword">import</span> { animations } <span class="hljs-keyword">from</span> <span class="hljs-string">'../utils/designSystem'</span>;
+
+<span class="hljs-comment">// Animation de fondu</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">motion.div</span>
+  <span class="hljs-attr">variants</span>=<span class="hljs-string">{animations.fadeIn}</span>
+  <span class="hljs-attr">initial</span>=<span class="hljs-string">"hidden"</span>
+  <span class="hljs-attr">animate</span>=<span class="hljs-string">"visible"</span>
+&gt;</span>
+  Contenu animé
+<span class="hljs-tag">&lt;/<span class="hljs-name">motion.div</span>&gt;</span></span>
+
+<span class="hljs-comment">// Animation de fondu vers le haut</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">motion.div</span>
+  <span class="hljs-attr">variants</span>=<span class="hljs-string">{animations.fadeInUp}</span>
+  <span class="hljs-attr">initial</span>=<span class="hljs-string">"hidden"</span>
+  <span class="hljs-attr">animate</span>=<span class="hljs-string">"visible"</span>
+&gt;</span>
+  Monte en apparaissant
+<span class="hljs-tag">&lt;/<span class="hljs-name">motion.div</span>&gt;</span></span>
+
+<span class="hljs-comment">// Animation séquentielle des enfants</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">motion.div</span>
+  <span class="hljs-attr">variants</span>=<span class="hljs-string">{animations.staggerChildren}</span>
+  <span class="hljs-attr">initial</span>=<span class="hljs-string">"hidden"</span>
+  <span class="hljs-attr">animate</span>=<span class="hljs-string">"visible"</span>
+&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">motion.div</span> <span class="hljs-attr">variants</span>=<span class="hljs-string">{animations.fadeIn}</span>&gt;</span>Élément 1<span class="hljs-tag">&lt;/<span class="hljs-name">motion.div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">motion.div</span> <span class="hljs-attr">variants</span>=<span class="hljs-string">{animations.fadeIn}</span>&gt;</span>Élément 2<span class="hljs-tag">&lt;/<span class="hljs-name">motion.div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">motion.div</span> <span class="hljs-attr">variants</span>=<span class="hljs-string">{animations.fadeIn}</span>&gt;</span>Élément 3<span class="hljs-tag">&lt;/<span class="hljs-name">motion.div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">motion.div</span>&gt;</span></span>
+</div></code></pre>
+<h2 id="utilisation-de-lutilitaire-classnames">Utilisation de l'utilitaire <code>classNames</code></h2>
+<p>Pour combiner des classes de manière conditionnelle :</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { classNames } <span class="hljs-keyword">from</span> <span class="hljs-string">'../utils/designSystem'</span>;
+
+<span class="hljs-comment">// Exemple d'utilisation</span>
+<span class="hljs-keyword">const</span> buttonClasses = classNames(
+  <span class="hljs-string">'base-class'</span>,
+  isActive &amp;&amp; <span class="hljs-string">'active-class'</span>,
+  size === <span class="hljs-string">'large'</span> ? <span class="hljs-string">'large-class'</span> : <span class="hljs-string">'small-class'</span>,
+  customClass
+);
+</div></code></pre>
+<h2 id="th%C3%A8mes">Thèmes</h2>
+<p>Pour les sections spéciales ou des pages thématiques :</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { themes } <span class="hljs-keyword">from</span> <span class="hljs-string">'../utils/designSystem'</span>;
+
+<span class="hljs-comment">// Thème par défaut</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{themes.default.background}</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{themes.default.card}</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{themes.default.text}</span>&gt;</span>Titre<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{themes.default.accent}</span>&gt;</span>Texte d'accent<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+
+<span class="hljs-comment">// Thème sombre</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{themes.dark.background}</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{themes.dark.card}</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{themes.dark.text}</span>&gt;</span>Titre<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{themes.dark.accent}</span>&gt;</span>Texte d'accent<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+</div></code></pre>
+<h2 id="conseils-dimpl%C3%A9mentation">Conseils d'implémentation</h2>
+<ol>
+<li>Privilégiez toujours les composants UI prédéfinis plutôt que de recréer des éléments</li>
+<li>Utilisez le système de design pour toutes les nouvelles fonctionnalités</li>
+<li>Quand vous modifiez des composants existants, alignez-les avec le système</li>
+<li>Pour les cas particuliers, étendez le système plutôt que de contourner ses règles</li>
+<li>Consultez cette documentation avant de créer de nouveaux composants</li>
+</ol>
+<h2 id="contribution-au-syst%C3%A8me-de-design">Contribution au système de design</h2>
+<p>Pour ajouter ou modifier des éléments du système de design :</p>
+<ol>
+<li>Discutez des changements avec l'équipe</li>
+<li>Mettez à jour le fichier <code>designSystem.ts</code></li>
+<li>Créez ou modifiez les composants concernés</li>
+<li>Mettez à jour cette documentation</li>
+<li>Communiquez les changements à l'équipe</li>
+</ol>
+<h2 id="importations">Importations</h2>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { typography, spacing, components } <span class="hljs-keyword">from</span> <span class="hljs-string">'../utils/designSystem'</span>;
+</div></code></pre>
+
+</body>
+
+</html>

@@ -23,7 +23,7 @@ const HomePage = () => {
           className="mb-16"
         >
           <Card className="overflow-hidden" padding="none" elevation="high">
-            <div className="flex flex-col md:flex-row">
+          <div className="flex flex-col md:flex-row">
               <motion.div 
                 className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center"
                 variants={animations.slideInLeft}
@@ -31,20 +31,20 @@ const HomePage = () => {
                 <Badge variant="primary" className="mb-4 animate-pulse">Nouvelle collection</Badge>
                 <h1 className={typography.headings.display}>
                   JaelleShop <span className="text-primary-600">Inspiring</span> Fashion.
-                </h1>
+              </h1>
                 <p className={`${typography.body.medium} mb-8 max-w-lg mt-4`}>
-                  Découvrez notre collection exclusive et faites de votre style une déclaration de mode unique.
-                </p>
+                Découvrez notre collection exclusive et faites de votre style une déclaration de mode unique.
+              </p>
                 <div className="flex flex-wrap gap-4">
                   <Button 
                     variant="primary"
                     size="lg"
-                    to="/products"
-                    className={colors.gradients.primary}
+                  to="/products"
+                    className={`${colors.gradients.blueViolet} !text-black`}
                     icon={
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
+                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
                     }
                   >
                     Explorer nos produits
@@ -82,10 +82,10 @@ const HomePage = () => {
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                       </svg>
-                    </div>
+              </div>
                     <span className={typography.body.medium}>Garantie qualité</span>
                   </motion.div>
-                </div>
+            </div>
               </motion.div>
               
               <motion.div 
@@ -93,12 +93,12 @@ const HomePage = () => {
                 variants={animations.scaleIn}
               >
                 <motion.img
-                  src="https://res.cloudinary.com/dmcaguchx/image/upload/v1746496377/jaelleshop/products/photo-1556306535-0f09a537f0a3.jpg"
-                  alt="Featured product"
-                  className="w-full h-full object-cover object-center"
+                src="https://res.cloudinary.com/dmcaguchx/image/upload/v1746496377/jaelleshop/products/photo-1556306535-0f09a537f0a3.jpg"
+                alt="Featured product"
+                className="w-full h-full object-cover object-center"
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.7 }}
-                />
+              />
                 {/* Badges flottants avec animation */}
                 <motion.div 
                   className="absolute top-8 right-8 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg"
@@ -130,7 +130,7 @@ const HomePage = () => {
         {/* Produits en vedette avec design amélioré */}
         <div id="featured" className="relative">
           {/* Élément décoratif */}
-          <div className={`${components.decorations.blobs} w-64 h-64 bg-amber-300 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}></div>
+          <div className={`${components.decorations.blobs} w-64 h-64 bg-tertiary-300 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}></div>
           
           <Card className={components.containers.glass}>
             <SectionTitle
@@ -143,14 +143,14 @@ const HomePage = () => {
                 to: "/products"
               }}
             />
-            
-            <ProductsGrid featuredOnly={true} limit={4} title="" />
+          
+          <ProductsGrid featuredOnly={true} limit={4} title="" />
           </Card>
         </div>
 
         {/* Section de promotions avec compte à rebours */}
         <div className="my-16">
-          <Card className={`${colors.gradients.warm} p-8 sm:p-10 text-white overflow-hidden relative`}>
+          <Card className={`${colors.gradients.tricolor} p-8 sm:p-10 !text-black overflow-hidden relative`}>
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full translate-x-32 -translate-y-32"></div>
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full -translate-x-32 translate-y-32"></div>
             
@@ -186,9 +186,9 @@ const HomePage = () => {
               badge="Avantages"
               badgeVariant="success"
             />
-            
+          
             <div className={components.gridLayouts.features}>
-              {/* Avantage 1 */}
+            {/* Avantage 1 */}
               <motion.div 
                 className="text-center p-6 rounded-2xl hover:bg-white hover:shadow-md transition-all"
                 variants={animations.fadeInUp}
@@ -198,16 +198,16 @@ const HomePage = () => {
                 transition={{ delay: 0.1 }}
                 whileHover={{ y: -5 }}
               >
-                <div className={`${colors.gradients.primary} w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
+                <div className={`${colors.gradients.blueViolet} w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 !text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
                 <h3 className={typography.headings.h3}>Qualité Premium</h3>
                 <p className={`${typography.body.regular} mt-2`}>Des vêtements fabriqués avec les meilleurs matériaux pour une durabilité et un confort incomparables.</p>
               </motion.div>
-              
-              {/* Avantage 2 */}
+            
+            {/* Avantage 2 */}
               <motion.div 
                 className="text-center p-6 rounded-2xl hover:bg-white hover:shadow-md transition-all"
                 variants={animations.fadeInUp}
@@ -217,16 +217,16 @@ const HomePage = () => {
                 transition={{ delay: 0.2 }}
                 whileHover={{ y: -5 }}
               >
-                <div className={`${colors.gradients.ocean} w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
+                <div className={`${colors.gradients.greenBlue} w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 !text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
                 <h3 className={typography.headings.h3}>Livraison Rapide</h3>
                 <p className={`${typography.body.regular} mt-2`}>Recevez votre commande en un temps record grâce à notre service de livraison express.</p>
               </motion.div>
-              
-              {/* Avantage 3 */}
+            
+            {/* Avantage 3 */}
               <motion.div 
                 className="text-center p-6 rounded-2xl hover:bg-white hover:shadow-md transition-all"
                 variants={animations.fadeInUp}
@@ -236,11 +236,11 @@ const HomePage = () => {
                 transition={{ delay: 0.3 }}
                 whileHover={{ y: -5 }}
               >
-                <div className={`${colors.gradients.sunset} w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </div>
+                <div className={`${colors.gradients.violetGreen} w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 !text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
                 <h3 className={typography.headings.h3}>Retours Gratuits</h3>
                 <p className={`${typography.body.regular} mt-2`}>Insatisfait ? Retournez votre article dans les 30 jours pour un remboursement complet.</p>
               </motion.div>
@@ -249,7 +249,7 @@ const HomePage = () => {
         </div>
 
         {/* Newsletter avec design amélioré */}
-        <Card className={`${colors.gradients.cosmic} p-10 text-white overflow-hidden relative mb-16 shadow-xl`}>
+        <Card className={`${colors.gradients.cosmic} p-10 !text-black overflow-hidden relative mb-16 shadow-xl`}>
           {/* Éléments décoratifs */}
           <motion.div 
             className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full translate-x-32 -translate-y-32"
@@ -277,13 +277,13 @@ const HomePage = () => {
             <div className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto mt-8 bg-white/10 backdrop-blur-sm p-2 rounded-full">
               <Input
                 type="email" 
-                placeholder="Votre adresse email"
+                placeholder="Votre adresse email" 
                 fullWidth
                 className="focus:ring-white bg-white/60 placeholder:text-gray-500"
                 variant="outlined"
                 size="lg"
               />
-              <Button variant="primary" size="lg" className="bg-white text-primary-600 hover:bg-gray-100">
+              <Button variant="primary" size="lg" className="bg-white !text-primary-600 hover:bg-gray-100">
                 S'inscrire
               </Button>
             </div>

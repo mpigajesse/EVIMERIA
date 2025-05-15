@@ -17,11 +17,11 @@ const Footer = () => {
                 <input 
                   type="email" 
                   placeholder="Votre adresse email" 
-                  className="flex-grow px-4 py-3 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-white"
+                  className="flex-grow px-4 py-3 rounded-full text-gray-800 bg-white border-2 border-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white placeholder-gray-600 font-medium"
                 />
                 <button 
                   type="submit"
-                  className="whitespace-nowrap bg-white text-primary-600 hover:bg-primary-50 px-6 py-3 rounded-full font-semibold transition-colors"
+                  className="whitespace-nowrap bg-white !text-black hover:bg-primary-50 px-6 py-3 rounded-full font-semibold transition-colors"
                 >
                   S'inscrire
                 </button>

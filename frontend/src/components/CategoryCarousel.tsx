@@ -158,7 +158,7 @@ const CategoryCarousel: React.FC = () => {
                     {/* Badge avec nombre de produits */}
                     {category.products_count && (
                       <div className="absolute top-3 right-3">
-                        <Badge variant="primary" size="sm" className={`${colors.gradients.primary} shadow-md`}>
+                        <Badge variant="primary" size="sm" className={`${colors.gradients.blueViolet} !text-black shadow-md`}>
                           {category.products_count} produits
                         </Badge>
                       </div>
@@ -227,7 +227,7 @@ const CategoryCarousel: React.FC = () => {
             variant="primary"
             size="lg"
             to="/categories"
-            className="bg-white text-primary-600 border border-primary-100 hover:shadow-lg hover:border-primary-200"
+            className="bg-white !text-primary-600 !border-2 !border-primary-600 hover:shadow-lg hover:border-primary-200"
             icon={
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />

@@ -43,68 +43,68 @@ const LoginPage = () => {
                 className="mb-6 sm:mb-8"
               />
             </motion.div>
-            
+        
             <motion.form 
               className="space-y-4 sm:space-y-6" 
               onSubmit={handleSubmit}
               variants={animations.fadeInUp}
               transition={{ delay: 0.1 }}
             >
-              <div>
+          <div>
                 <label htmlFor="email" className={`block text-sm font-medium ${typography.body.medium} mb-1`}>
-                  Adresse email
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
+              Adresse email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
                   className={components.inputs.base}
-                  placeholder="votre@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              
-              <div>
+              placeholder="votre@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          
+          <div>
                 <div className="flex items-center justify-between mb-1">
                   <label htmlFor="password" className={`block text-sm font-medium ${typography.body.medium}`}>
-                    Mot de passe
-                  </label>
+              Mot de passe
+            </label>
                   <div className="text-xs sm:text-sm">
                     <Link to="#" className="text-primary-600 hover:text-primary-500 underline">
                       Mot de passe oublié ?
                     </Link>
                   </div>
                 </div>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
                   className={components.inputs.base}
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                />
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
                 <label htmlFor="remember-me" className={`ml-2 block text-sm ${typography.body.regular}`}>
-                  Se souvenir de moi
-                </label>
-              </div>
-              
+                Se souvenir de moi
+              </label>
+            </div>
+            
               <motion.div 
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -126,9 +126,9 @@ const LoginPage = () => {
                 </div>
                 <div className="relative flex justify-center text-sm">
                   <span className="px-2 bg-white text-gray-500">ou</span>
-                </div>
-              </div>
-              
+            </div>
+          </div>
+          
               {/* Boutons de connexion sociale */}
               <div className="flex flex-col space-y-3">
                 <Button 
@@ -140,20 +140,20 @@ const LoginPage = () => {
                   </svg>
                   Continuer avec Google
                 </Button>
-              </div>
+          </div>
             </motion.form>
-            
+        
             <motion.div 
               className="text-center mt-4 sm:mt-6"
               variants={animations.fadeInUp}
               transition={{ delay: 0.2 }}
             >
               <p className={typography.body.small}>
-                Vous n'avez pas de compte ?{' '}
+            Vous n'avez pas de compte ?{' '}
                 <Link to="/register" className="text-primary-600 hover:text-primary-500 underline">
-                  S'inscrire
-                </Link>
-              </p>
+              S'inscrire
+            </Link>
+          </p>
             </motion.div>
             
             {/* Badge sécurisé */}

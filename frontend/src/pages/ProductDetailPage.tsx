@@ -21,7 +21,7 @@ const ProductDetailPage: React.FC = () => {
           variants={animations.fadeIn}
         >
           {/* Détail du produit */}
-          <ProductDetail />
+      <ProductDetail />
           
           {/* Recommandations de produits similaires */}
           <div className="mt-16">

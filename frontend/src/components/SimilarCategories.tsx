@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Category, getCategories, getCategoryImageUrl } from '../api/products';
 import { animations, typography } from '../utils/designSystem';
-import { Badge, Card, Loader, Button } from './ui';
+import { Badge, Card, Loader, ActionButton } from './ui';
 
 interface SimilarCategoriesProps {
   categoryId?: number;
@@ -132,7 +132,8 @@ const SimilarCategories: React.FC<SimilarCategoriesProps> = ({
                     </p>
                   )}
                   
-                  <Button
+                  <ActionButton
+                    to={`/categories/${category.slug}`}
                     variant="primary"
                     size="sm"
                     className="mt-auto w-full"
@@ -144,7 +145,7 @@ const SimilarCategories: React.FC<SimilarCategoriesProps> = ({
                     iconPosition="right"
                   >
                     Explorer la catégorie
-                  </Button>
+                  </ActionButton>
                 </div>
               </Card>
             </Link>

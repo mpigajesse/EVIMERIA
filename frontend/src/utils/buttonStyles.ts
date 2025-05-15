@@ -21,17 +21,17 @@ export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 // Classes de base pour tous les boutons (utilisées dans le composant Button)
 export const baseButtonClasses = "inline-flex items-center justify-center font-medium transition-colors duration-300 rounded-full focus:outline-none whitespace-nowrap focus:ring-2 focus:ring-offset-2";
 
-// Définition des styles par variant
+// Définition des styles par variant avec des couleurs plus visibles
 export const variantStyles: Record<ButtonVariant, string> = {
-  primary: "bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500 active:bg-primary-800 shadow-sm hover:shadow-md",
-  secondary: "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-primary-600 focus:ring-primary-400 active:bg-gray-100 shadow-sm hover:shadow",
-  accent: "bg-secondary-600 text-white hover:bg-secondary-700 focus:ring-secondary-400 active:bg-secondary-800 shadow-sm hover:shadow-md",
-  gradient: "bg-gradient-to-r from-primary-500 to-primary-700 text-white hover:from-primary-600 hover:to-primary-800 focus:ring-primary-400 shadow-sm hover:shadow-md",
-  outlined: "border-2 border-primary-500 text-primary-600 hover:bg-primary-50 focus:ring-primary-400 active:bg-primary-100",
-  danger: "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 active:bg-red-800 shadow-sm hover:shadow-md",
-  success: "bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500 active:bg-emerald-800 shadow-sm hover:shadow-md",
+  primary: "bg-primary-600 !text-black hover:bg-primary-700 focus:ring-primary-500 active:bg-primary-800 shadow-md",
+  secondary: "bg-gray-100 border border-primary-300 text-primary-700 hover:bg-primary-50 hover:border-primary-400 focus:ring-primary-400 active:bg-primary-100 shadow-sm hover:shadow",
+  accent: "bg-secondary-600 !text-black hover:bg-secondary-700 focus:ring-secondary-400 active:bg-secondary-800 shadow-md",
+  gradient: "bg-gradient-to-r from-primary-500 to-primary-700 !text-black hover:from-primary-600 hover:to-primary-800 focus:ring-primary-400 shadow-md",
+  outlined: "border-2 border-primary-500 bg-white text-primary-600 hover:bg-primary-50 focus:ring-primary-400 active:bg-primary-100",
+  danger: "bg-red-600 !text-black hover:bg-red-700 focus:ring-red-500 active:bg-red-800 shadow-md",
+  success: "bg-emerald-600 !text-black hover:bg-emerald-700 focus:ring-emerald-500 active:bg-emerald-800 shadow-md",
   link: "text-primary-600 hover:text-primary-800 hover:underline focus:ring-primary-400 px-0 py-0",
-  icon: "text-gray-700 hover:text-primary-600 hover:bg-gray-100 focus:ring-primary-400 rounded-full p-2"
+  icon: "bg-primary-50 text-primary-700 hover:bg-primary-100 hover:text-primary-800 focus:ring-primary-400 rounded-full p-2 shadow-sm"
 };
 
 // Définition des tailles

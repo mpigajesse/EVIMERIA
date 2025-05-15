@@ -437,7 +437,7 @@ const CategoryDetailPage: React.FC = () => {
                   <Card 
                     to={`/products?filter=${name.toLowerCase()}`}
                     elevation="medium"
-                    className={`${colors.gradients.primary} text-white text-center h-24 sm:h-32 flex items-center justify-center hover:shadow-lg`}
+                    className={`${colors.gradients.primary} !text-black text-center h-24 sm:h-32 flex items-center justify-center hover:shadow-lg`}
                     padding="sm"
                     hover={false}
                   >

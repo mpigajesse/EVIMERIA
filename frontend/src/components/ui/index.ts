@@ -4,6 +4,9 @@ import Input from './Input';
 import Badge from './Badge';
 import SectionTitle from './SectionTitle';
 import Loader from './Loader';
+import ActionButton from './ActionButton';
+import NavButton from './NavButton';
+import ProductBuyButton from '../ProductBuyButton';
 
 export {
   Button,
@@ -11,7 +14,10 @@ export {
   Input,
   Badge,
   SectionTitle,
-  Loader
+  Loader,
+  ActionButton,
+  NavButton,
+  ProductBuyButton
 };
 
 // Exporter par défaut pour une utilisation simple
@@ -21,5 +27,8 @@ export default {
   Input,
   Badge,
   SectionTitle,
-  Loader
+  Loader,
+  ActionButton,
+  NavButton,
+  ProductBuyButton
 }; 

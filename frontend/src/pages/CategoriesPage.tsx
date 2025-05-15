@@ -46,7 +46,7 @@ const CategoriesPage: React.FC = () => {
           variants={animations.fadeInDown}
           className="relative z-10"
         >
-          <div className={`${colors.gradients.primary} text-white p-8 rounded-3xl mb-8 shadow-lg relative overflow-hidden`}>
+          <div className={`${colors.gradients.primary} !text-black p-8 rounded-3xl mb-8 shadow-lg relative overflow-hidden`}>
             <div className="absolute inset-0 bg-pattern opacity-10"></div>
             
             <SectionTitle
@@ -139,7 +139,7 @@ const CategoriesPage: React.FC = () => {
                       {/* Badge avec nombre de produits */}
                       {category.products_count !== undefined && (
                         <div className="absolute top-4 right-4">
-                          <Badge variant="primary" size="sm" className={`${colors.gradients.primary} shadow-md`}>
+                          <Badge variant="primary" size="sm" className={`${colors.gradients.primary} !text-black shadow-md`}>
                             {category.products_count} produits
                           </Badge>
                         </div>
@@ -154,7 +154,7 @@ const CategoriesPage: React.FC = () => {
                         >
                           <Button 
                             variant="primary"
-                            className="bg-white text-primary-600 hover:bg-gray-100"
+                            className="bg-white !text-primary-600 !border-2 !border-primary-600 hover:bg-gray-100"
                           >
                             Explorer la collection
                           </Button>
@@ -194,7 +194,7 @@ const CategoriesPage: React.FC = () => {
           whileInView="visible"
           viewport={{ once: true }}
         >
-          <Card className={`${colors.gradients.cosmic} p-8 text-white rounded-3xl overflow-hidden relative mb-16`}>
+          <Card className={`${colors.gradients.cosmic} p-8 !text-black rounded-3xl overflow-hidden relative mb-16`}>
             {/* Éléments décoratifs */}
             <motion.div 
               className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full translate-x-32 -translate-y-32"
@@ -217,7 +217,7 @@ const CategoriesPage: React.FC = () => {
                 variant="primary" 
                 size="lg"
                 to="/products"
-                className="bg-white text-primary-600 hover:bg-gray-100"
+                className="bg-white !text-primary-600 !border-2 !border-primary-600 hover:bg-gray-100"
               >
                 En profiter maintenant
               </Button>
