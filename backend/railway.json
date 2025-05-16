@@ -4,8 +4,8 @@
     "builder": "DOCKERFILE"
   },
   "deploy": {
-    "startCommand": "/app/start.sh",
     "restartPolicyType": "ON_FAILURE",
+    "startCommand": "/app/start.sh",
     "numReplicas": 1
   }
 } 
