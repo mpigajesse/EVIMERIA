@@ -22,34 +22,18 @@ var/
 
 # Django
 *.log
-local_settings.py
+*.pot
+*.pyc
 db.sqlite3
 db.sqlite3-journal
 media/
 static/
-staticfiles/
-.env.local
-.env.development
-.env.production
 
 # Frontend
 node_modules/
-/frontend/node_modules/
-/frontend/.pnp
-/frontend/.pnp.js
-/frontend/coverage
-/frontend/.next/
-/frontend/out/
-/frontend/build/
-/frontend/dist/
-/frontend/.env.local
-/frontend/.env.development.local
-/frontend/.env.test.local
-/frontend/.env.production.local
-/frontend/npm-debug.log*
-/frontend/yarn-debug.log*
-/frontend/yarn-error.log*
-.DS_Store
+.npm
+.eslintcache
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -58,26 +42,24 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Environnement virtuel
-venv/
-virtualenv/
-ENV/
-.env
-.venv
-
-# VS Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# PyCharm
+# IDEs and editors
 .idea/
-*.iml
-*.iws
-*.ipr
-.idea_modules/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+*.code-workspace
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Environnement
+.env
+.env.local
+.env.development
+.env.test
+.env.production
 
 # Autres
 .DS_Store

@@ -39,7 +39,7 @@ const HomePage = () => {
                   <Button 
                     variant="primary"
                     size="lg"
-                    to="/products"
+                  to="/products"
                     className="bg-blue-600 !text-black"
                     icon={
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -191,18 +191,18 @@ const HomePage = () => {
                   transition={{ delay: 0.3, duration: 0.5 }}
                   viewport={{ once: true }}
                 >
-                  <PromoSection 
+            <PromoSection 
                     title="Du00e9couvrez EVIMERIA" 
                     subtitle="Votre nouvelle plateforme de mode et d'accessoires - Vivez une expu00e9rience shopping unique et innovante !" 
-                    variant="countdown"
-                    endsIn={24}
-                    minDiscount={15}
-                    limit={3}
-                    className="relative z-10"
-                  />
+              variant="countdown"
+              endsIn={24}
+              minDiscount={15}
+              limit={3}
+              className="relative z-10"
+            />
                 </motion.div>
               </div>
-            </Card>
+          </Card>
           </motion.div>
         </div>
 
