@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Installer les dépendances Python
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir dj-database-url
 
 # Copier le code source du backend
 COPY backend/ .
@@ -39,6 +40,13 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
 # Collectstatic avant le démarrage
 RUN python manage.py collectstatic --noinput
 
+# Créer un script d'initialisation de la base de données
+RUN echo '#!/bin/bash\n\
+# Créer un superutilisateur par défaut\n\
+echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username=\"admin\").exists() or User.objects.create_superuser(\"admin\", \"admin@example.com\", \"adminpassword123\")" | python manage.py shell\n\
+echo "Superuser admin created successfully"\n\
+' > /app/init_db.sh && chmod +x /app/init_db.sh
+
 # Créer un script de démarrage
 RUN echo '#!/bin/bash\n\
 echo "Starting EVIMERIA on Railway..."\n\
@@ -48,37 +56,38 @@ echo "ALLOWED_HOSTS: $DJANGO_ALLOWED_HOSTS"\n\
 \n\
 # Vérifier la connexion à la base de données\n\
 if [ -n "$DATABASE_URL" ]; then\n\
-  echo "Database connection configured. Attempting to connect..."\n\
-  # Extraire les informations de connexion de DATABASE_URL\n\
-  DB_HOST=$(echo $DATABASE_URL | sed -n "s/^.*@\\(.*\\):.*/\\1/p")\n\
-  DB_PORT=$(echo $DATABASE_URL | sed -n "s/^.*:$$\([0-9]*\).*/\\1/p")\n\
-  DB_NAME=$(echo $DATABASE_URL | sed -n "s/^.*\\/\\(.*\\)?.*/\\1/p")\n\
+  echo "Database connection configured. Analyzing DATABASE_URL..."\n\
   \n\
   # Attendre que la base de données soit disponible\n\
   echo "Waiting for PostgreSQL database..."\n\
+  # Technique plus simple pour attendre que la base de données soit prête\n\
   for i in {1..30}; do\n\
-    pg_isready -h $DB_HOST -p $DB_PORT && break\n\
-    echo "Waiting for database connection... ($i/30)"\n\
+    echo "Attempt $i/30..."\n\
+    python -c "import psycopg2, os, time; time.sleep(1); conn=psycopg2.connect(os.environ[\"DATABASE_URL\"]); conn.close()" && break || echo "Connection failed, retrying..."\n\
+    if [ $i -eq 30 ]; then\n\
+      echo "Database connection failed after 30 attempts. Proceeding anyway..."\n\
+    fi\n\
     sleep 1\n\
   done\n\
-  \n\
-  # Vérifier si la base de données est disponible\n\
-  if pg_isready -h $DB_HOST -p $DB_PORT; then\n\
-    echo "Database is ready. Proceeding with migrations."\n\
-  else\n\
-    echo "Database connection failed after 30 attempts. Proceeding anyway..."\n\
-  fi\n\
 else\n\
   echo "No DATABASE_URL found. Using default database."\n\
 fi\n\
 \n\
 # Exécuter les migrations\n\
 echo "Running migrations..."\n\
-python manage.py migrate\n\
+python manage.py migrate --noinput\n\
+\n\
+# Initialiser la base de données avec un superutilisateur si nécessaire\n\
+echo "Initializing database with default data..."\n\
+/app/init_db.sh\n\
 \n\
 # Vérifier l\'état de l\'application Django\n\
 echo "Checking Django application..."\n\
 python manage.py check\n\
+\n\
+# Liste des tables dans la base de données\n\
+echo "Listing database tables..."\n\
+python -c "from django.db import connection; cursor = connection.cursor(); cursor.execute(\"SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\'\"); print([x[0] for x in cursor.fetchall()])"\n\
 \n\
 # Si Railway définit un PORT différent, utilisez-le\n\
 if [ -n "$PORT" ] && [ "$PORT" != "8000" ]; then\n\
