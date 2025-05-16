@@ -89,7 +89,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     <motion.div
       whileHover={{ y: -8 }}
       transition={{ duration: 0.4, type: "spring", stiffness: 300 }}
-      className={classNames("group", className)}
+      className={classNames("group h-full", className)}
     >
       <Link 
         to={`/products/${product.slug}`} 
@@ -102,9 +102,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </div>
         )}
         
-        {/* Image du produit - hauteur fixe avec fond de chargement */}
+        {/* Image du produit - taille fixe et uniforme */}
         <div className="relative overflow-hidden bg-gray-100">
-          <div className="aspect-[4/3] w-full">
+          <div className="aspect-[1/1] w-full h-[300px]">
             {product.images && product.images.length > 0 ? (
               <motion.div
                 className="w-full h-full bg-gray-50"
@@ -150,7 +150,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </div>
         
         {/* Informations produit - hauteur fixe */}
-        <div className="p-4 h-[160px] flex flex-col">
+        <div className="p-4 h-[180px] flex flex-col">
           {/* Catégorie */}
           <Badge 
             variant="info" 

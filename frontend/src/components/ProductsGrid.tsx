@@ -19,8 +19,8 @@ interface ProductsGridProps {
 // Composant SkeletonCard pour afficher pendant le chargement
 const SkeletonCard: React.FC = () => (
   <div className="bg-white rounded-xl shadow-sm overflow-hidden h-full">
-    <div className="aspect-[4/3] w-full bg-gray-200 animate-pulse"></div>
-    <div className="p-4 h-[160px]">
+    <div className="aspect-[1/1] w-full h-[300px] bg-gray-200 animate-pulse"></div>
+    <div className="p-4 h-[180px]">
       <div className="w-1/3 h-5 bg-gray-200 rounded-full mb-3 animate-pulse"></div>
       <div className="w-full h-5 bg-gray-200 rounded-full mb-2 animate-pulse"></div>
       <div className="w-2/3 h-5 bg-gray-200 rounded-full mb-6 animate-pulse"></div>

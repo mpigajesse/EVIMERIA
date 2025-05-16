@@ -75,31 +75,48 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
       }}
     >
       {/* Image de la catégorie */}
-      <div className={variant === 'horizontal' ? 'w-1/3 relative' : 'relative aspect-square w-full overflow-hidden'}>
-        <div className="absolute inset-0 bg-gray-200">
-          <img
-            src={imageUrl}
-            alt={category.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.src = `https://via.placeholder.com/400x400?text=${category.name}`;
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/60"></div>
-        </div>
-        
-        {variant !== 'horizontal' && category.products_count && (
-          <div className="absolute top-2 right-2 z-10">
-            <span className="bg-primary-600 text-white text-xs font-medium px-2.5 py-1 rounded-full shadow-md">
-              {productsCount}
-            </span>
+      {variant === 'horizontal' ? (
+        <div className="w-1/3 relative">
+          <div className="absolute inset-0 bg-gray-200">
+            <img
+              src={imageUrl}
+              alt={category.name}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = `https://via.placeholder.com/400x400?text=${category.name}`;
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/60"></div>
           </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="relative w-full">
+          <div className="aspect-[1/1] h-[300px]">
+            <img
+              src={imageUrl}
+              alt={category.name}
+              className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = `https://via.placeholder.com/400x400?text=${category.name}`;
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/60"></div>
+          </div>
+          
+          {category.products_count && (
+            <div className="absolute top-3 right-3 z-10">
+              <span className="bg-primary-600 text-white text-xs font-medium px-2.5 py-1 rounded-full shadow-md">
+                {productsCount}
+              </span>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Contenu de la carte */}
-      <div className={`${variant === 'horizontal' ? 'w-2/3 p-4' : 'p-4 flex flex-col flex-grow'}`}>
+      <div className={`${variant === 'horizontal' ? 'w-2/3 p-4' : 'p-4 h-[180px] flex flex-col'}`}>
         <h3 className="text-lg font-semibold mb-1 line-clamp-1">{category.name}</h3>
         
         {category.description && (
@@ -114,7 +131,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
           </div>
         )}
         
-        <div className={variant === 'horizontal' ? 'mt-auto' : 'mt-3'}>
+        <div className={variant === 'horizontal' ? 'mt-auto' : 'mt-auto pt-2'}>
           <ActionButton
             to={`/categories/${category.slug}`}
             variant="primary"

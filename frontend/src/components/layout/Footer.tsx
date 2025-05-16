@@ -16,7 +16,7 @@ const Footer = () => {
               <h2 className="text-2xl font-bold text-white">EVIMERIA</h2>
             </div>
             <p className="text-blue-200 mb-6">
-              Votre nouvelle plateforme de mode et d'accessoires en ligne. Vu00eatements u00e9lu00e9gants et tendance, accessoires de qualitu00e9. Du00e9couvrez notre collection exclusive.
+              ✨ Votre nouvelle destination mode pour des vêtements et accessoires tendance, uniques et inspirants.
             </p>
             <div className="flex space-x-4 mb-8">
               <a href="#" className="text-blue-200 hover:text-violet-300 transition-colors">

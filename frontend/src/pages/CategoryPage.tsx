@@ -214,26 +214,49 @@ const CategoryPage: React.FC = () => {
               <motion.div 
                 key={relatedCategory.id}
                 variants={staggeredItem}
+                className="h-full"
               >
-                <Link to={`/categories/${relatedCategory.slug}`} className="block">
+                <Link to={`/categories/${relatedCategory.slug}`} className="block h-full">
                   <motion.div 
-                    className="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-200 h-full"
+                    className="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-200 h-full flex flex-col"
                     whileHover={{ y: -5, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)' }}
                   >
-                    <div className="aspect-w-16 aspect-h-9 w-full">
-                      <img 
-                        src={getCategoryImageUrl(relatedCategory)} 
-                        alt={relatedCategory.name} 
-                        className="w-full h-32 object-cover object-center"
-                        onError={(e) => {
-                          // Fallback en cas d'erreur de chargement d'image
-                          const target = e.target as HTMLImageElement;
-                          target.src = `https://via.placeholder.com/300x200?text=${relatedCategory.name}`;
-                        }}
-                      />
+                    {/* Conteneur d'image avec ratio 1:1 et hauteur fixe */}
+                    <div className="relative w-full">
+                      <div className="aspect-[1/1] h-[300px]">
+                        <img 
+                          src={getCategoryImageUrl(relatedCategory)} 
+                          alt={relatedCategory.name} 
+                          className="w-full h-full object-cover object-center"
+                          onError={(e) => {
+                            // Fallback en cas d'erreur de chargement d'image
+                            const target = e.target as HTMLImageElement;
+                            target.src = `https://via.placeholder.com/300x300?text=${relatedCategory.name}`;
+                          }}
+                        />
+                      </div>
+                      {relatedCategory.products_count && (
+                        <div className="absolute top-3 right-3 z-10">
+                          <span className="bg-primary-600 text-white text-xs font-medium px-2.5 py-1 rounded-full shadow-md">
+                            {relatedCategory.products_count} produits
+                          </span>
+                        </div>
+                      )}
                     </div>
-                    <div className="p-4">
-                      <h3 className="font-medium text-center text-gray-900">{relatedCategory.name}</h3>
+                    
+                    {/* Zone de texte avec hauteur fixe */}
+                    <div className="p-4 h-[100px] flex flex-col">
+                      <h3 className="font-medium text-gray-900 line-clamp-1 text-lg">{relatedCategory.name}</h3>
+                      {relatedCategory.description && (
+                        <p className="text-gray-600 text-sm line-clamp-2 mt-1 flex-grow">
+                          {relatedCategory.description}
+                        </p>
+                      )}
+                      <div className="mt-auto">
+                        <span className="text-primary-600 text-sm font-medium hover:underline">
+                          Explorer cette catégorie
+                        </span>
+                      </div>
                     </div>
                   </motion.div>
                 </Link>

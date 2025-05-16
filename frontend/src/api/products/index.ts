@@ -17,6 +17,11 @@ export interface Product {
   category_name: string;
   images: ProductImage[];
   created_at: string;
+  // Propriétés additionnelles
+  discount_percentage?: number;
+  is_new?: boolean;
+  rating?: number;
+  review_count?: number;
 }
 
 export interface ProductImage {

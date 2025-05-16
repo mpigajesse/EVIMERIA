@@ -31,9 +31,10 @@ const RegisterPage = () => {
 
   return (
     <div className={components.containers.page}>
-      {/* Éléments décoratifs d'arrière-plan */}
-      <div className={`${components.decorations.blobs} w-96 h-96 bg-primary-300 top-0 -right-48 opacity-20`}></div>
-      <div className={`${components.decorations.blobs} w-72 h-72 bg-secondary-300 bottom-40 -left-40 opacity-20`}></div>
+      {/* Éléments décoratifs d'arrière-plan améliorés */}
+      <div className={`${components.decorations.blobs} w-96 h-96 bg-blue-400 top-0 -right-48 opacity-20`}></div>
+      <div className={`${components.decorations.blobs} w-72 h-72 bg-violet-400 bottom-40 -left-40 opacity-20`}></div>
+      <div className={`${components.decorations.blobs} w-64 h-64 bg-green-400 top-40 left-20 opacity-10`}></div>
       
       <div className={components.containers.maxWidth}>
         <motion.div 
@@ -45,10 +46,13 @@ const RegisterPage = () => {
           <Card 
             elevation="high" 
             rounded="xl" 
-            className="w-full max-w-sm sm:max-w-md"
+            className="w-full max-w-sm sm:max-w-md overflow-hidden relative"
             padding="md"
           >
-            <motion.div variants={animations.fadeInUp} className="text-center">
+            {/* Barre de gradient supérieure */}
+            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-600 via-violet-600 to-green-600"></div>
+            
+            <motion.div variants={animations.fadeInUp} className="text-center pt-4">
               <SectionTitle 
                 title="Inscription" 
                 description="Créez votre compte pour commencer vos achats"
@@ -156,7 +160,7 @@ const RegisterPage = () => {
               id="agree-terms"
               name="agree-terms"
               type="checkbox"
-              className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              className="h-4 w-4 text-violet-600 focus:ring-violet-500 border-gray-300 rounded"
               checked={agreeTerms}
               onChange={(e) => setAgreeTerms(e.target.checked)}
               required
@@ -164,11 +168,11 @@ const RegisterPage = () => {
                 </div>
                 <label htmlFor="agree-terms" className="ml-2 block text-xs sm:text-sm text-gray-500">
               J'accepte les {' '}
-                  <Link to="#" className="text-primary-600 hover:text-primary-500 underline">
+                  <Link to="#" className="text-blue-600 hover:text-blue-500 underline">
                 conditions générales
               </Link>
                   {' '} et la {' '}
-                  <Link to="#" className="text-primary-600 hover:text-primary-500 underline">
+                  <Link to="#" className="text-blue-600 hover:text-blue-500 underline">
                     politique de confidentialité
                   </Link>
             </label>
@@ -181,7 +185,7 @@ const RegisterPage = () => {
               >
                 <Button
                   variant="primary"
-                  className="w-full py-2.5 sm:py-3"
+                  className="w-full py-2.5 sm:py-3 bg-gradient-to-r from-blue-600 via-violet-600 to-green-600 !text-white hover:from-blue-700 hover:via-violet-700 hover:to-green-700"
               type="submit"
             >
               Créer un compte
@@ -202,7 +206,7 @@ const RegisterPage = () => {
               <div className="flex flex-col space-y-3">
                 <Button 
                   variant="outlined"
-                  className="w-full justify-center"
+                  className="w-full justify-center border-gray-300 text-gray-700 hover:bg-gray-50"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
@@ -219,7 +223,7 @@ const RegisterPage = () => {
             >
               <p className={typography.body.small}>
             Vous avez déjà un compte ?{' '}
-                <Link to="/login" className="text-primary-600 hover:text-primary-500 underline">
+                <Link to="/login" className="text-blue-600 hover:text-blue-500 underline">
               Se connecter
             </Link>
           </p>
@@ -227,12 +231,12 @@ const RegisterPage = () => {
             
             {/* Badge */}
             <motion.div 
-              className="absolute top-2 right-2"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              className="absolute top-4 right-4"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5 }}
             >
-              <Badge variant="primary" className={`${colors.gradients.primary} !text-black`}>
+              <Badge variant="primary" className="bg-gradient-to-r from-blue-600 via-violet-600 to-green-600 text-white shadow-sm">
                 <span className="mr-1">✨</span> Nouveau
               </Badge>
             </motion.div>

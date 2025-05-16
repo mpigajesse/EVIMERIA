@@ -73,7 +73,7 @@ const Header = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            <span className="font-bold">NOUVEAU !</span> Du00e9couvrez EVIMERIA, votre nouvelle plateforme de mode et d'accessoires
+            <span className="font-bold">✨ NOUVEAU !</span> Découvrez EVIMERIA, votre nouvelle destination mode pour des vêtements et accessoires tendance, uniques et inspirants.
           </motion.p>
         </motion.div>
         
@@ -173,6 +173,14 @@ const Header = () => {
             
             <Link to="/products" className="text-gray-700 hover:text-blue-600 transition-colors py-2 font-medium">
               Produits
+            </Link>
+
+            <Link to="/about" className="text-gray-700 hover:text-blue-600 transition-colors py-2 font-medium">
+              À propos
+            </Link>
+
+            <Link to="/contact" className="text-gray-700 hover:text-blue-600 transition-colors py-2 font-medium">
+              Contact
             </Link>
             
             <div className="flex items-center space-x-4">
@@ -299,6 +307,32 @@ const Header = () => {
                       </Link>
                     ))}
                   </div>
+                </motion.div>
+
+                <motion.div variants={mobileMenuItemAnimation}>
+                  <Link 
+                    to="/about" 
+                    className="text-gray-700 hover:text-blue-600 px-2 py-2 rounded-lg hover:bg-gray-50 flex items-center"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    À propos
+                  </Link>
+                </motion.div>
+
+                <motion.div variants={mobileMenuItemAnimation}>
+                  <Link 
+                    to="/contact" 
+                    className="text-gray-700 hover:text-blue-600 px-2 py-2 rounded-lg hover:bg-gray-50 flex items-center"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    Contact
+                  </Link>
                 </motion.div>
                 
                 <motion.div variants={mobileMenuItemAnimation}>

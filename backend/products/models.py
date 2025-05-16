@@ -22,6 +22,28 @@ class Category(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+        
+    @property
+    def get_image_url(self):
+        """Retourne l'URL directe si c'est une URL Cloudinary, sinon l'URL classique."""
+        if self.image and hasattr(self.image, 'url'):
+            url = self.image.url
+            # Si l'URL commence par /media/http, c'est probablement une URL Cloudinary
+            if url.startswith('/media/http'):
+                # Extraire et nettoyer l'URL Cloudinary
+                cleaned_url = url.replace('/media/', '')
+                from urllib.parse import unquote
+                cleaned_url = unquote(cleaned_url)
+                
+                # Corriger le format de l'URL
+                if cleaned_url.startswith('http:/'):
+                    cleaned_url = cleaned_url.replace('http:/', 'https://')
+                elif cleaned_url.startswith('res.cloudinary.com'):
+                    cleaned_url = f'https://{cleaned_url}'
+                
+                return cleaned_url
+            return url
+        return None
 
 class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
@@ -61,3 +83,25 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image de {self.product.name} - {'Principale' if self.is_main else 'Secondaire'}"
+    
+    @property
+    def get_image_url(self):
+        """Retourne l'URL directe si c'est une URL Cloudinary, sinon l'URL classique."""
+        if self.image and hasattr(self.image, 'url'):
+            url = self.image.url
+            # Si l'URL commence par /media/http, c'est probablement une URL Cloudinary
+            if url.startswith('/media/http'):
+                # Extraire et nettoyer l'URL Cloudinary
+                cleaned_url = url.replace('/media/', '')
+                from urllib.parse import unquote
+                cleaned_url = unquote(cleaned_url)
+                
+                # Corriger le format de l'URL
+                if cleaned_url.startswith('http:/'):
+                    cleaned_url = cleaned_url.replace('http:/', 'https://')
+                elif cleaned_url.startswith('res.cloudinary.com'):
+                    cleaned_url = f'https://{cleaned_url}'
+                
+                return cleaned_url
+            return url
+        return None

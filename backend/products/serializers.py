@@ -9,24 +9,8 @@ class ProductImageSerializer(serializers.ModelSerializer):
         fields = ['id', 'image', 'is_main', 'image_url']
         
     def get_image_url(self, obj):
-        # Correction de l'URL Cloudinary
-        if obj.image:
-            url = obj.image.url
-            if url.startswith('/media/http'):
-                # Extraire et décoder l'URL Cloudinary
-                cleaned_url = url.replace('/media/', '')
-                from urllib.parse import unquote
-                cleaned_url = unquote(cleaned_url)
-                
-                # Correction du format de l'URL
-                if cleaned_url.startswith('http:/'):
-                    cleaned_url = cleaned_url.replace('http:/', 'https://')
-                elif cleaned_url.startswith('res.cloudinary.com'):
-                    cleaned_url = f'https://{cleaned_url}'
-                
-                return cleaned_url
-            return url
-        return None
+        # Utiliser la méthode get_image_url du modèle
+        return obj.get_image_url
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
@@ -52,24 +36,8 @@ class CategorySerializer(serializers.ModelSerializer):
         return obj.products.filter(is_published=True).count()
         
     def get_image_url(self, obj):
-        # Correction de l'URL Cloudinary
-        if obj.image:
-            url = obj.image.url
-            if url.startswith('/media/http'):
-                # Extraire et décoder l'URL Cloudinary
-                cleaned_url = url.replace('/media/', '')
-                from urllib.parse import unquote
-                cleaned_url = unquote(cleaned_url)
-                
-                # Correction du format de l'URL
-                if cleaned_url.startswith('http:/'):
-                    cleaned_url = cleaned_url.replace('http:/', 'https://')
-                elif cleaned_url.startswith('res.cloudinary.com'):
-                    cleaned_url = f'https://{cleaned_url}'
-                
-                return cleaned_url
-            return url
-        return None
+        # Utiliser la méthode get_image_url du modèle
+        return obj.get_image_url
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)

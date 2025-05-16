@@ -100,7 +100,7 @@ const SimilarCategories: React.FC<SimilarCategoriesProps> = ({
                     <img 
                       src={getCategoryImageUrl(category)} 
                       alt={category.name}
-                      className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110" 
+                      className="w-full h-[300px] object-cover object-center transition-transform duration-500 group-hover:scale-110" 
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = `https://via.placeholder.com/400x400?text=${category.name}`;
@@ -123,7 +123,7 @@ const SimilarCategories: React.FC<SimilarCategoriesProps> = ({
                 </div>
                 
                 {/* Zone de texte de hauteur fixe */}
-                <div className="p-4 flex flex-col flex-grow bg-white">
+                <div className="p-4 h-[180px] flex flex-col">
                   <h3 className={`${typography.headings.h4} mb-2 line-clamp-1`}>{category.name}</h3>
                   
                   {category.description && (
