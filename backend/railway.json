@@ -4,9 +4,9 @@
     "builder": "DOCKERFILE"
   },
   "deploy": {
-    "startCommand": "/app/start.sh",
+    "restartPolicyType": "ON_FAILURE",
     "healthcheckPath": "/health/",
     "healthcheckTimeout": 10,
-    "restartPolicyType": "ON_FAILURE"
+    "startCommand": "gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:$PORT --log-level debug"
   }
 } 
