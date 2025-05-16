@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     procps \
     net-tools \
+    postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
 # Installer les dépendances Python
@@ -44,8 +45,41 @@ echo "Starting EVIMERIA on Railway..."\n\
 echo "Environment: Railway Deployment"\n\
 echo "PORT: $PORT"\n\
 echo "ALLOWED_HOSTS: $DJANGO_ALLOWED_HOSTS"\n\
+\n\
+# Vérifier la connexion à la base de données\n\
+if [ -n "$DATABASE_URL" ]; then\n\
+  echo "Database connection configured. Attempting to connect..."\n\
+  # Extraire les informations de connexion de DATABASE_URL\n\
+  DB_HOST=$(echo $DATABASE_URL | sed -n "s/^.*@\\(.*\\):.*/\\1/p")\n\
+  DB_PORT=$(echo $DATABASE_URL | sed -n "s/^.*:$$\([0-9]*\).*/\\1/p")\n\
+  DB_NAME=$(echo $DATABASE_URL | sed -n "s/^.*\\/\\(.*\\)?.*/\\1/p")\n\
+  \n\
+  # Attendre que la base de données soit disponible\n\
+  echo "Waiting for PostgreSQL database..."\n\
+  for i in {1..30}; do\n\
+    pg_isready -h $DB_HOST -p $DB_PORT && break\n\
+    echo "Waiting for database connection... ($i/30)"\n\
+    sleep 1\n\
+  done\n\
+  \n\
+  # Vérifier si la base de données est disponible\n\
+  if pg_isready -h $DB_HOST -p $DB_PORT; then\n\
+    echo "Database is ready. Proceeding with migrations."\n\
+  else\n\
+    echo "Database connection failed after 30 attempts. Proceeding anyway..."\n\
+  fi\n\
+else\n\
+  echo "No DATABASE_URL found. Using default database."\n\
+fi\n\
+\n\
+# Exécuter les migrations\n\
+echo "Running migrations..."\n\
 python manage.py migrate\n\
+\n\
+# Vérifier l\'état de l\'application Django\n\
+echo "Checking Django application..."\n\
 python manage.py check\n\
+\n\
 # Si Railway définit un PORT différent, utilisez-le\n\
 if [ -n "$PORT" ] && [ "$PORT" != "8000" ]; then\n\
   echo "Binding to Railway PORT: $PORT"\n\
