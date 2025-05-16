@@ -1,4 +1,3 @@
-# Utiliser uniquement le backend Django (sans frontend intégré)
 FROM python:3.11-slim
 
 WORKDIR /app
