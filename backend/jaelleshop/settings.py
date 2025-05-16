@@ -189,7 +189,14 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ],
+    'UNAUTHENTICATED_USER': None,  # Permet les requêtes anonymes
 }
+
+# Permissions public pour certaines APIs
+from rest_framework.permissions import AllowAny
+REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = [
+    'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+]
 
 # JWT Settings
 SIMPLE_JWT = {

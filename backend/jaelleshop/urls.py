@@ -36,11 +36,16 @@ def api_root_view(request):
         }
     })
 
+# Vue simple pour le healthcheck
+def health_check(request):
+    return HttpResponse("OK", content_type="text/plain")
+
 # Vue pour servir l'application React
 frontend_view = TemplateView.as_view(template_name='index.html')
 
 urlpatterns = [
     # API endpoints
+    path('', health_check, name='health-check'),  # Endpoint pour le healthcheck
     path('api-info/', api_root_view, name='api-info'),
     path('admin/', admin.site.urls),
     path('api/', include('products.api.urls')),
