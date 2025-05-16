@@ -20,13 +20,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
-from django.views.generic import TemplateView
 import os
 
 # Une vue simple pour l'API
 def api_root_view(request):
     return JsonResponse({
         "message": "API JaelleShop - Bienvenue",
+        "status": "running",
         "endpoints": {
             "admin": "/admin/",
             "api": "/api/", 
@@ -36,17 +36,14 @@ def api_root_view(request):
         }
     })
 
-# Vue simple pour le healthcheck
 def health_check(request):
-    return HttpResponse("OK", content_type="text/plain")
-
-# Vue pour servir l'application React
-frontend_view = TemplateView.as_view(template_name='index.html')
+    return HttpResponse("OK")
 
 urlpatterns = [
     # API endpoints
-    path('', health_check, name='health-check'),  # Endpoint pour le healthcheck
+    path('', api_root_view),
     path('api-info/', api_root_view, name='api-info'),
+    path('health/', health_check, name='health'),
     path('admin/', admin.site.urls),
     path('api/', include('products.api.urls')),
     path('api/users/', include('users.urls')),
@@ -57,11 +54,6 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    # Ajout d'une route spécifique pour les assets du frontend
-    urlpatterns += static('/assets/', document_root=os.path.join(settings.FRONTEND_DIR, 'dist', 'assets'))
-
-# Toutes les autres routes sont gérées par l'application React
-urlpatterns += [
-    re_path(r'^$', frontend_view),  # Page d'accueil
-    re_path(r'^(?!api|admin|api-info|static|media|assets).*$', frontend_view),  # Toutes les autres routes frontend
-]
+else:
+    # En production, servis par whitenoise
+    pass

@@ -189,14 +189,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ],
-    'UNAUTHENTICATED_USER': None,  # Permet les requêtes anonymes
 }
-
-# Permissions public pour certaines APIs
-from rest_framework.permissions import AllowAny
-REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = [
-    'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-]
 
 # JWT Settings
 SIMPLE_JWT = {
@@ -237,3 +230,17 @@ CORS_ALLOW_ALL_ORIGINS = True  # Pour le développement seulement
 
 # Configuration du modèle utilisateur personnalisé
 AUTH_USER_MODEL = 'users.User'
+
+# URL de base pour l'environnement de production Railway
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+# Activer WhiteNoise pour servir les fichiers statiques
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Configuration CORS
+CORS_ALLOW_ALL_ORIGINS = True
