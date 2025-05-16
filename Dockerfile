@@ -40,63 +40,77 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
 # Collectstatic avant le démarrage
 RUN python manage.py collectstatic --noinput
 
-# Créer un script d'initialisation de la base de données
-RUN echo '#!/bin/bash\n\
-# Créer un superutilisateur par défaut\n\
-echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username=\"admin\").exists() or User.objects.create_superuser(\"admin\", \"admin@example.com\", \"adminpassword123\")" | python manage.py shell\n\
-echo "Superuser admin created successfully"\n\
-' > /app/init_db.sh && chmod +x /app/init_db.sh
+# Créer un script d'initialisation de la base de données - Plus simple
+COPY <<EOF /app/init_db.sh
+#!/bin/bash
+echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='admin').exists() or User.objects.create_superuser('admin', 'admin@example.com', 'adminpassword123')" | python manage.py shell
+echo "Superuser admin created successfully"
+EOF
 
-# Créer un script de démarrage
-RUN echo '#!/bin/bash\n\
-echo "Starting EVIMERIA on Railway..."\n\
-echo "Environment: Railway Deployment"\n\
-echo "PORT: $PORT"\n\
-echo "ALLOWED_HOSTS: $DJANGO_ALLOWED_HOSTS"\n\
-\n\
-# Vérifier la connexion à la base de données\n\
-if [ -n "$DATABASE_URL" ]; then\n\
-  echo "Database connection configured. Analyzing DATABASE_URL..."\n\
-  \n\
-  # Attendre que la base de données soit disponible\n\
-  echo "Waiting for PostgreSQL database..."\n\
-  # Technique plus simple pour attendre que la base de données soit prête\n\
-  for i in {1..30}; do\n\
-    echo "Attempt $i/30..."\n\
-    python -c "import psycopg2, os, time; time.sleep(1); conn=psycopg2.connect(os.environ[\"DATABASE_URL\"]); conn.close()" && break || echo "Connection failed, retrying..."\n\
-    if [ $i -eq 30 ]; then\n\
-      echo "Database connection failed after 30 attempts. Proceeding anyway..."\n\
-    fi\n\
-    sleep 1\n\
-  done\n\
-else\n\
-  echo "No DATABASE_URL found. Using default database."\n\
-fi\n\
-\n\
-# Exécuter les migrations\n\
-echo "Running migrations..."\n\
-python manage.py migrate --noinput\n\
-\n\
-# Initialiser la base de données avec un superutilisateur si nécessaire\n\
-echo "Initializing database with default data..."\n\
-/app/init_db.sh\n\
-\n\
-# Vérifier l\'état de l\'application Django\n\
-echo "Checking Django application..."\n\
-python manage.py check\n\
-\n\
-# Liste des tables dans la base de données\n\
-echo "Listing database tables..."\n\
-python -c "from django.db import connection; cursor = connection.cursor(); cursor.execute(\"SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\'\"); print([x[0] for x in cursor.fetchall()])"\n\
-\n\
-# Si Railway définit un PORT différent, utilisez-le\n\
-if [ -n "$PORT" ] && [ "$PORT" != "8000" ]; then\n\
-  echo "Binding to Railway PORT: $PORT"\n\
-  gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:$PORT --log-level debug\n\
-else\n\
-  echo "Binding to default port: 8000"\n\
-  gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:8000 --log-level debug\n\
-fi' > /app/start.sh && chmod +x /app/start.sh
+RUN chmod +x /app/init_db.sh
+
+# Créer un script de démarrage - Plus simple
+COPY <<EOF /app/start.sh
+#!/bin/bash
+echo "Starting EVIMERIA on Railway..."
+echo "Environment: Railway Deployment"
+echo "PORT: \$PORT"
+echo "ALLOWED_HOSTS: \$DJANGO_ALLOWED_HOSTS"
+
+# Vérifier la connexion à la base de données
+if [ -n "\$DATABASE_URL" ]; then
+  echo "Database connection configured"
+  
+  # Attendre que la base de données soit disponible
+  echo "Waiting for PostgreSQL database..."
+  for i in {1..30}; do
+    echo "Attempt \$i/30..."
+    python -c "import psycopg2, os, time; time.sleep(1); 
+    try:
+        conn=psycopg2.connect(os.environ['DATABASE_URL'])
+        conn.close()
+        print('Connected!')
+        exit(0)
+    except Exception as e:
+        print(f'Error: {e}')
+        exit(1)" && break || echo "Connection failed, retrying..."
+    
+    if [ \$i -eq 30 ]; then
+      echo "Database connection failed after 30 attempts. Proceeding anyway..."
+    fi
+    sleep 1
+  done
+else
+  echo "No DATABASE_URL found. Using default database."
+fi
+
+# Exécuter les migrations
+echo "Running migrations..."
+python manage.py migrate --noinput
+
+# Initialiser la base de données avec un superutilisateur
+echo "Initializing database with default data..."
+/app/init_db.sh
+
+# Vérifier l'application Django
+echo "Checking Django application..."
+python manage.py check
+
+# Liste des tables dans la base de données
+echo "Listing database tables..."
+python -c "from django.db import connection; cursor = connection.cursor(); cursor.execute('SELECT table_name FROM information_schema.tables WHERE table_schema = \\'public\\''); print([x[0] for x in cursor.fetchall()])"
+
+# Démarrer Gunicorn
+if [ -n "\$PORT" ] && [ "\$PORT" != "8000" ]; then
+  echo "Binding to Railway PORT: \$PORT"
+  gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:\$PORT --log-level debug
+else
+  echo "Binding to default port: 8000"
+  gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:8000 --log-level debug
+fi
+EOF
+
+RUN chmod +x /app/start.sh
 
 # Commande de démarrage
 CMD ["/app/start.sh"]
