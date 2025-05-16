@@ -164,7 +164,19 @@ def db_tables(request):
 
 def simple_test(request):
     """Point de terminaison très simple pour tester"""
-    return HttpResponse("OK - EVIMERIA fonctionne!", content_type="text/plain")
+    import django
+    import sys
+    import os
+    
+    settings_module = os.environ.get('DJANGO_SETTINGS_MODULE', 'unknown')
+    
+    response_text = f"""
+EVIMERIA fonctionne!
+Python: {sys.version}
+Django: {django.__version__}
+Settings: {settings_module}
+"""
+    return HttpResponse(response_text, content_type="text/plain")
 
 urlpatterns = [
     # Route de test simple

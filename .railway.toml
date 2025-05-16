@@ -3,9 +3,8 @@ builder = "DOCKERFILE"
 dockerfilePath = "./Dockerfile"
 
 [deploy]
-numReplicas = 1
+startCommand = "sh backend/railway_entrypoint.sh"
 restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 3
 
 [service]
 internal_port = 8000
