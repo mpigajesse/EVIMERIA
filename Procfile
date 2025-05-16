@@ -1,1 +1,0 @@
-web: cd backend && gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:$PORT 

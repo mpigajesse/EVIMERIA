@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-c+h11ba43(notowv31(&=
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 # Compatibilité avec les deux noms de variables pour ALLOWED_HOSTS
-ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', '0.0.0.0', 'evimeria-production.up.railway.app', '.railway.app']
+ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
@@ -232,7 +232,7 @@ CORS_ALLOW_ALL_ORIGINS = True  # Pour le développement seulement
 # Configuration du modèle utilisateur personnalisé
 AUTH_USER_MODEL = 'users.User'
 
-# URL de base pour l'environnement de production Railway
+# URL de base pour l'environnement de production
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = False

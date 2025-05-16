@@ -75,7 +75,7 @@ def health_check(request):
     response = JsonResponse({
         "status": "OK",
         "message": "Service is healthy",
-        "environment": os.environ.get('RAILWAY_DEPLOYMENT', 'False'),
+        "environment": "production" if not settings.DEBUG else "development",
         "host_info": {
             "hostname": hostname,
             "ip": ip,
@@ -112,11 +112,6 @@ def check_db_connection():
     except Exception as e:
         logger.error(f"Database connection error: {e}")
         return False
-
-def railway_check(request):
-    """Point de terminaison spécifique pour Railway"""
-    logger.info("Railway check endpoint accessed")
-    return HttpResponse("Railway check OK", content_type="text/plain")
 
 def debug_info(request):
     logger.info("Debug info endpoint accessed")
@@ -186,7 +181,6 @@ urlpatterns = [
     path('', api_root_view),
     path('api-info/', api_root_view, name='api-info'),
     path('health/', health_check, name='health'),
-    path('railway/', railway_check, name='railway'),
     path('debug-info/', debug_info, name='debug-info'),
     path('db-tables/', db_tables, name='db-tables'),
     path('admin/', admin.site.urls),

@@ -1,1 +1,0 @@
-web: gunicorn --env DJANGO_SETTINGS_MODULE=jaelleshop.settings railway_wsgi:application --bind 0.0.0.0:$PORT --log-level debug 
