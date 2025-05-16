@@ -30,7 +30,7 @@ const HomePage = () => {
               >
                 <Badge variant="primary" className="mb-4 animate-pulse">Nouvelle collection</Badge>
                 <h1 className={typography.headings.display}>
-                  JaelleShop <span className="text-primary-600">Inspiring</span> Fashion.
+                  EVIMERIA <span className="text-primary-600">Inspiring</span> Fashion.
               </h1>
                 <p className={`${typography.body.medium} mb-8 max-w-lg mt-4`}>
                 Découvrez notre collection exclusive et faites de votre style une déclaration de mode unique.
@@ -150,20 +150,60 @@ const HomePage = () => {
 
         {/* Section de promotions avec compte à rebours */}
         <div className="my-16">
-          <Card className="bg-gradient-to-r from-blue-600 via-violet-600 to-green-600 p-8 sm:p-10 !text-black overflow-hidden relative shadow-xl rounded-3xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full translate-x-32 -translate-y-32"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full -translate-x-32 translate-y-32"></div>
-            
-            <PromoSection 
-              title="Offres flash" 
-              subtitle="Ne manquez pas ces offres exceptionnelles à durée limitée" 
-              variant="countdown"
-              endsIn={24}
-              minDiscount={15}
-              limit={3}
-              className="relative z-10"
-            />
-          </Card>
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <Card className="bg-gradient-to-r from-blue-600 via-violet-600 to-green-600 p-8 sm:p-10 !text-black overflow-hidden relative shadow-xl rounded-3xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              {/* Éléments décoratifs animés */}
+              <motion.div 
+                className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full" 
+                animate={{ x: [50, 30, 50], y: [-50, -30, -50], opacity: [0.5, 0.7, 0.5] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div 
+                className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full" 
+                animate={{ x: [-50, -30, -50], y: [50, 30, 50], opacity: [0.5, 0.7, 0.5] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div 
+                className="absolute top-1/2 left-1/3 w-16 h-16 bg-blue-300/30 rounded-full" 
+                animate={{ scale: [1, 1.5, 1], opacity: [0.3, 0.5, 0.3] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div 
+                className="absolute bottom-1/3 right-1/4 w-20 h-20 bg-violet-300/20 rounded-full" 
+                animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              />
+              <motion.div 
+                className="absolute top-1/4 right-1/3 w-12 h-12 bg-green-300/20 rounded-full" 
+                animate={{ scale: [1, 1.4, 1], opacity: [0.2, 0.5, 0.2] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+              />
+              
+              <div className="relative z-10">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                  viewport={{ once: true }}
+                >
+                  <PromoSection 
+                    title="Du00e9couvrez EVIMERIA" 
+                    subtitle="Votre nouvelle plateforme de mode et d'accessoires - Vivez une expu00e9rience shopping unique et innovante !" 
+                    variant="countdown"
+                    endsIn={24}
+                    minDiscount={15}
+                    limit={3}
+                    className="relative z-10"
+                  />
+                </motion.div>
+              </div>
+            </Card>
+          </motion.div>
         </div>
 
         {/* Recommandations de produits */}

@@ -11,9 +11,12 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Colonne 1: Logo et description */}
           <div className="col-span-1 lg:col-span-1">
-            <h2 className="text-2xl font-bold text-white mb-6">JaelleShop</h2>
+            <div className="flex items-center mb-6">
+              <img src="/src/assets/logo/logodusite.jpg" alt="EVIMERIA" className="h-7 w-7 rounded-full shadow-sm mr-2" />
+              <h2 className="text-2xl font-bold text-white">EVIMERIA</h2>
+            </div>
             <p className="text-blue-200 mb-6">
-              Votre boutique de mode en ligne pour des vêtements élégants et tendance. Découvrez notre collection exclusive.
+              Votre nouvelle plateforme de mode et d'accessoires en ligne. Vu00eatements u00e9lu00e9gants et tendance, accessoires de qualitu00e9. Du00e9couvrez notre collection exclusive.
             </p>
             <div className="flex space-x-4 mb-8">
               <a href="#" className="text-blue-200 hover:text-violet-300 transition-colors">
@@ -75,7 +78,7 @@ const Footer = () => {
         </div>
         
         <div className="mt-16 pt-8 border-t border-blue-800 text-center text-sm text-blue-200 flex flex-col items-center">
-          <p>&copy; {new Date().getFullYear()} JaelleShop. Tous droits réservés.</p>
+          <p>&copy; {new Date().getFullYear()} EVIMERIA. Tous droits réservés.</p>
           <div className="flex space-x-6 mt-4">
             <Link to="/privacy" className="text-violet-300 hover:text-white transition-colors">Confidentialité</Link>
             <Link to="/terms" className="text-green-300 hover:text-white transition-colors">Conditions</Link>

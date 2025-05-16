@@ -59,26 +59,41 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         {/* Notification bandeau (optionnel) */}
         <motion.div 
-          className="bg-blue-100 text-blue-800 text-center text-sm py-2 px-4 rounded-lg mb-4 flex items-center justify-center"
-          variants={fadeInDown}
-          initial="hidden"
-          animate="visible"
+          className="bg-gradient-to-r from-blue-600 via-violet-600 to-green-600 text-white text-center py-3 px-4 rounded-lg mb-4 flex items-center justify-center shadow-lg"
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 300, damping: 15 }}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 flex-shrink-0 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
           </svg>
-          <p>Livraison gratuite pour toute commande supérieure à 50€</p>
+          <motion.p 
+            className="font-medium"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <span className="font-bold">NOUVEAU !</span> Du00e9couvrez EVIMERIA, votre nouvelle plateforme de mode et d'accessoires
+          </motion.p>
         </motion.div>
         
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="text-2xl font-bold text-blue-600 flex items-center">
-            <motion.span 
-              className="text-3xl mr-1 text-blue-500"
-              whileHover={{ scale: 1.1, rotate: 5 }}
+            <motion.img 
+              src="/src/assets/logo/logodusite.jpg" 
+              alt="EVIMERIA" 
+              className="h-10 w-10 mr-2 rounded-full shadow-sm"
+              whileHover={{ scale: 1.05, rotate: 5 }}
               transition={{ type: "spring", stiffness: 500 }}
-            >J</motion.span>
-            <span>aelleShop</span>
+            />
+            <motion.span 
+              className="font-extrabold bg-gradient-to-r from-blue-600 via-violet-600 to-green-600 text-transparent bg-clip-text"
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 500 }}
+            >
+              EVIMERIA
+            </motion.span>
           </Link>
           
           {/* Barre de recherche (visible sur desktop) */}
