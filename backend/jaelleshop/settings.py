@@ -147,12 +147,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# Configuration pour les fichiers statiques du frontend
-STATICFILES_DIRS = [
-    # os.path.join(BASE_DIR, '..', 'frontend', 'dist'),  # Chemin vers les assets du build React
-    # os.path.join(BASE_DIR, '..', 'frontend', 'dist', 'assets'),  # Chemin vers les assets du build React
-]
-
 # Activer WhiteNoise pour servir les fichiers statiques
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 

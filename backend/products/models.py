@@ -22,7 +22,7 @@ class Category(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
-        
+
     @property
     def get_image_url(self):
         """Retourne l'URL directe si c'est une URL Cloudinary, sinon l'URL classique."""

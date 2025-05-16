@@ -4,21 +4,10 @@
     "builder": "DOCKERFILE"
   },
   "deploy": {
+    "numReplicas": 1,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 3,
     "healthcheckPath": "/api-info/",
     "healthcheckTimeout": 300
-  },
-  "volumes": [
-    {
-      "name": "static",
-      "path": "/app/static",
-      "mode": "READ_WRITE"
-    },
-    {
-      "name": "media",
-      "path": "/app/media",
-      "mode": "READ_WRITE"
-    }
-  ]
-}
+  }
+} 
