@@ -47,12 +47,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             className={`flex-1 text-center ${variant === 'fullwidth' ? 'md:text-left' : 'lg:text-left'} pb-8 ${variant === 'fullwidth' ? 'md:pb-0' : 'lg:pb-0'}`}
             variants={itemAnimation}
           >
-            <div className="inline-block px-4 py-2 rounded-full bg-primary-100 text-primary-800 font-medium text-sm mb-6">
+            <div className="inline-block px-4 py-2 rounded-full bg-blue-100 text-blue-800 font-medium text-sm mb-6">
               Nouvelle collection
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight tracking-tight mb-4">
-              JaelleShop Inspiring <span className="block">Fashion.</span>
+              JaelleShop <span className="text-blue-600">Inspiring</span> <span className="block">Fashion.</span>
             </h1>
             
             <p className="text-gray-600 text-lg max-w-xl mx-auto lg:mx-0 mb-8">
@@ -61,13 +61,31 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <NavButton to="/categories" variant="primary">
+              <NavButton to="/categories" variant="primary" className="bg-blue-600 text-black hover:bg-blue-700">
                 Nos catégories
               </NavButton>
               
-              <NavButton to="/products" variant="secondary">
+              <NavButton to="/products" variant="secondary" className="bg-violet-600 text-black hover:bg-violet-700 border-0">
                 Voir tous les produits
               </NavButton>
+            </div>
+            
+            {/* Section de couleurs de la carte de visite */}
+            <div className="flex items-center justify-center lg:justify-start mt-6 space-x-3">
+              <div className="flex items-center">
+                <div className="w-6 h-6 rounded-full bg-primary-600"></div>
+                <span className="ml-2 text-gray-700">Vert</span>
+              </div>
+              
+              <div className="flex items-center">
+                <div className="w-6 h-6 rounded-full bg-secondary-600"></div>
+                <span className="ml-2 text-gray-700">Bleu</span>
+              </div>
+              
+              <div className="flex items-center">
+                <div className="w-6 h-6 rounded-full bg-accent-600"></div>
+                <span className="ml-2 text-gray-700">Violet</span>
+              </div>
             </div>
             
             <div className="flex items-center justify-center lg:justify-start mt-8 space-x-8">
@@ -100,7 +118,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                   className="rounded-2xl shadow-xl object-cover w-full"
                 />
                 
-                <div className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium text-primary-800 shadow-md">
+                <div className="absolute top-4 right-4 bg-accent-100 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium text-accent-800 shadow-md">
                   Collection limitée
                 </div>
               </div>

@@ -28,8 +28,8 @@ const NavButton: React.FC<NavButtonProps> = ({
   
   // Styles selon la variante
   const variantStyles = {
-    primary: 'bg-primary-600 !text-black hover:bg-primary-700 shadow-md focus:ring-primary-500',
-    secondary: 'bg-white !text-gray-800 hover:bg-gray-50 border border-gray-200 shadow-sm focus:ring-primary-400'
+    primary: 'bg-blue-600 !text-black hover:bg-blue-700 shadow-md focus:ring-blue-500',
+    secondary: 'bg-violet-600 !text-black hover:bg-violet-700 border-0 shadow-md focus:ring-violet-400'
   };
   
   // Classes complètes

@@ -3,6 +3,10 @@ import Header from '../../components/layout/Header';
 import CategoriesNav from '../../components/layout/CategoriesNav';
 import Footer from '../../components/layout/Footer';
 import { useEffect } from 'react';
+import { motion } from 'framer-motion';
+// import Loader from '../../components/ui/Loader';
+// import CartDrawer from '../../components/layout/CartDrawer';
+// import SearchModal from '../../components/layout/SearchModal';
 
 const Layout = () => {
   const location = useLocation();
@@ -19,12 +23,21 @@ const Layout = () => {
   }, [location.pathname]);
 
   return (
-    <div className="flex flex-col min-h-screen overflow-x-hidden w-full">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-100 via-blue-50 to-blue-100">
+      {/* <Loader /> */}
+      {/* <CartDrawer /> */}
+      {/* <SearchModal /> */}
       <Header />
       {shouldShowCategoriesNav && <CategoriesNav />}
-      <main className="flex-grow responsive-container safari-flex-fix">
+      <motion.main 
+        className="flex-grow responsive-container safari-flex-fix"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+      >
         <Outlet />
-      </main>
+      </motion.main>
       <Footer />
     </div>
   );

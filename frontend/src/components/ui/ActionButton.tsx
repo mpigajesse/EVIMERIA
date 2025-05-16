@@ -54,6 +54,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
     outlined: 'bg-white border-2 border-primary-500 text-primary-600 hover:bg-primary-50 shadow-sm',
     danger: 'bg-red-600 !text-black hover:bg-red-700 shadow-md',
     success: 'bg-emerald-600 !text-black hover:bg-emerald-700 shadow-md',
+    ghost: 'bg-transparent hover:bg-gray-100 text-gray-700 focus:ring-gray-400',
     link: 'text-primary-700 hover:text-primary-800 hover:underline',
     icon: 'bg-primary-600 !text-black hover:bg-primary-700 shadow-md',
   };

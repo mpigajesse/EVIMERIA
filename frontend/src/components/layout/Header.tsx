@@ -59,7 +59,7 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         {/* Notification bandeau (optionnel) */}
         <motion.div 
-          className="bg-primary-100 text-primary-800 text-center text-sm py-2 px-4 rounded-lg mb-4 flex items-center justify-center"
+          className="bg-blue-100 text-blue-800 text-center text-sm py-2 px-4 rounded-lg mb-4 flex items-center justify-center"
           variants={fadeInDown}
           initial="hidden"
           animate="visible"
@@ -72,9 +72,9 @@ const Header = () => {
         
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="text-2xl font-bold text-primary-600 flex items-center">
+          <Link to="/" className="text-2xl font-bold text-blue-600 flex items-center">
             <motion.span 
-              className="text-3xl mr-1 text-primary-500"
+              className="text-3xl mr-1 text-blue-500"
               whileHover={{ scale: 1.1, rotate: 5 }}
               transition={{ type: "spring", stiffness: 500 }}
             >J</motion.span>
@@ -88,14 +88,14 @@ const Header = () => {
           
           {/* Navigation desktop */}
           <nav className="hidden md:flex space-x-6 items-center">
-            <Link to="/" className="text-gray-700 hover:text-primary-600 transition-colors py-2 font-medium">
+            <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors py-2 font-medium">
               Accueil
             </Link>
             
             {/* Menu déroulant des catégories */}
             <div className="relative group">
               <button 
-                className="flex items-center text-gray-700 hover:text-primary-600 transition-colors py-2 font-medium"
+                className="flex items-center text-gray-700 hover:text-blue-600 transition-colors py-2 font-medium"
                 onMouseEnter={() => setCategoriesMenuOpen(true)}
                 onMouseLeave={() => setCategoriesMenuOpen(false)}
                 onClick={() => setCategoriesMenuOpen(!categoriesMenuOpen)}
@@ -126,13 +126,13 @@ const Header = () => {
                     <div className="py-2">
                       <Link 
                         to="/products" 
-                        className="block px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-gray-50"
+                        className="block px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                       >
                         Tous les produits
                       </Link>
                       <Link 
                         to="/products?featured=true" 
-                        className="block px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-gray-50"
+                        className="block px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                       >
                         Produits en vedette
                       </Link>
@@ -145,7 +145,7 @@ const Header = () => {
                         <Link 
                           key={category.id}
                           to={`/categories/${category.slug}`}
-                          className="block px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-gray-50"
+                          className="block px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                         >
                           {category.name}
                         </Link>
@@ -156,19 +156,19 @@ const Header = () => {
               </AnimatePresence>
             </div>
             
-            <Link to="/products" className="text-gray-700 hover:text-primary-600 transition-colors py-2 font-medium">
+            <Link to="/products" className="text-gray-700 hover:text-blue-600 transition-colors py-2 font-medium">
               Produits
             </Link>
             
             <div className="flex items-center space-x-4">
-              <Link to="/cart" className="relative p-2 text-gray-700 hover:text-primary-600 transition-colors">
+              <Link to="/cart" className="relative p-2 text-gray-700 hover:text-blue-600 transition-colors">
                 <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
                   {totalItems > 0 && (
                     <motion.span 
-                      className="absolute -top-1 -right-1 bg-primary-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+                      className="absolute -top-1 -right-1 bg-green-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ type: "spring", stiffness: 500 }}
@@ -180,7 +180,7 @@ const Header = () => {
               </Link>
               
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link to="/login" className="inline-flex items-center justify-center px-4 py-1.5 bg-white border border-gray-300 text-gray-700 rounded-full hover:bg-gray-50 hover:text-primary-600 transition-colors">
+                <Link to="/login" className="inline-flex items-center justify-center px-4 py-1.5 bg-white border border-violet-300 text-violet-700 rounded-full hover:bg-violet-50 hover:text-violet-600 transition-colors">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
@@ -199,7 +199,7 @@ const Header = () => {
                 </svg>
                 {totalItems > 0 && (
                   <motion.span 
-                    className="absolute -top-1 -right-1 bg-primary-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+                    className="absolute -top-1 -right-1 bg-green-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: "spring", stiffness: 500 }}
@@ -247,7 +247,7 @@ const Header = () => {
                 <motion.div variants={mobileMenuItemAnimation}>
                   <Link 
                     to="/" 
-                    className="text-gray-700 hover:text-primary-600 px-2 py-2 rounded-lg hover:bg-gray-50 flex items-center"
+                    className="text-gray-700 hover:text-blue-600 px-2 py-2 rounded-lg hover:bg-gray-50 flex items-center"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -260,7 +260,7 @@ const Header = () => {
                 <motion.div variants={mobileMenuItemAnimation}>
                   <Link 
                     to="/products" 
-                    className="text-gray-700 hover:text-primary-600 px-2 py-2 rounded-lg hover:bg-gray-50 flex items-center"
+                    className="text-gray-700 hover:text-blue-600 px-2 py-2 rounded-lg hover:bg-gray-50 flex items-center"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -277,7 +277,7 @@ const Header = () => {
                       <Link 
                         key={category.id}
                         to={`/categories/${category.slug}`}
-                        className="block text-gray-700 hover:text-primary-600 px-2 py-1.5 rounded-lg hover:bg-gray-50 ml-2"
+                        className="block text-gray-700 hover:text-blue-600 px-2 py-1.5 rounded-lg hover:bg-gray-50 ml-2"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         {category.name}
@@ -289,7 +289,7 @@ const Header = () => {
                 <motion.div variants={mobileMenuItemAnimation}>
                   <Link 
                     to="/login" 
-                    className="text-gray-700 hover:text-primary-600 px-2 py-2 rounded-lg hover:bg-gray-50 flex items-center"
+                    className="text-gray-700 hover:text-blue-600 px-2 py-2 rounded-lg hover:bg-gray-50 flex items-center"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

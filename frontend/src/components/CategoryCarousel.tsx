@@ -158,7 +158,7 @@ const CategoryCarousel: React.FC = () => {
                     {/* Badge avec nombre de produits */}
                     {category.products_count && (
                       <div className="absolute top-3 right-3">
-                        <Badge variant="primary" size="sm" className={`${colors.gradients.blueViolet} !text-black shadow-md`}>
+                        <Badge variant="primary" size="sm" className={`${colors.gradients.primary} !text-black shadow-md`}>
                           {category.products_count} produits
                         </Badge>
                       </div>

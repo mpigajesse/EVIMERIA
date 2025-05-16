@@ -6,7 +6,8 @@ import {
   ButtonSize, 
   generateButtonClasses, 
   buttonHoverAnimation, 
-  buttonTapAnimation 
+  buttonTapAnimation,
+  variantStyles as buttonVariantStyles
 } from '../../utils/buttonStyles';
 
 interface ButtonProps {
