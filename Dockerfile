@@ -65,55 +65,28 @@ if [ -n "$DATABASE_URL" ]; then\n\
   # Vérifier si la base de données est disponible\n\
   if pg_isready -h $DB_HOST -p $DB_PORT; then\n\
     echo "Database is ready. Proceeding with migrations."\n\
-    \n\
-    # Vérifier si la base de données est initialisée\n\
-    echo "Checking if database is initialized..."\n\
-    if python manage.py showmigrations | grep -q "[X]"; then\n\
-      echo "Database already has some migrations applied."\n\
-    else\n\
-      echo "Database seems empty. Running initial migrations..."\n\
-      python manage.py migrate auth\n\
-      python manage.py migrate admin\n\
-      python manage.py migrate contenttypes\n\
-      python manage.py migrate sessions\n\
-    fi\n\
-    \n\
-    # Exécuter toutes les migrations\n\
-    echo "Running all migrations..."\n\
-    python manage.py migrate\n\
-    \n\
-    # Vérifier si un superuser existe déjà\n\
-    echo "Checking if superuser exists..."\n\
-    if ! python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); exit(User.objects.filter(is_superuser=True).exists())"; then\n\
-      echo "Creating initial superuser..."\n\
-      python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser(\"admin\", \"admin@evimeria.com\", \"admin123\") if not User.objects.filter(username=\"admin\").exists() else None"\n\
-    fi\n\
   else\n\
     echo "Database connection failed after 30 attempts. Proceeding anyway..."\n\
   fi\n\
 else\n\
   echo "No DATABASE_URL found. Using default database."\n\
-  python manage.py migrate\n\
 fi\n\
+\n\
+# Exécuter les migrations\n\
+echo "Running migrations..."\n\
+python manage.py migrate\n\
 \n\
 # Vérifier l\'état de l\'application Django\n\
 echo "Checking Django application..."\n\
 python manage.py check\n\
 \n\
-# Démarrer avec le mode de débogage pour voir les erreurs\n\
-echo "Starting with debug mode for first-time setup..."\n\
-python manage.py runserver 0.0.0.0:$PORT &\n\
-echo "Waiting for Django to initialize (5 seconds)..."\n\
-sleep 5\n\
-kill $!\n\
-\n\
 # Si Railway définit un PORT différent, utilisez-le\n\
 if [ -n "$PORT" ] && [ "$PORT" != "8000" ]; then\n\
   echo "Binding to Railway PORT: $PORT"\n\
-  gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:$PORT --log-level debug --timeout 120\n\
+  gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:$PORT --log-level debug\n\
 else\n\
   echo "Binding to default port: 8000"\n\
-  gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:8000 --log-level debug --timeout 120\n\
+  gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:8000 --log-level debug\n\
 fi' > /app/start.sh && chmod +x /app/start.sh
 
 # Commande de démarrage
