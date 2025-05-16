@@ -24,6 +24,7 @@ import os
 import logging
 import socket
 import sys
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -80,6 +81,69 @@ def railway_check(request):
     logger.info("Railway check endpoint accessed")
     return HttpResponse("Railway check OK", content_type="text/plain")
 
+def db_check(request):
+    """Point de terminaison pour vérifier la connexion à la base de données"""
+    logger.info("Database check endpoint accessed")
+    
+    from django.db import connections
+    from django.db.utils import OperationalError
+    
+    db_conn = connections['default']
+    databases = settings.DATABASES
+    db_info = {k: v.copy() for k, v in databases.items()}
+    
+    # Masquer les mots de passe pour la sécurité
+    for db in db_info.values():
+        if 'PASSWORD' in db:
+            db['PASSWORD'] = '******'
+        if 'USER' in db:
+            db['USER'] = db['USER']  # Gardez l'utilisateur visible pour le diagnostic
+    
+    results = {
+        "db_config": db_info,
+        "engine": db_info['default'].get('ENGINE', 'unknown'),
+        "connection": "unknown",
+        "models": [],
+        "tables": [],
+        "environment": {
+            "DATABASE_URL": os.environ.get('DATABASE_URL', '').split('@')[0] + '@******' if os.environ.get('DATABASE_URL') else None,
+            "PGDATABASE": os.environ.get('PGDATABASE'),
+            "PGHOST": os.environ.get('PGHOST'),
+            "PGPORT": os.environ.get('PGPORT'),
+            "PGUSER": os.environ.get('PGUSER'),
+        }
+    }
+    
+    # Vérifier la connexion
+    try:
+        db_conn.cursor()
+        results["connection"] = "OK"
+        
+        # Récupérer les modèles
+        from django.apps import apps
+        results["models"] = [model.__name__ for model in apps.get_models()]
+        
+        # Récupérer les tables
+        tables = []
+        with db_conn.cursor() as cursor:
+            cursor.execute("""
+                SELECT table_name 
+                FROM information_schema.tables 
+                WHERE table_schema = 'public'
+                ORDER BY table_name;
+            """)
+            tables = [row[0] for row in cursor.fetchall()]
+        results["tables"] = tables
+        
+    except OperationalError as e:
+        results["connection"] = f"ERROR: {str(e)}"
+    except Exception as e:
+        results["connection"] = f"UNKNOWN ERROR: {str(e)}"
+    
+    response = JsonResponse(results)
+    response["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return response
+
 def debug_info(request):
     logger.info("Debug info endpoint accessed")
     env_vars = {k: v for k, v in os.environ.items() if not k.startswith('SECRET') and not 'PASSWORD' in k.upper()}
@@ -100,6 +164,7 @@ urlpatterns = [
     path('api-info/', api_root_view, name='api-info'),
     path('health/', health_check, name='health'),
     path('railway/', railway_check, name='railway'),
+    path('db-check/', db_check, name='db-check'),
     path('debug-info/', debug_info, name='debug-info'),
     path('admin/', admin.site.urls),
     path('api/', include('products.api.urls')),
