@@ -83,8 +83,8 @@ const Footer = () => {
             <Link to="/privacy" className="text-violet-300 hover:text-white transition-colors">Confidentialité</Link>
             <Link to="/terms" className="text-green-300 hover:text-white transition-colors">Conditions</Link>
             <Link to="/contact" className="text-violet-300 hover:text-white transition-colors">Contact</Link>
-          </div>
-          
+      </div>
+
           <div className="mt-4 flex justify-center items-center space-x-3 bg-white/5 rounded-lg p-2">
         
             <div className="w-20 h-20 flex items-center justify-center bg-white/80 rounded">
@@ -92,21 +92,21 @@ const Footer = () => {
             </div>
             <div className="w-20 h-20 flex items-center justify-center bg-white/80 rounded">
               <img src="https://cecatogo.org/wp-content/uploads/2021/12/promotion-1-1.png" alt="Moov Money" className="h-4 w-auto object-contain" />
-            </div>
+          </div>
             <div className="w-20 h-20 flex items-center justify-center bg-white/80 rounded">
               <img src="https://cdn-icons-png.flaticon.com/128/349/349223.png" alt="PayPal" className="h-4 w-auto object-contain" />
-            </div>
+          </div>
             <div className="w-20 h-20 flex items-center justify-center bg-white/80 rounded">
               <img src="https://mir-s3-cdn-cf.behance.net/projects/404/5319da54025463.Y3JvcCwxMDgyLDg0NywwLDQ2Nw.png" alt="Airtel Money" className="h-4 w-auto object-contain" />
-            </div>
+          </div>
             <div className="w-20 h-20 flex items-center justify-center bg-white/80 rounded">
               <img src="https://www.entreprises-magazine.com/wp-content/uploads/2020/03/Orange-Money-Maroc-696x385.jpg" alt="Orange Money" className="h-4 w-auto object-contain" />
-            </div>
+          </div>
             <div className="w-20 h-20 flex items-center justify-center bg-white/80 rounded">
               <img src="https://mms.businesswire.com/media/20181108005528/fr/553326/23/WU_Prim_CMYK.jpg" alt="Western Union" className="h-4 w-auto object-contain" />
-            </div>
-          </div>
-          
+        </div>
+      </div>
+
         </div>
       </div>
     </footer>

@@ -1,0 +1,14 @@
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "docker-compose.yml"
+
+[deploy]
+startCommand = "docker-compose up -d"
+healthcheckPath = "/api-info/"
+healthcheckTimeout = 300
+
+[service.backend]
+name = "EVIMERIA Backend"
+
+[service.frontend]
+name = "EVIMERIA Frontend" 

@@ -120,7 +120,7 @@ const CheckoutPage = () => {
                   onChange={handleChange}
                   required
                   placeholder="Votre prénom"
-                  className={components.inputs.base}
+                        className={components.inputs.base}
                 />
               </div>
               <div>
@@ -135,7 +135,7 @@ const CheckoutPage = () => {
                   onChange={handleChange}
                   required
                   placeholder="Votre nom"
-                  className={components.inputs.base}
+                        className={components.inputs.base}
                 />
               </div>
             </div>
@@ -152,7 +152,7 @@ const CheckoutPage = () => {
                 onChange={handleChange}
                 required
                 placeholder="votre.email@exemple.com"
-                className={components.inputs.base}
+                      className={components.inputs.base}
               />
             </div>
             
@@ -168,7 +168,7 @@ const CheckoutPage = () => {
                 onChange={handleChange}
                 required
                 placeholder="Votre adresse complète"
-                className={components.inputs.base}
+                      className={components.inputs.base}
               />
             </div>
             
@@ -185,7 +185,7 @@ const CheckoutPage = () => {
                   onChange={handleChange}
                   required
                   placeholder="Votre ville"
-                  className={components.inputs.base}
+                        className={components.inputs.base}
                 />
               </div>
               <div>
@@ -200,7 +200,7 @@ const CheckoutPage = () => {
                   onChange={handleChange}
                   required
                   placeholder="Code postal"
-                  className={components.inputs.base}
+                        className={components.inputs.base}
                 />
               </div>
               <div>
@@ -215,7 +215,7 @@ const CheckoutPage = () => {
                   onChange={handleChange}
                   required
                   placeholder="Votre pays"
-                  className={components.inputs.base}
+                        className={components.inputs.base}
                 />
               </div>
             </div>
@@ -296,7 +296,7 @@ const CheckoutPage = () => {
                         <div className="w-20 h-20 flex items-center justify-center bg-white/80 rounded">
                           <img src="https://mms.businesswire.com/media/20181108005528/fr/553326/23/WU_Prim_CMYK.jpg" alt="Western Union" className="h-4 w-auto object-contain" />
                         </div>
-                      </div>
+              </div>
                     </motion.div>
             )}
             
