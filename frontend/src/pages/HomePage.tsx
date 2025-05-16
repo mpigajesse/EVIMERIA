@@ -150,7 +150,7 @@ const HomePage = () => {
 
         {/* Section de promotions avec compte à rebours */}
         <div className="my-16">
-          <Card className="bg-primary-600 p-8 sm:p-10 !text-black overflow-hidden relative">
+          <Card className="bg-gradient-to-r from-blue-600 via-violet-600 to-green-600 p-8 sm:p-10 !text-black overflow-hidden relative shadow-xl rounded-3xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full translate-x-32 -translate-y-32"></div>
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full -translate-x-32 translate-y-32"></div>
             
@@ -249,7 +249,7 @@ const HomePage = () => {
         </div>
 
         {/* Newsletter avec design amélioré */}
-        <Card className="bg-blue-600 p-10 !text-black overflow-hidden relative mb-16 shadow-xl">
+        <Card className="bg-gradient-to-r from-blue-700 to-blue-900 p-10 !text-black overflow-hidden relative mb-16 shadow-xl">
           {/* Éléments décoratifs */}
           <motion.div 
             className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full translate-x-32 -translate-y-32"
@@ -269,8 +269,8 @@ const HomePage = () => {
             variants={animations.fadeInUp}
           >
             <Badge variant="primary" className="bg-white/20 backdrop-blur-sm mb-4">Newsletter</Badge>
-            <h2 className={`${typography.headings.h1} text-white mb-4`}>Restez informé</h2>
-            <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
+            <h2 className={`${typography.headings.h1} text-white mb-4 bg-blue-900/40 inline-block px-2.5 py-0.5 rounded-full backdrop-blur-sm mb-4`}>Restez informé</h2>
+            <p className="text-lg text-white bg-blue-900/40 p-4 rounded-xl max-w-2xl mx-auto mb-8">
               Inscrivez-vous à notre newsletter pour recevoir nos offres exclusives et les dernières tendances
             </p>
             
@@ -288,7 +288,7 @@ const HomePage = () => {
               </Button>
             </div>
             
-            <p className="text-white/70 text-sm mt-4">
+            <p className="text-white bg-blue-900/50 inline-block px-4 py-2 rounded-lg text-sm mt-4">
               En vous inscrivant, vous acceptez de recevoir nos emails et confirmez avoir lu notre politique de confidentialité.
             </p>
           </motion.div>
