@@ -1,22 +1,4 @@
-# Stage 1: Build du frontend
-FROM node:18-alpine AS frontend_build
-
-WORKDIR /app/frontend
-
-# Copier package.json et package-lock.json
-COPY frontend/package*.json ./
-
-# Installer les dépendances avec une limite de mémoire très stricte
-ENV NODE_OPTIONS=--max_old_space_size=256
-RUN npm install --no-package-lock --no-fund --no-audit --production=false
-
-# Copier le code source du frontend
-COPY frontend/ ./
-
-# Construire l'application
-RUN npm run build
-
-# Stage 2: Backend Django avec les fichiers statiques du frontend
+# Utiliser uniquement le backend Django (sans frontend intégré)
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -30,9 +12,6 @@ COPY backend/ .
 
 # Créer les répertoires nécessaires
 RUN mkdir -p /app/static /app/media && chmod -R 755 /app/static /app/media
-
-# Copier le build du frontend
-COPY --from=frontend_build /app/frontend/dist /app/frontend/dist
 
 # Variables d'environnement
 ENV PYTHONDONTWRITEBYTECODE=1
