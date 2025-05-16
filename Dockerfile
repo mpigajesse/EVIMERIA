@@ -1,4 +1,23 @@
-FROM python:3.11-slim as backend
+# Stage 1: Build du frontend
+FROM node:18-alpine AS frontend_build
+
+WORKDIR /app/frontend
+
+# Copier package.json et package-lock.json
+COPY frontend/package*.json ./
+
+# Installer les dépendances avec une limite de mémoire
+ENV NODE_OPTIONS=--max_old_space_size=465
+RUN npm install --production=false --no-optional
+
+# Copier le code source du frontend
+COPY frontend/ ./
+
+# Construire l'application
+RUN npm run build
+
+# Stage 2: Backend Django avec les fichiers statiques du frontend
+FROM python:3.11-slim
 
 WORKDIR /app
 
@@ -9,37 +28,16 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copier le code source du backend
 COPY backend/ .
 
-# Configurer les variables d'environnement
+# Créer les répertoires nécessaires
+RUN mkdir -p /app/static /app/media && chmod -R 755 /app/static /app/media
+
+# Copier le build du frontend
+COPY --from=frontend_build /app/frontend/dist /app/frontend/dist
+
+# Variables d'environnement
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV DEBUG=False
-
-# Stage pour le frontend
-FROM node:18-alpine as frontend_build
-
-WORKDIR /frontend
-
-# Installer les dépendances du frontend
-COPY frontend/package.json frontend/package-lock.json ./
-RUN npm install --no-audit --no-fund --progress=false
-
-# Copier le code source du frontend
-COPY frontend/ .
-
-# Construire l'application React
-RUN npm run build
-
-# Stage final
-FROM python:3.11-slim
-
-WORKDIR /app
-
-# Copier les fichiers du backend
-COPY --from=backend /app /app
-COPY --from=backend /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
-
-# Copier le build du frontend
-COPY --from=frontend_build /frontend/dist /app/frontend/dist
 
 # Exposer le port
 EXPOSE 8000

@@ -149,7 +149,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Configuration pour les fichiers statiques du frontend
 STATICFILES_DIRS = [
-    os.path.join(FRONTEND_DIR, 'dist', 'assets'),  # Chemin vers les assets du build React
+    os.path.join(BASE_DIR, '..', 'frontend', 'dist'),  # Chemin vers les assets du build React
+    os.path.join(BASE_DIR, '..', 'frontend', 'dist', 'assets'),  # Chemin vers les assets du build React
 ]
 
 # Activer WhiteNoise pour servir les fichiers statiques
