@@ -11,4 +11,4 @@ healthcheckTimeout = 300
 name = "EVIMERIA Backend"
 
 [service.frontend]
-name = "EVIMERIA Frontend" 
+name = "EVIMERIA Frontend"

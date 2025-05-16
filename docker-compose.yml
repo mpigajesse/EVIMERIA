@@ -56,4 +56,4 @@ networks:
 volumes:
   postgres_data:
   backend_static:
-  backend_media: 
+  backend_media:
