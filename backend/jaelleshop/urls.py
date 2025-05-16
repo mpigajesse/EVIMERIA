@@ -21,9 +21,13 @@ from django.conf.urls.static import static
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Une vue simple pour l'API
 def api_root_view(request):
+    logger.info("API root view accessed")
     return JsonResponse({
         "message": "API JaelleShop - Bienvenue",
         "status": "running",
@@ -37,13 +41,33 @@ def api_root_view(request):
     })
 
 def health_check(request):
-    return HttpResponse("OK")
+    logger.info("Health check endpoint accessed")
+    response = HttpResponse("OK")
+    response["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response["Pragma"] = "no-cache"
+    response["Expires"] = "0"
+    return response
+
+def debug_info(request):
+    logger.info("Debug info endpoint accessed")
+    env_vars = {k: v for k, v in os.environ.items() if not k.startswith('SECRET') and not 'PASSWORD' in k.upper()}
+    info = {
+        "environment": env_vars,
+        "settings": {
+            "DEBUG": settings.DEBUG,
+            "ALLOWED_HOSTS": settings.ALLOWED_HOSTS,
+            "STATIC_URL": settings.STATIC_URL,
+            "MEDIA_URL": settings.MEDIA_URL,
+        }
+    }
+    return JsonResponse(info)
 
 urlpatterns = [
     # API endpoints
     path('', api_root_view),
     path('api-info/', api_root_view, name='api-info'),
     path('health/', health_check, name='health'),
+    path('debug-info/', debug_info, name='debug-info'),
     path('admin/', admin.site.urls),
     path('api/', include('products.api.urls')),
     path('api/users/', include('users.urls')),
