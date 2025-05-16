@@ -4,7 +4,7 @@ Boutique e-commerce moderne créée avec Django, React et Cloudinary.
 
 ## Prérequis
 
-- Docker et Docker Compose
+- Docker et Docker Compose pour le développement local
 - Un compte Railway pour le déploiement
 - Un compte Cloudinary pour la gestion des médias
 
@@ -13,64 +13,77 @@ Boutique e-commerce moderne créée avec Django, React et Cloudinary.
 ```
 evimeria/
 ├── backend/            # API Django
+│   ├── Dockerfile      # Dockerfile du backend
 │   ├── jaelleshop/     # Configurations du projet
 │   ├── products/       # App pour les produits
 │   ├── users/          # App pour les utilisateurs
 │   └── ...
 ├── frontend/           # Application React
-├── Dockerfile          # Configuration Docker
+│   ├── Dockerfile      # Dockerfile du frontend
+│   ├── nginx.conf      # Configuration Nginx
+│   └── ...
 ├── docker-compose.yml  # Configuration Docker Compose
+├── railway.toml        # Configuration Railway
 └── ...
 ```
 
 ## Déploiement sur Railway
 
-### 1. Préparer l'application
+### 1. Préparation du code
 
-Tout d'abord, assurez-vous que votre application fonctionne correctement localement avec Docker :
+Assurez-vous que votre dépôt contient tous les fichiers suivants:
+- `backend/Dockerfile`
+- `frontend/Dockerfile`
+- `frontend/nginx.conf`
+- `docker-compose.yml`
+- `railway.toml`
+- `.dockerignore`
 
-```bash
-# Copier le fichier d'exemple des variables d'environnement
-cp env.sample .env
+### 2. Configuration des variables d'environnement
 
-# Éditer les variables d'environnement avec vos propres valeurs
-nano .env
+Dans Railway, configurez les variables d'environnement suivantes:
 
-# Construire et démarrer les conteneurs Docker
-docker-compose up --build
+```
+# Base de données PostgreSQL
+DATABASE_URL=postgresql://${PGUSER}:${POSTGRES_PASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}
+POSTGRES_PASSWORD=votre_mot_de_passe
+POSTGRES_USER=postgres
+POSTGRES_DB=railway
+
+# Configuration Django
+DEBUG=False
+SECRET_KEY=votre_secret_key
+ALLOWED_HOSTS=*.up.railway.app,localhost,127.0.0.1
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=dmcaguchx
+CLOUDINARY_API_KEY=votre_api_key
+CLOUDINARY_API_SECRET=votre_api_secret
+
+# Configuration de build
+NODE_OPTIONS=--max_old_space_size=465
+PIP_NO_CACHE_DIR=true
+PYTHONUNBUFFERED=1
+NODE_ENV=production
+NPM_CONFIG_PRODUCTION=false
+
+# Port
+PORT=8000
 ```
 
-### 2. Créer un nouveau projet sur Railway
+### 3. Déploiement sur Railway
 
-1. Connectez-vous sur [Railway](https://railway.app/)
-2. Créez un nouveau projet
-3. Choisissez "Deploy from GitHub repo"
-4. Sélectionnez votre dépôt GitHub
-5. Configurez les variables d'environnement suivantes dans Railway :
-   - `DEBUG=False`
-   - `SECRET_KEY=<votre_secret_key>`
-   - `ALLOWED_HOSTS=<votre_domaine_railway>.up.railway.app,<autres_domaines>`
-   - `CLOUDINARY_CLOUD_NAME=<votre_cloudinary_cloud_name>`
-   - `CLOUDINARY_API_KEY=<votre_cloudinary_api_key>`
-   - `CLOUDINARY_API_SECRET=<votre_cloudinary_api_secret>`
+1. Connectez-vous à Railway et créez un nouveau projet
+2. Choisissez "Deploy from GitHub repo"
+3. Sélectionnez votre dépôt GitHub
+4. Railway détectera automatiquement les fichiers Docker et déploiera votre application
 
-### 3. Ajouter une base de données PostgreSQL
+### 4. Configuration des volumes Railway
 
-1. Dans votre projet Railway, allez dans "New"
-2. Sélectionnez "Database" puis "PostgreSQL"
-3. Une fois créée, Railway configurera automatiquement la variable `DATABASE_URL`
-
-### 4. Configuration des variables d'environnement spéciales
-
-Après avoir créé votre projet sur Railway, assurez-vous d'ajouter ces variables :
-
-1. `PORT=8000` (Le port sur lequel l'application écoutera)
-2. `NIXPACKS_BUILD_CMD=pip install -r backend/requirements.txt && cd frontend && npm install && npm run build`
-3. `NIXPACKS_START_CMD=cd backend && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:$PORT`
-
-### 5. Déploiement automatique
-
-Une fois configuré, Railway déploiera automatiquement l'application à chaque push sur la branche principale.
+Railway créera automatiquement les volumes suivants, configurés dans le fichier `railway.toml`:
+- `backend_static`: Pour les fichiers statiques Django
+- `backend_media`: Pour les médias uploadés
+- `postgres_data`: Pour les données PostgreSQL persistantes
 
 ## Développement local avec Docker
 
@@ -81,8 +94,8 @@ docker-compose up
 # Reconstruire l'application après des modifications
 docker-compose up --build
 
-# Exécuter des commandes dans le conteneur
-docker-compose exec web python backend/manage.py createsuperuser
+# Exécuter des commandes dans le conteneur backend
+docker-compose exec backend python manage.py createsuperuser
 ```
 
 ## Maintenance
@@ -90,22 +103,22 @@ docker-compose exec web python backend/manage.py createsuperuser
 ### Migration de la base de données
 
 ```bash
-docker-compose exec web python backend/manage.py makemigrations
-docker-compose exec web python backend/manage.py migrate
+docker-compose exec backend python manage.py makemigrations
+docker-compose exec backend python manage.py migrate
 ```
 
 ### Création d'un utilisateur admin
 
 ```bash
-docker-compose exec web python backend/manage.py createsuperuser
+docker-compose exec backend python manage.py createsuperuser
 ```
 
 ### Sauvegarde et restauration de la base de données
 
 ```bash
 # Sauvegarde
-docker-compose exec db pg_dump -U postgres jaelleshop > backup.sql
+docker-compose exec db pg_dump -U postgres railway > backup.sql
 
 # Restauration
-cat backup.sql | docker-compose exec -T db psql -U postgres jaelleshop
+cat backup.sql | docker-compose exec -T db psql -U postgres railway
 ``` 
