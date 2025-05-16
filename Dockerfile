@@ -21,7 +21,7 @@ WORKDIR /frontend
 
 # Installer les dépendances du frontend
 COPY frontend/package.json frontend/package-lock.json ./
-RUN npm ci
+RUN npm install --no-audit --no-fund --progress=false
 
 # Copier le code source du frontend
 COPY frontend/ .
