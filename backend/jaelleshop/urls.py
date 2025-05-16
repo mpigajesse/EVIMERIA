@@ -162,7 +162,14 @@ def db_tables(request):
     
     return JsonResponse({"tables": tables})
 
+def simple_test(request):
+    """Point de terminaison très simple pour tester"""
+    return HttpResponse("OK - EVIMERIA fonctionne!", content_type="text/plain")
+
 urlpatterns = [
+    # Route de test simple
+    path('test/', simple_test, name='simple-test'),
+    
     # API endpoints
     path('', api_root_view),
     path('api-info/', api_root_view, name='api-info'),
