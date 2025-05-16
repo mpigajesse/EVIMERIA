@@ -1,17 +1,19 @@
 [build]
 builder = "DOCKERFILE"
+dockerfilePath = "./Dockerfile"
 
 [deploy]
 numReplicas = 1
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3
+healthcheckPath = "/health/"
+healthcheckTimeout = 10
+healthcheckInterval = 30
 
 [service]
 internal_port = 8000
-auto_healthcheck = false # Désactiver l'healthcheck auto de Railway
+auto_healthcheck = true
 
-[service.healthcheck]
-path = "/health/"
-interval = "30s"
-timeout = "10s"
-retries = 3 
+[env]
+DJANGO_SETTINGS_MODULE = "jaelleshop.settings"
+PORT = "8000" 
