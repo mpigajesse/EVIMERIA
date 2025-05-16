@@ -6,9 +6,9 @@ WORKDIR /app/frontend
 # Copier package.json et package-lock.json
 COPY frontend/package*.json ./
 
-# Installer les dépendances avec une limite de mémoire
-ENV NODE_OPTIONS=--max_old_space_size=465
-RUN npm install --production=false --no-optional
+# Installer les dépendances avec une limite de mémoire très stricte
+ENV NODE_OPTIONS=--max_old_space_size=256
+RUN npm install --no-package-lock --no-fund --no-audit --production=false
 
 # Copier le code source du frontend
 COPY frontend/ ./
