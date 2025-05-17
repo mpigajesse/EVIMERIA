@@ -4,7 +4,7 @@ nixPkgs = ['python3', 'python3Packages.pip', 'postgresql', 'gcc', 'nodejs']
 [phases.install]
 cmds = [
   'cd backend && pip install --break-system-packages -r requirements.txt',
-  'cd frontend && npm ci'
+  'cd frontend && npm ci --legacy-peer-deps'
 ]
 
 [phases.build]
