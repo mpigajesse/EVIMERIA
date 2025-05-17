@@ -10,7 +10,7 @@ provider = "nixpacks"
 noDocker = true
 
 [phases.setup]
-nixPkgs = ["python3", "postgresql", "gcc"]
+nixPkgs = ['python3', 'python3Packages.pip', 'postgresql', 'gcc']
 
 [[services]]
 name = "backend"
