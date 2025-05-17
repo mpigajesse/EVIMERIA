@@ -19,6 +19,7 @@ from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.http import HttpResponse, JsonResponse
+from django.views.generic import TemplateView
 import os
 import logging
 import socket
@@ -173,12 +174,28 @@ Settings: {settings_module}
 """
     return HttpResponse(response_text, content_type="text/plain")
 
+# Fonction pour servir l'application React
+def serve_react_app(request):
+    """Sert l'application React frontend"""
+    logger.info("Serving React app")
+    frontend_path = os.path.join(settings.FRONTEND_DIR, 'dist', 'index.html')
+    if os.path.exists(frontend_path):
+        with open(frontend_path, 'r', encoding='utf-8') as file:
+            return HttpResponse(file.read(), content_type='text/html')
+    else:
+        logger.error(f"Frontend file not found at {frontend_path}")
+        return HttpResponse(
+            f"L'application frontend n'a pas été trouvée. Vérifiez si le build React existe à l'emplacement {frontend_path}",
+            content_type='text/plain',
+            status=404
+        )
+
 urlpatterns = [
     # Route de test simple
     path('test/', simple_test, name='simple-test'),
     
     # API endpoints
-    path('', api_root_view),
+    path('api/', api_root_view),
     path('api-info/', api_root_view, name='api-info'),
     path('health/', health_check, name='health'),
     path('debug-info/', debug_info, name='debug-info'),
@@ -187,6 +204,11 @@ urlpatterns = [
     path('api/', include('products.api.urls')),
     path('api/users/', include('users.urls')),
     # path('api/orders/', include('orders.urls')),
+    
+    # Servir l'application React frontend à la racine
+    path('', serve_react_app),
+    # Capturer toutes les autres routes qui ne sont pas des API pour les envoyer à React
+    re_path(r'^(?!api/|admin/|media/|static/).*$', serve_react_app),
 ]
 
 # Ajout des URLs pour les médias et fichiers statiques
