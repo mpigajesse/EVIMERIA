@@ -125,7 +125,7 @@ docker-compose exec db pg_dump -U postgres railway > backup.sql
 
 # Restauration
 cat backup.sql | docker-compose exec -T db psql -U postgres railway
-```
+``` 
 
 ## Configuration des variables d'environnement pour l'application
 
