@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "cd backend && pip install --break-system-packages -r requirements.txt && cd ../frontend && npm ci --legacy-peer-deps && npm run build"
+buildCommand = "cd backend && pip install --break-system-packages -r requirements.txt && cd ../frontend && npm ci --legacy-peer-deps && npm run build && cd ../backend && mkdir -p staticfiles"
 
 [deploy]
 startCommand = "cd backend && python -m gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:$PORT"
