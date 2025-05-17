@@ -152,9 +152,13 @@ STATICFILES_DIRS = [
     os.path.join(FRONTEND_DIR, 'dist'),
 ]
 
-# Activer WhiteNoise pour servir les fichiers statiques
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-WHITENOISE_ROOT = os.path.join(FRONTEND_DIR, 'dist')
+# En production, forcer Whitenoise et la bonne config
+if not DEBUG:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')  # S'assurer que Whitenoise est bien placé
+    WHITENOISE_ROOT = os.path.join(FRONTEND_DIR, 'dist')
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Cloudinary settings
 CLOUDINARY_STORAGE = {
