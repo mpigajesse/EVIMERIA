@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-c+h11ba43(notowv31(&=
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 # Compatibilité avec les deux noms de variables pour ALLOWED_HOSTS
-ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -99,7 +99,8 @@ if DATABASE_URL:
         'default': dj_database_url.config(
             default=DATABASE_URL,
             conn_max_age=600,
-            conn_health_checks=True
+            conn_health_checks=True,
+            ssl_require=True
         )
     }
 else:
@@ -146,10 +147,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(FRONTEND_DIR, 'dist'),
+]
 
 # Activer WhiteNoise pour servir les fichiers statiques
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+WHITENOISE_ROOT = os.path.join(FRONTEND_DIR, 'dist')
 
 # Cloudinary settings
 CLOUDINARY_STORAGE = {
@@ -228,6 +233,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True  # Pour le développement seulement
+CORS_ALLOW_CREDENTIALS = True
 
 # Configuration du modèle utilisateur personnalisé
 AUTH_USER_MODEL = 'users.User'
@@ -235,9 +241,12 @@ AUTH_USER_MODEL = 'users.User'
 # URL de base pour l'environnement de production
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = False
+    SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
 
 # Configuration CORS
 CORS_ALLOW_ALL_ORIGINS = True
