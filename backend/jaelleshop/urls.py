@@ -43,61 +43,22 @@ def api_root_view(request):
         }
     })
 
+# Fonction health_check simplifiée
 def health_check(request):
     logger.info("Health check endpoint accessed")
-    # Récupération des informations système pour debug
-    hostname = socket.gethostname()
-    ip = socket.gethostbyname(hostname)
-    allowed_hosts = settings.ALLOWED_HOSTS
-    django_settings_module = os.environ.get('DJANGO_SETTINGS_MODULE', 'unknown')
-    
-    # Informations sur les versions
-    python_version = sys.version
-    django_version = django.__version__
-    
-    # Informations sur la base de données
-    db_config = settings.DATABASES.get('default', {})
-    db_engine = db_config.get('ENGINE', 'unknown')
-    db_name = db_config.get('NAME', 'unknown')
-    db_host = db_config.get('HOST', 'unknown')
-    
-    # Ne pas inclure les données sensibles comme les mots de passe
-    if 'PASSWORD' in db_config:
-        db_config_safe = {k: v for k, v in db_config.items() if k != 'PASSWORD'}
-    else:
-        db_config_safe = db_config
-    
-    # Logging détaillé
-    logger.info(f"Health check from {request.META.get('REMOTE_ADDR')} - Hostname: {hostname}, IP: {ip}")
-    logger.info(f"ALLOWED_HOSTS: {allowed_hosts}")
-    logger.info(f"Database config: {db_config_safe}")
-    
-    # Retourner une réponse JSON plus détaillée pour le débogage
-    response = JsonResponse({
+    return JsonResponse({
         "status": "OK",
-        "message": "Service is healthy",
-        "environment": "production" if not settings.DEBUG else "development",
-        "host_info": {
-            "hostname": hostname,
-            "ip": ip,
-            "allowed_hosts": allowed_hosts,
-            "django_settings": django_settings_module,
-        },
-        "versions": {
-            "python": python_version,
-            "django": django_version,
-        },
-        "database": {
-            "engine": db_engine,
-            "name": db_name,
-            "host": db_host,
-            "connected": check_db_connection(),
-        }
+        "message": "Service is healthy"
     })
-    response["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response["Pragma"] = "no-cache"
-    response["Expires"] = "0"
-    return response
+
+def simplified_health_check(request):
+    """Version ultra-simple du health check pour le déploiement"""
+    return HttpResponse("OK", content_type="text/plain")
+
+# Endpoint ultra-minimal pour le healthcheck
+def minimal_status(request):
+    """Endpoint minimal pour le healthcheck de Railway"""
+    return HttpResponse(status=200)
 
 def check_db_connection():
     """Vérifie la connexion à la base de données"""
@@ -197,7 +158,8 @@ urlpatterns = [
     # API endpoints
     path('api/', api_root_view),
     path('api-info/', api_root_view, name='api-info'),
-    path('health/', health_check, name='health'),
+    path('health/', simplified_health_check, name='health'),
+    path('status/', minimal_status, name='status'),
     path('debug-info/', debug_info, name='debug-info'),
     path('db-tables/', db_tables, name='db-tables'),
     path('admin/', admin.site.urls),
