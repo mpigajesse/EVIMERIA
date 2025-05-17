@@ -98,9 +98,15 @@ if DATABASE_URL:
     DATABASES = {
         'default': dj_database_url.config(
             default=DATABASE_URL,
-            conn_max_age=600,
+            conn_max_age=300,  # Réduit à 5 minutes
             conn_health_checks=True,
-            ssl_require=True
+            ssl_require=True,
+            options={
+                'keepalives': 1,
+                'keepalives_idle': 30,
+                'keepalives_interval': 10,
+                'keepalives_count': 5
+            }
         )
     }
 else:
