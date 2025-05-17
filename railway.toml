@@ -7,6 +7,8 @@ startCommand = "cd backend && gunicorn jaelleshop.wsgi:application --bind 0.0.0.
 healthcheckPath = "/"
 healthcheckTimeout = 300
 restartPolicyType = "on-failure"
+provider = "nixpacks"
+noDocker = true
 
 [phases.setup]
 nixPkgs = ["python3", "postgresql", "gcc"]
