@@ -10,7 +10,8 @@ cmds = [
 [phases.build]
 cmds = [
   'cd frontend && npm run build',
-  'cd backend && mkdir -p staticfiles && python manage.py collectstatic --noinput'
+  'cd backend && mkdir -p staticfiles',
+  'cd backend && python manage.py collectstatic --noinput --clear'
 ]
 
 [start]

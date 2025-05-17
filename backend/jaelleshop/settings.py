@@ -152,13 +152,18 @@ STATICFILES_DIRS = [
     os.path.join(FRONTEND_DIR, 'dist'),
 ]
 
-# En production, forcer Whitenoise et la bonne config
-if not DEBUG:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')  # S'assurer que Whitenoise est bien placé
-    WHITENOISE_ROOT = os.path.join(FRONTEND_DIR, 'dist')
-    STATIC_URL = '/static/'
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# Configuration de Whitenoise pour les fichiers statiques (développement et production)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Assurer que Whitenoise est dans les premiers middlewares
+if 'whitenoise.middleware.WhiteNoiseMiddleware' not in MIDDLEWARE:
+    # Insérer Whitenoise juste après SecurityMiddleware
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+
+# Configuration supplémentaire de Whitenoise
+WHITENOISE_ROOT = os.path.join(FRONTEND_DIR, 'dist')
+WHITENOISE_MAX_AGE = 31536000  # 1 an en secondes
+WHITENOISE_SKIP_COMPRESS_EXTENSIONS = []  # Comprimer tous les types de fichiers
 
 # Cloudinary settings
 CLOUDINARY_STORAGE = {
