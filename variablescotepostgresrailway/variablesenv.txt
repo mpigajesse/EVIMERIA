@@ -1,3 +1,8 @@
+
+infos de la base postgres cote railway 
+
+env: 
+
 DATABASE_PUBLIC_URL="postgresql://${{PGUSER}}:${{POSTGRES_PASSWORD}}@${{RAILWAY_TCP_PROXY_DOMAIN}}:${{RAILWAY_TCP_PROXY_PORT}}/${{PGDATABASE}}"
 DATABASE_URL="postgresql://${{PGUSER}}:${{POSTGRES_PASSWORD}}@${{RAILWAY_PRIVATE_DOMAIN}}:5432/${{PGDATABASE}}"
 PGDATA="/var/lib/postgresql/data/pgdata"
@@ -7,21 +12,13 @@ PGPASSWORD="${{POSTGRES_PASSWORD}}"
 PGPORT="5432"
 PGUSER="${{POSTGRES_USER}}"
 POSTGRES_DB="railway"
-POSTGRES_PASSWORD="aBaBnvTLNykAnPRbXiRbtbgyVpprHNsY"
+POSTGRES_PASSWORD="EDvwqsDFZIbbYYJCPbYifAgkBslUSQLM"
 POSTGRES_USER="postgres"
 RAILWAY_DEPLOYMENT_DRAINING_SECONDS="60"
 SSL_CERT_DAYS="820"
 
 
 
+env de notre application
 
-Connect to Postgres
-
-Public Network
-
-Raw psql command
-
-PGPASSWORD=aBaBnvTLNykAnPRbXiRbtbgyVpprHNsY psql -h gondola.proxy.rlwy.net -U postgres -p 10810 -d railway
-
-
-postgresql://postgres:********@gondola.proxy.rlwy.net:10810/railway
+actuelleemnt vide  sans variables d'environnement 
