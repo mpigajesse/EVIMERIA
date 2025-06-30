@@ -110,7 +110,7 @@ const HomePage = () => {
                   <div className="w-full h-full relative overflow-hidden rounded-2xl featured-product-container">
                     {/* Image avec contournement intelligent */}
                 <motion.img
-                      src={mainImage.image_url || mainImage.image}
+                      src={mainImage.image}
                       alt={featuredProduct?.name || "Produit featured"}
                       className="w-full h-full featured-product-image"
                       style={{ 
