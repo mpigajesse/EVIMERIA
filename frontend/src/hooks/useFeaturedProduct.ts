@@ -14,36 +14,19 @@ export const useFeaturedProduct = () => {
         setError(null);
         
         // Récupérer tous les produits featured
-        const response = await axios.get('/api/products/?featured=true&limit=50');
+        const response = await axios.get('/api/products/featured/');
         const products = response.data.results || response.data;
         
         if (products && products.length > 0) {
-          // Filtrer les produits avec images et préférer certaines catégories pour la bannière
+          // Filtrer les produits avec images
           const productsWithImages = products.filter((product: Product) => 
             product.images && product.images.length > 0
           );
           
           if (productsWithImages.length > 0) {
-            // Préférer les vêtements, accessoires élégants pour la bannière
-            const preferredProducts = productsWithImages.filter((product: Product) => {
-              const name = product.name.toLowerCase();
-              const categoryName = product.category.name.toLowerCase() || '';
-              
-              return (
-                name.includes('robe') || 
-                name.includes('veste') || 
-                name.includes('chemise') || 
-                name.includes('sac') || 
-                name.includes('montre') || 
-                categoryName.includes('femmes') || 
-                categoryName.includes('hommes')
-              );
-            });
-            
-            // Utiliser les produits préférés s'il y en a, sinon tous les produits avec images
-            const finalProducts = preferredProducts.length > 0 ? preferredProducts : productsWithImages;
-            const randomIndex = Math.floor(Math.random() * finalProducts.length);
-            setFeaturedProduct(finalProducts[randomIndex]);
+            // Sélectionner un produit au hasard parmi ceux qui ont des images
+            const randomIndex = Math.floor(Math.random() * productsWithImages.length);
+            setFeaturedProduct(productsWithImages[randomIndex]);
           }
         }
       } catch (err) {
