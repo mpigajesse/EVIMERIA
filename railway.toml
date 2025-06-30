@@ -4,7 +4,7 @@ buildCommand = "cd backend && pip install --break-system-packages -r requirement
 
 [deploy]
 startCommand = "cd backend && python -m gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:$PORT"
-releaseCommand = "cd backend && python manage.py migrate --noinput && python manage.py create_admin && python manage.py populate_database"
+releaseCommand = "cd backend && python manage.py migrate --noinput && python manage.py create_admin"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
 
