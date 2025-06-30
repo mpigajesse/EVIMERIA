@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Category, Product, SubCategory, getProductsByCategory, getCategories, getCategoryImageUrl, getSubCategoriesByCategory } from '../api/products';
+import { Category, Product, SubCategory, getProductsByCategory, getCategories, getSubCategoriesByCategory } from '../api/products';
 import { components, typography, animations } from '../utils/designSystem';
 import { Card, Button, Badge, SectionTitle } from '../components/ui';
 import ProductsGrid from '../components/ProductsGrid';
@@ -235,13 +235,13 @@ const CategoryDetailPage: React.FC = () => {
       <div className="relative p-8 lg:p-12 rounded-3xl overflow-hidden bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 text-white shadow-2xl">
         {/* Image de fond avec overlay */}
         <div className="absolute inset-0 opacity-20">
-          <img 
-            src={getCategoryImageUrl(category!)} 
-            alt={category!.name}
+          <motion.img 
+            src={category?.image || `https://via.placeholder.com/1200x400?text=${category?.name}`} 
+            alt={category?.name}
             className="w-full h-full object-cover"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
-              target.src = `https://via.placeholder.com/1200x400?text=${category!.name}`;
+              target.src = `https://via.placeholder.com/1200x400?text=${category?.name}`;
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-br from-purple-600/80 to-blue-600/80"></div>

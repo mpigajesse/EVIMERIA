@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Category, Product, getProductsByCategory, getCategories, getCategoryImageUrl } from '../api/products';
+import { Category, Product, getProductsByCategory, getCategories } from '../api/products';
 import ProductsGrid from '../components/ProductsGrid';
 import { fadeIn, fadeInUp, staggeredList, staggeredItem } from '../utils/animations';
 
@@ -141,20 +141,13 @@ const CategoryPage: React.FC = () => {
           className="md:w-1/3 lg:w-1/4"
           variants={fadeInUp}
         >
-          <div className="rounded-2xl overflow-hidden h-40 md:h-56 lg:h-64 shadow-md">
-            <motion.img 
-              src={getCategoryImageUrl(category)} 
-              alt={category.name} 
-              className="w-full h-full object-cover"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.3 }}
-              onError={(e) => {
-                // Fallback en cas d'erreur de chargement d'image
-                const target = e.target as HTMLImageElement;
-                target.src = `https://via.placeholder.com/600x400?text=${category.name}`;
-              }}
+          <motion.div variants={fadeInUp}>
+            <img 
+              src={category.image || `https://via.placeholder.com/1200x400?text=${category.name}`} 
+              alt={`Bannière pour ${category.name}`}
+              className="w-full h-64 object-cover rounded-lg shadow-lg"
             />
-          </div>
+          </motion.div>
         </motion.div>
         
         <motion.div 
@@ -225,14 +218,9 @@ const CategoryPage: React.FC = () => {
                     <div className="relative w-full">
                       <div className="aspect-[1/1] h-[300px]">
                         <img 
-                          src={getCategoryImageUrl(relatedCategory)} 
+                          src={relatedCategory.image || `https://via.placeholder.com/300x300?text=${relatedCategory.name}`} 
                           alt={relatedCategory.name} 
                           className="w-full h-full object-cover object-center"
-                          onError={(e) => {
-                            // Fallback en cas d'erreur de chargement d'image
-                            const target = e.target as HTMLImageElement;
-                            target.src = `https://via.placeholder.com/300x300?text=${relatedCategory.name}`;
-                          }}
                         />
                       </div>
                       {relatedCategory.products_count && (
