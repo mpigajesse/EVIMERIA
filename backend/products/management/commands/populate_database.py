@@ -1,3 +1,4 @@
+import sys
 from django.core.management.base import BaseCommand
 from django.utils.text import slugify
 from products.models import Category, SubCategory
@@ -6,9 +7,25 @@ class Command(BaseCommand):
     help = 'Populates the database with initial categories and subcategories.'
 
     def handle(self, *args, **kwargs):
-        self.stdout.write(self.style.SUCCESS('=== Starting database population ==='))
-        self.create_categories_and_subcategories()
-        self.stdout.write(self.style.SUCCESS('=== Database population finished successfully! ==='))
+        self.stdout.write(self.style.SUCCESS('='*50))
+        self.stderr.write(self.style.WARNING('--- Executing populate_database command ---'))
+        self.stdout.write(self.style.SUCCESS('='*50))
+        
+        try:
+            self.create_categories_and_subcategories()
+            self.stdout.write(self.style.SUCCESS('\n=== Database population finished successfully! ==='))
+        
+        except Exception as e:
+            self.stderr.write(self.style.ERROR(f'\n!!! An error occurred during database population !!!'))
+            self.stderr.write(self.style.ERROR(f'Error: {e}'))
+            import traceback
+            traceback.print_exc(file=sys.stderr)
+            # We exit with a non-zero code to make the deployment fail if the script fails.
+            sys.exit(1)
+        
+        self.stdout.write(self.style.SUCCESS('='*50))
+        self.stderr.write(self.style.WARNING('--- populate_database command finished ---'))
+        self.stdout.write(self.style.SUCCESS('='*50))
 
     def create_categories_and_subcategories(self):
         """
