@@ -111,7 +111,7 @@ const HomePage = () => {
                     {/* Image avec contournement intelligent */}
                 <motion.img
                       src={mainImage.image}
-                      alt={featuredProduct?.name || "Produit featured"}
+                      alt={featuredProduct?.name || "Produit vedette"}
                       className="w-full h-full featured-product-image"
                       style={{ 
                         objectFit: 'contain',

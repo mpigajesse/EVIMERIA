@@ -28,7 +28,7 @@ elif os.path.exists(os.path.join(BASE_DIR, '..', 'frontend', 'dist')):
     FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', 'frontend'))
 else:
     # Fallback
-    FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, 'frontend'))
+FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, 'frontend'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -68,7 +68,7 @@ if railway_url:
 
 # En développement, autoriser tous les hosts
 if DEBUG:
-    ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -140,19 +140,19 @@ if DATABASE_URL:
     }
 else:
     # Configuration par défaut pour le développement local
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('POSTGRES_DB', 'evimeria'),
-            'USER': os.environ.get('POSTGRES_USER', 'postgres'),
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', ''),
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_DB', 'evimeria'),
+        'USER': os.environ.get('POSTGRES_USER', 'postgres'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', ''),
             'HOST': os.environ.get('PGHOST', 'db'),
             'PORT': os.environ.get('PGPORT', '5432'),
-            'OPTIONS': {
+        'OPTIONS': {
                 'sslmode': 'disable' if DEBUG else 'require'
-            }
         }
     }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -284,12 +284,12 @@ if DEBUG:
     # Configuration CORS pour le développement
     CORS_ALLOW_ALL_ORIGINS = True
     CORS_ALLOW_CREDENTIALS = True
-    CORS_ALLOWED_ORIGINS = [
-        "http://localhost:5173",  # Vite React frontend
-        "http://127.0.0.1:5173",
-        "http://localhost:8000",
-        "http://127.0.0.1:8000",
-    ]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Vite React frontend
+    "http://127.0.0.1:5173",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
 else:
     # Configuration CORS sécurisée pour la production
     CORS_ALLOW_ALL_ORIGINS = False
@@ -323,7 +323,7 @@ if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
-    
+
     # Cookies sécurisés
     SECURE_HSTS_SECONDS = 31536000  # 1 an
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True

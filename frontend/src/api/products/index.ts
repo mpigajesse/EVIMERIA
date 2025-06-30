@@ -109,7 +109,7 @@ const safeApiCall = async <T>(apiCall: Promise<{ data: PaginatedResponse<T> }>):
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new ApiError('Erreur lors de l\'appel API', error.response?.data);
-    }
+  }
     throw new ApiError('Une erreur inconnue est survenue');
   }
 };
