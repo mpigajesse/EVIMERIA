@@ -30,8 +30,8 @@ class CategoryListAPIView(ListAPIView):
     pagination_class = StandardResultsSetPagination
     
     def get_queryset(self):
-        """Récupère la liste de toutes les catégories publiées"""
-        return Category.objects.filter(is_published=True).annotate(
+        """Récupère la liste de toutes les catégories"""
+        return Category.objects.annotate(
             products_count=Count('products', filter=Q(products__is_published=True))
         ).order_by('-products_count')
 
