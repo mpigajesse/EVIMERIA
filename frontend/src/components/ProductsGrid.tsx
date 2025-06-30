@@ -141,10 +141,10 @@ const ProductsGrid: React.FC<ProductsGridProps> = ({
 
   return (
     <div className={className}>
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4 mb-6">
         {title && (
           <motion.h2 
-            className={typography.headings.h2}
+            className={`${typography.headings.h2} mb-2 sm:mb-0`}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -155,11 +155,10 @@ const ProductsGrid: React.FC<ProductsGridProps> = ({
         
         {/* Sélecteur de devise */}
         {showCurrencySwitcher && (
-          <div className="w-full sm:w-auto">
+          <div className="self-end sm:self-auto">
             <CurrencySwitcher 
               defaultCurrency={currencyCode}
               onCurrencyChange={handleCurrencyChange}
-              className="w-full sm:w-auto"
             />
           </div>
         )}
