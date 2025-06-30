@@ -30,7 +30,10 @@ class CategoryListAPIView(ListAPIView):
     pagination_class = StandardResultsSetPagination
     
     def get_queryset(self):
-        """Récupère la liste de toutes les catégories"""
+        """
+        Récupère la liste de toutes les catégories.
+        Le filtre sur 'is_published' a été retiré pour s'assurer que toutes les catégories s'affichent.
+        """
         return Category.objects.annotate(
             products_count=Count('products', filter=Q(products__is_published=True))
         ).order_by('-products_count')
