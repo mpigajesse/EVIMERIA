@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from django.shortcuts import get_object_or_404
@@ -17,14 +17,10 @@ from products.serializers import (
     ProductImageSerializer
 )
 
-class CategoryListAPIView(APIView):
+class CategoryListAPIView(generics.ListAPIView):
     permission_classes = [AllowAny]
-    
-    def get(self, request):
-        """Récupère la liste de toutes les catégories publiées"""
-        categories = Category.objects.filter(is_published=True)
-        serializer = CategorySerializer(categories, many=True)
-        return Response(serializer.data)
+    queryset = Category.objects.filter(is_published=True)
+    serializer_class = CategorySerializer
 
 class CategoryDetailAPIView(APIView):
     permission_classes = [AllowAny]
