@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Product, ProductImage, getFeaturedProducts } from '../api/products';
+import { Product, ProductImage } from '../api/products';
+import axios from 'axios';
 
 export const useFeaturedProduct = () => {
   const [featuredProduct, setFeaturedProduct] = useState<Product | null>(null);
@@ -12,8 +13,9 @@ export const useFeaturedProduct = () => {
         setLoading(true);
         setError(null);
         
-        // Récupérer les produits featured
-        const products = await getFeaturedProducts();
+        // Récupérer tous les produits featured
+        const response = await axios.get('/api/products/featured/');
+        const products = response.data.results || response.data;
         
         if (products && products.length > 0) {
           // Filtrer les produits avec images
