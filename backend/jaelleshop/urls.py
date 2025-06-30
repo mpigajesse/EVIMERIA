@@ -58,7 +58,7 @@ def simplified_health_check(request):
 # Endpoint ultra-minimal pour le healthcheck
 def minimal_status(request):
     """Endpoint minimal pour le healthcheck de Railway"""
-    return HttpResponse(status=200)
+    return HttpResponse("OK", status=200)
 
 def check_db_connection():
     """Vérifie la connexion à la base de données"""
@@ -128,21 +128,47 @@ Settings: {settings_module}
 """
     return HttpResponse(response_text, content_type="text/plain")
 
-# Fonction pour servir l'application React
+# Vue pour servir le frontend React
 def serve_react_app(request):
-    """Sert l'application React frontend"""
-    logger.info("Serving React app")
-    frontend_path = os.path.join(settings.FRONTEND_DIR, 'dist', 'index.html')
-    if os.path.exists(frontend_path):
-        with open(frontend_path, 'r', encoding='utf-8') as file:
-            return HttpResponse(file.read(), content_type='text/html')
-    else:
-        logger.error(f"Frontend file not found at {frontend_path}")
-        return HttpResponse(
-            f"L'application frontend n'a pas été trouvée. Vérifiez si le build React existe à l'emplacement {frontend_path}",
-            content_type='text/plain',
-            status=404
-        )
+    """Serve the React app"""
+    try:
+        # Essayer de servir index.html du frontend
+        frontend_dist = os.path.join(settings.FRONTEND_DIR, 'dist')
+        index_path = os.path.join(frontend_dist, 'index.html')
+        
+        if os.path.exists(index_path):
+            with open(index_path, 'r', encoding='utf-8') as f:
+                return HttpResponse(f.read(), content_type='text/html')
+        else:
+            # Si le frontend n'existe pas, retourner un message d'information
+            return HttpResponse(f"""
+                <html>
+                    <body>
+                        <h1>🚀 EVIMERIA Backend</h1>
+                        <p>✅ Backend Django fonctionne !</p>
+                        <p>⚠️ Frontend React en cours de construction...</p>
+                        <p><strong>Chemin recherché :</strong> {index_path}</p>
+                        <p><strong>Répertoire frontend :</strong> {settings.FRONTEND_DIR}</p>
+                        <hr>
+                        <h3>🔗 Liens utiles :</h3>
+                        <ul>
+                            <li><a href="/admin/">Interface Admin Django</a></li>
+                            <li><a href="/api/products/">API Produits</a></li>
+                            <li><a href="/status/">Status de l'application</a></li>
+                        </ul>
+                    </body>
+                </html>
+            """, content_type='text/html')
+    except Exception as e:
+        return HttpResponse(f"""
+            <html>
+                <body>
+                    <h1>❌ Erreur</h1>
+                    <p>Erreur lors du chargement du frontend : {str(e)}</p>
+                    <p><a href="/admin/">Accéder à l'admin Django</a></p>
+                </body>
+            </html>
+        """, content_type='text/html', status=500)
 
 urlpatterns = [
     # Admin doit être en premier
@@ -159,15 +185,13 @@ urlpatterns = [
     path('db-tables/', db_tables, name='db-tables'),
     path('api/', include('products.api.urls')),
     path('api/users/', include('users.urls')),
-    # path('api/orders/', include('orders.urls')),
+    path('api/orders/', include('orders.urls')),
     
-    # Servir l'application React frontend à la racine
-    path('', serve_react_app),
-    # Capturer toutes les autres routes qui ne sont pas des API pour les envoyer à React
-    re_path(r'^(?!api/|admin/|media/|static/).*$', serve_react_app),
+    # Fallback pour le frontend React
+    re_path(r'^.*$', serve_react_app, name='react_app'),
 ]
 
-# Ajout des URLs pour les médias et fichiers statiques
+# Servir les fichiers statiques en développement
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

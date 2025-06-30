@@ -16,7 +16,19 @@ env_path = os.path.join(BASE_DIR.parent, '.env')
 load_dotenv(env_path)
 
 # Chemin vers le dossier du frontend
-FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, 'frontend'))
+# En développement local
+FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', 'frontend'))
+
+# En production Railway, ajuster le chemin
+if os.path.exists('/app/frontend/dist'):
+    # Production Railway
+    FRONTEND_DIR = '/app/frontend'
+elif os.path.exists(os.path.join(BASE_DIR, '..', 'frontend', 'dist')):
+    # Développement local
+    FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', 'frontend'))
+else:
+    # Fallback
+    FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, 'frontend'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -181,8 +193,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Configuration des fichiers statiques pour Railway
 STATICFILES_DIRS = []
-if os.path.exists(os.path.join(FRONTEND_DIR, 'dist')):
-    STATICFILES_DIRS.append(os.path.join(FRONTEND_DIR, 'dist'))
+frontend_dist_path = os.path.join(FRONTEND_DIR, 'dist')
+if os.path.exists(frontend_dist_path):
+    STATICFILES_DIRS.append(frontend_dist_path)
 
 # Configuration de Whitenoise pour les fichiers statiques (développement et production)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -193,7 +206,7 @@ if 'whitenoise.middleware.WhiteNoiseMiddleware' not in MIDDLEWARE:
     MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
 # Configuration supplémentaire de Whitenoise
-WHITENOISE_ROOT = os.path.join(FRONTEND_DIR, 'dist')
+WHITENOISE_ROOT = frontend_dist_path if os.path.exists(frontend_dist_path) else None
 WHITENOISE_MAX_AGE = 31536000  # 1 an en secondes
 WHITENOISE_SKIP_COMPRESS_EXTENSIONS = []  # Comprimer tous les types de fichiers
 
