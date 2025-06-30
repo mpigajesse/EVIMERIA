@@ -101,10 +101,16 @@ export interface PaginatedResponse<T> {
 }
 
 // API UTILS
-const safeApiCall = async <T>(apiCall: Promise<{ data: PaginatedResponse<T> }>): Promise<PaginatedResponse<T>> => {
+const safeApiCall = async <T>(apiCall: Promise<{ data: T[] | PaginatedResponse<T> }>): Promise<T[]> => {
   try {
     const response = await apiCall;
-    return response.data;
+    const data = response.data;
+    if ('results' in data) {
+      // C'est une réponse paginée
+      return data.results;
+    }
+    // C'est une réponse non paginée (tableau direct)
+    return data as T[];
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new ApiError('Erreur lors de l\'appel API', error.response?.data);
@@ -114,16 +120,17 @@ const safeApiCall = async <T>(apiCall: Promise<{ data: PaginatedResponse<T> }>):
 };
 
 // API FUNCTIONS
-export const getProducts = async () => {
+export const getProducts = async (): Promise<Product[]> => {
   try {
-    return await safeApiCall<Product>(api.get('/products/'));
+    const response = await api.get<PaginatedResponse<Product>>('/products/');
+    return response.data.results;
   } catch (error) {
     console.error('Erreur lors de la récupération des produits:', error);
     throw error;
   }
 };
 
-export const getProductBySlug = async (slug: string) => {
+export const getProductBySlug = async (slug: string): Promise<Product> => {
   try {
     const response = await api.get<Product>(`/products/${slug}/`);
     return response.data;
@@ -133,63 +140,84 @@ export const getProductBySlug = async (slug: string) => {
   }
 };
 
-export const getFeaturedProducts = async () => {
+export const getFeaturedProducts = async (): Promise<Product[]> => {
   try {
-    return await safeApiCall<Product>(api.get('/products/featured/'));
+    const response = await api.get<PaginatedResponse<Product>>('/products/featured/');
+    return response.data.results;
   } catch (error) {
     console.error('Erreur lors de la récupération des produits mis en avant:', error);
     throw error;
   }
 };
 
-export const getCategories = async () => {
+export const getCategories = async (): Promise<Category[]> => {
   try {
-    return await safeApiCall<Category>(api.get('/categories/'));
+    const response = await api.get<PaginatedResponse<Category>>('/categories/');
+    console.log("Données brutes des catégories:", response.data); // Pour le débogage
+    
+    if (response.data && Array.isArray(response.data.results)) {
+      return response.data.results;
+    }
+    
+    // Si la réponse n'a pas le format attendu, essayez de gérer le cas où ce n'est pas paginé
+    if (Array.isArray(response.data)) {
+      console.warn("Réponse non paginée pour les catégories");
+      return response.data as unknown as Category[];
+    }
+
+    console.error("Les données reçues pour les catégories ne sont pas dans le format attendu:", response.data);
+    return []; // Retourne un tableau vide pour éviter de casser l'UI
+
   } catch (error) {
     console.error('Erreur lors de la récupération des catégories:', error);
     throw error;
   }
 };
 
-export const getProductsByCategory = async (categorySlug: string) => {
+export const getProductsByCategory = async (categorySlug: string): Promise<Product[]> => {
   try {
-    return await safeApiCall<Product>(api.get(`/categories/${categorySlug}/products/`));
+    const response = await api.get<PaginatedResponse<Product>>(`/categories/${categorySlug}/products/`);
+    return response.data.results;
   } catch (error) {
     console.error(`Erreur lors de la récupération des produits de la catégorie ${categorySlug}:`, error);
     throw error;
   }
 };
 
-export const getSubCategories = async () => {
+export const getSubCategories = async (): Promise<SubCategory[]> => {
   try {
-    return await safeApiCall<SubCategory>(api.get('/subcategories/'));
+    const response = await api.get<PaginatedResponse<SubCategory>>('/subcategories/');
+    return response.data.results;
   } catch (error) {
     console.error('Erreur lors de la récupération des sous-catégories:', error);
     throw error;
   }
 };
 
-export const getSubCategoriesByCategory = async (categorySlug: string) => {
+export const getSubCategoriesByCategory = async (categorySlug: string): Promise<SubCategory[]> => {
   try {
-    return await safeApiCall<SubCategory>(api.get(`/subcategories/by_category/?category=${categorySlug}`));
+    const response = await api.get<PaginatedResponse<SubCategory>>(`/subcategories/by_category/?category=${categorySlug}`);
+    return response.data.results;
   } catch (error) {
     console.error(`Erreur lors de la récupération des sous-catégories de ${categorySlug}:`, error);
     throw error;
   }
 };
 
-export const getProductsBySubCategory = async (subcategorySlug: string) => {
+export const getProductsBySubCategory = async (subcategorySlug: string): Promise<Product[]> => {
   try {
-    return await safeApiCall<Product>(api.get(`/subcategories/${subcategorySlug}/products/`));
+    const response = await api.get<PaginatedResponse<Product>>(`/subcategories/${subcategorySlug}/products/`);
+    return response.data.results;
   } catch (error) {
     console.error(`Erreur lors de la récupération des produits de la sous-catégorie ${subcategorySlug}:`, error);
     throw error;
   }
 };
 
-export const searchProducts = async (query: string) => {
+export const searchProducts = async (query: string): Promise<Product[]> => {
   try {
-    return await safeApiCall<Product>(api.get(`/products/search/?q=${query}`));
+    const response = await api.get<PaginatedResponse<Product>>(`/products/search/?q=${query}`);
+    return response.data.results;
   } catch (error) {
     console.error(`Erreur lors de la recherche de produits avec la requête "${query}":`, error);
     throw error;
