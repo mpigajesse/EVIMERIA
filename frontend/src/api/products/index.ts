@@ -207,3 +207,15 @@ export const registerUser = async (userData: any) => {
     throw new ApiError('Une erreur inconnue est survenue');
   }
 };
+
+export const loginUser = async (credentials: any) => {
+  try {
+    const response = await api.post('/token/', credentials);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new ApiError('Erreur lors de la connexion', error.response?.data);
+    }
+    throw new ApiError('Une erreur inconnue est survenue');
+  }
+};

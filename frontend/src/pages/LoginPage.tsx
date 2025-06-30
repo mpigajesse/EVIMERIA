@@ -1,18 +1,46 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { components, typography, animations } from '../utils/designSystem';
 import { Card, Button, Badge, SectionTitle } from '../components/ui';
+import { loginUser, ApiError } from '../api/products';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Ici, on enverrait les informations au backend pour l'authentification
-    console.log('Tentative de connexion avec:', { email, password, rememberMe });
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      const data = await loginUser({ email, password });
+      // Stocker les tokens. Le localStorage est simple, mais pour une meilleure sécurité
+      // en production, considérer des cookies httpOnly.
+      localStorage.setItem('accessToken', data.access);
+      localStorage.setItem('refreshToken', data.refresh);
+
+      // Rediriger vers la page d'accueil ou le tableau de bord
+      navigate('/');
+
+    } catch (err) {
+      let errorMessage = 'Email ou mot de passe incorrect.';
+      if (err instanceof ApiError) {
+        // Personnaliser le message si l'API renvoie des détails spécifiques
+        if (err.details && err.details.detail) {
+          errorMessage = err.details.detail;
+        }
+      }
+      setError(errorMessage);
+      console.error('Erreur de connexion:', err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -54,6 +82,13 @@ const LoginPage = () => {
               variants={animations.fadeInUp}
               transition={{ delay: 0.1 }}
             >
+              {error && (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                  <strong className="font-bold">Erreur: </strong>
+                  <span className="block sm:inline">{error}</span>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="email" className={`block text-sm font-medium ${typography.body.medium} mb-1`}>
@@ -120,8 +155,9 @@ const LoginPage = () => {
                     variant="primary"
                     className="px-8 py-2.5 bg-gradient-to-r from-blue-600 via-violet-600 to-green-600 !text-white hover:from-blue-700 hover:via-violet-700 hover:to-green-700"
                     type="submit"
+                    disabled={isLoading}
                   >
-                    Se connecter
+                    {isLoading ? 'Connexion...' : 'Se connecter'}
                   </Button>
                 </motion.div>
               </div>
