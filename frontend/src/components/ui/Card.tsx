@@ -17,6 +17,7 @@ interface CardProps {
   badge?: ReactNode;
   badgePosition?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
   as?: React.ElementType;
+  bgColor?: string;
 }
 
 /**
@@ -37,6 +38,7 @@ const Card = ({
   badge,
   badgePosition = 'top-right',
   as: Component = 'div',
+  bgColor = 'bg-white',
 }: CardProps) => {
   // Gestion du padding avec classes Tailwind responsive
   const getPaddingClasses = (): string => {
@@ -110,7 +112,8 @@ const Card = ({
 
   // Classes de base pour la carte
   const baseClasses = classNames(
-    'bg-white overflow-hidden relative w-full',
+    bgColor,
+    'overflow-hidden relative w-full',
     getRoundedClasses(),
     getElevationClasses(),
     getPaddingClasses(),

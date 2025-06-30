@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Category, getCategories, getCategoryImageUrl } from '../api/products';
+import { Category, getCategories } from '../api/products';
 import { animations, typography, colors, components } from '../utils/designSystem';
 import { Card, Button, Badge, SectionTitle } from './ui';
 
@@ -9,6 +9,7 @@ const CategoryCarousel: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const categoryRefs = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -117,53 +118,21 @@ const CategoryCarousel: React.FC = () => {
             {categoryItems.map((category, index) => (
               <motion.div
                 key={category.id}
-                className="category-item px-3 md:px-4 min-w-[260px] md:min-w-[300px] flex-shrink-0 snap-center"
-                variants={animations.fadeInUp}
-                custom={index}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -8 }}
+                className="w-full flex-shrink-0"
+                ref={(el) => { if (el) categoryRefs.current[index] = el; }}
               >
                 <Card 
-                  to={`/categories/${category.slug}`}
-                  padding="none" 
-                  hover={false}
-                  rounded="xl"
-                  elevation="extraHigh"
-                  className={`relative h-full ${index === activeIndex ? 'ring-2 ring-primary-500 ring-offset-2' : ''}`}
+                  className="h-full overflow-hidden" 
+                  bgColor="bg-white" 
+                  elevation="low"
                 >
-                  <motion.div
-                    className="relative h-48 md:h-64 overflow-hidden"
-                    whileHover="hover"
-                  >
+                  <div className="relative h-48 sm:h-56">
                     <motion.img 
-                      src={getCategoryImageUrl(category)} 
+                      src={category.image || `https://via.placeholder.com/400x300?text=${category.name}`} 
                       alt={category.name}
                       className="w-full h-full object-cover object-center" 
-                      variants={{
-                        hover: { scale: 1.1, filter: "brightness(1.1)" }
-                      }}
-                      transition={{ duration: 0.5 }}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = `https://via.placeholder.com/400x300?text=${category.name}`;
-                      }}
                     />
-                    <motion.div 
-                      className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/60"
-                      variants={{
-                        hover: { opacity: 0.8 }
-                      }}
-                    ></motion.div>
-                    
-                    {/* Badge avec nombre de produits */}
-                    {category.products_count && (
-                      <div className="absolute top-3 right-3">
-                        <Badge variant="primary" size="sm" className={`${colors.gradients.primary} !text-black shadow-md`}>
-                          {category.products_count} produits
-                        </Badge>
-                      </div>
-                    )}
-                  </motion.div>
+                  </div>
                   
                   <div className="p-5 relative">
                     <h3 className={`${typography.headings.h3} group-hover:text-primary-600 transition-colors`}>{category.name}</h3>
