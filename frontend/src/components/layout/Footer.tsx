@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { components } from '../../utils/designSystem';
+import logoSite from '../../assets/logo/logodusite.jpg';
 
 const Footer = () => {
   return (
@@ -12,7 +13,7 @@ const Footer = () => {
           {/* Colonne 1: Logo et description */}
           <div className="col-span-1 lg:col-span-1">
             <div className="flex items-center mb-6">
-              <img src="/src/assets/logo/logodusite.jpg" alt="EVIMERIA" className="h-7 w-7 rounded-full shadow-sm mr-2" />
+              <img src={logoSite} alt="EVIMERIA" className="h-7 w-7 rounded-full shadow-sm mr-2" />
               <h2 className="text-2xl font-bold text-white">EVIMERIA</h2>
             </div>
             <p className="text-blue-200 mb-6">

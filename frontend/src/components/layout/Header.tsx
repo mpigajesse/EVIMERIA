@@ -5,6 +5,7 @@ import { useAppSelector } from '../../store';
 import SearchBar from '../SearchBar';
 import { getCategories, Category } from '../../api/products';
 import { fadeInDown, mobileMenuAnimation, mobileMenuItemAnimation } from '../../utils/animations';
+import logoSite from '../../assets/logo/logodusite.jpg';
 
 const Header = () => {
   const { totalItems } = useAppSelector((state) => state.cart);
@@ -81,7 +82,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="text-2xl font-bold text-blue-600 flex items-center">
             <motion.img 
-              src="/src/assets/logo/logodusite.jpg" 
+              src={logoSite}
               alt="EVIMERIA" 
               className="h-10 w-10 mr-2 rounded-full shadow-sm"
               whileHover={{ scale: 1.05, rotate: 5 }}
