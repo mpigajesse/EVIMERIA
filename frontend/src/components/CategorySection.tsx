@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Category, getCategories, getCategoryImageUrl } from '../api/products';
+import { Category, getCategories } from '../api/products';
 import { NavButton, Loader } from './ui';
-import { typography } from '../utils/designSystem';
+import { animations, typography, components, colors } from '../utils/designSystem';
 
 interface CategorySectionProps {
   title?: string;
@@ -24,8 +24,9 @@ const CategorySection: React.FC<CategorySectionProps> = ({
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        const data = await getCategories();
-        setCategories(data.slice(0, limit));
+        const response = await getCategories();
+        const allCategories = response.results || [];
+        setCategories(allCategories.slice(0, 4));
         setError(null);
       } catch (err) {
         console.error('Erreur lors du chargement des catégories:', err);
@@ -98,15 +99,14 @@ const CategorySection: React.FC<CategorySectionProps> = ({
             >
               <div className="absolute inset-0 bg-gradient-to-br from-gray-900/30 to-gray-900/70 z-10"></div>
               
-              <img 
-                src={getCategoryImageUrl(category)} 
-                alt={category.name}
-                className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = `https://via.placeholder.com/600x800?text=${category.name}`;
-                }}
-              />
+              <div className="relative aspect-w-16 aspect-h-9 sm:aspect-h-12 lg:aspect-h-9 overflow-hidden rounded-xl">
+                <img
+                  src={category.image || `https://via.placeholder.com/600x400?text=${category.name}`}
+                  alt={category.name}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+              </div>
               
               <div className="absolute inset-0 z-20 flex flex-col justify-end p-6">
                 <h3 className="text-white text-xl font-bold mb-2">{category.name}</h3>

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Category, getCategories, getCategoryImageUrl } from '../api/products';
+import { Category, getCategories } from '../api/products';
 import { components, typography, animations, colors } from '../utils/designSystem';
 import { Card, Button, Badge, SectionTitle } from '../components/ui';
 import CategoryAccordion from '../components/CategoryAccordion';
@@ -18,13 +18,10 @@ const CategoriesPage: React.FC = () => {
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        const data = await getCategories();
-        if (Array.isArray(data)) {
-          setCategories(data);
-          setFilteredCategories(data);
-        } else {
-          throw new Error('Les données reçues ne sont pas un tableau');
-        }
+        const response = await getCategories();
+        const categoriesData = response.results || [];
+        setCategories(categoriesData);
+        setFilteredCategories(categoriesData);
         setError(null);
       } catch (error) {
         console.error('Erreur lors du chargement des catégories:', error);
@@ -413,7 +410,7 @@ const CategoriesPage: React.FC = () => {
                             viewMode === 'list' ? 'w-1/3 h-48' : 'h-64'
                           }`}>
                       <motion.img 
-                        src={getCategoryImageUrl(category)} 
+                        src={category.image || `https://via.placeholder.com/400x300?text=${category.name}`} 
                         alt={category.name}
                         className="w-full h-full object-cover object-center transition-transform duration-700" 
                         whileHover={{ scale: 1.1 }}
@@ -477,45 +474,6 @@ const CategoriesPage: React.FC = () => {
                                 {category.description}
                               </p>
                             )}
-                            
-                            {/* Sous-catégories avec amélioration */}
-                            {category.subcategories && category.subcategories.length > 0 && (
-                              <div className="pt-4 border-t border-gray-100">
-                                <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
-                                  <svg className="w-4 h-4 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                  </svg>
-                                  Sous-catégories
-                                </h4>
-                                <div className="flex flex-wrap gap-2">
-                                  {category.subcategories.slice(0, 3).map((subcategory) => (
-                                    <motion.div
-                                      key={subcategory.id}
-                                      whileHover={{ scale: 1.05 }}
-                                      className="inline-block cursor-pointer"
-                                      onClick={(e: React.MouseEvent) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        window.location.href = `/categories/${category.slug}?subcategory=${subcategory.slug}`;
-                                      }}
-                                    >
-                                      <Badge 
-                                        variant="secondary" 
-                                        size="xs"
-                                        className="hover:bg-primary-100 hover:text-primary-700 transition-all duration-200 cursor-pointer"
-                                      >
-                                        {subcategory.name}
-                                      </Badge>
-                                    </motion.div>
-                                  ))}
-                                                                     {category.subcategories.length > 3 && (
-                                     <Badge variant="secondary" size="xs" className="text-gray-500 border-gray-300">
-                                       +{category.subcategories.length - 3} autres
-                                     </Badge>
-                                   )}
-                                </div>
-                              </div>
-                      )}
                     </div>
                   </Card>
                 </motion.div>

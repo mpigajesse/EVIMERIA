@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Category, getCategoryImageUrl } from '../api/products';
+import { Category } from '../api/products';
 import { ActionButton } from './ui';
 
 interface CategoryCardProps {
@@ -9,6 +9,8 @@ interface CategoryCardProps {
   index?: number;
   variant?: 'default' | 'horizontal' | 'minimal';
   className?: string;
+  imageClassName?: string;
+  contentClassName?: string;
 }
 
 const CategoryCard: React.FC<CategoryCardProps> = ({
@@ -16,6 +18,8 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
   index = 0,
   variant = 'default',
   className = '',
+  imageClassName = '',
+  contentClassName = '',
 }) => {
   // Animation d'apparition avec délai basé sur l'index
   const cardAnimation = {
@@ -53,7 +57,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
   };
 
   // Obtenir l'URL de l'image avec fallback
-  const imageUrl = getCategoryImageUrl(category);
+  const imageUrl = category.image || `https://via.placeholder.com/400x300?text=${category.name}`;
   
   // Nombre de produits formaté
   const productsCount = category.products_count 
@@ -78,45 +82,40 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
       {variant === 'horizontal' ? (
         <div className="w-1/3 relative">
           <div className="absolute inset-0 bg-gray-200">
-            <img
-              src={imageUrl}
-              alt={category.name}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = `https://via.placeholder.com/400x400?text=${category.name}`;
-              }}
-            />
+            <div className={`relative overflow-hidden rounded-t-lg ${imageClassName}`}>
+              <motion.img 
+                src={imageUrl} 
+                alt={category.name} 
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+            </div>
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/60"></div>
           </div>
         </div>
       ) : (
         <div className="relative w-full">
           <div className="aspect-[1/1] h-[300px]">
-            <img
-              src={imageUrl}
-              alt={category.name}
-              className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = `https://via.placeholder.com/400x400?text=${category.name}`;
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/60"></div>
-          </div>
-          
-          {category.products_count && (
-            <div className="absolute top-3 right-3 z-10">
-              <span className="bg-primary-600 text-white text-xs font-medium px-2.5 py-1 rounded-full shadow-md">
-                {productsCount}
-              </span>
+            <div className={`relative overflow-hidden rounded-t-lg ${imageClassName}`}>
+              <motion.img 
+                src={imageUrl} 
+                alt={category.name} 
+                className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+              />
             </div>
-          )}
+            
+            {category.products_count && (
+              <div className="absolute top-3 right-3 z-10">
+                <span className="bg-primary-600 text-white text-xs font-medium px-2.5 py-1 rounded-full shadow-md">
+                  {productsCount}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
       {/* Contenu de la carte */}
-      <div className={`${variant === 'horizontal' ? 'w-2/3 p-4' : 'p-4 h-[180px] flex flex-col'}`}>
+      <div className={`${variant === 'horizontal' ? 'w-2/3 p-4' : 'p-4 h-[180px] flex flex-col'} ${contentClassName}`}>
         <h3 className="text-lg font-semibold mb-1 line-clamp-1">{category.name}</h3>
         
         {category.description && (

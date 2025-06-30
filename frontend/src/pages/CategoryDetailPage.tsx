@@ -35,7 +35,7 @@ const CategoryDetailPage: React.FC = () => {
 
   // Statistiques
   const totalProducts = filteredProducts.length;
-  const avgPrice = filteredProducts.length > 0 ? (filteredProducts.reduce((sum, p) => sum + parseFloat(p.price), 0) / filteredProducts.length) : 0;
+  const avgPrice = filteredProducts.length > 0 ? (filteredProducts.reduce((sum, p) => sum + p.price, 0) / filteredProducts.length) : 0;
 
   useEffect(() => {
     const fetchCategoryAndProducts = async () => {
@@ -43,14 +43,10 @@ const CategoryDetailPage: React.FC = () => {
         setLoading(true);
         
         // Récupérer toutes les catégories
-        const categoriesData = await getCategories();
-        
-        if (!Array.isArray(categoriesData)) {
-          throw new Error('Les données de catégories reçues ne sont pas un tableau');
-        }
+        const categoriesResponse = await getCategories();
         
         // Trouver la catégorie par son slug
-        const foundCategory = categoriesData.find(cat => cat.slug === slug);
+        const foundCategory = categoriesResponse.results.find(cat => cat.slug === slug);
         
         if (!foundCategory) {
           throw new Error(`Catégorie "${slug}" non trouvée`);
@@ -59,13 +55,13 @@ const CategoryDetailPage: React.FC = () => {
         setCategory(foundCategory);
         
         // Récupérer les produits et les sous-catégories de cette catégorie
-        const [productsData, subcategoriesData] = await Promise.all([
+        const [productsResponse, subcategoriesResponse] = await Promise.all([
           getProductsByCategory(slug || ''),
           getSubCategoriesByCategory(slug || '')
         ]);
         
-        setAllProducts(productsData);
-        setSubcategories(subcategoriesData);
+        setAllProducts(productsResponse.results);
+        setSubcategories(subcategoriesResponse.results);
         setError(null);
       } catch (error) {
         console.error('Erreur lors du chargement de la catégorie et des produits:', error);
@@ -91,7 +87,7 @@ const CategoryDetailPage: React.FC = () => {
     if (subcategorySlug) {
       const targetSubcategory = subcategories.find(sub => sub.slug === subcategorySlug);
       if (targetSubcategory) {
-        filtered = filtered.filter(product => product.subcategory === targetSubcategory.id);
+        filtered = filtered.filter(product => product.subcategory?.id === targetSubcategory.id);
       }
     }
     
@@ -106,7 +102,7 @@ const CategoryDetailPage: React.FC = () => {
     // Filtrage par prix
     if (priceRange.min > 0 || priceRange.max < 1000) {
       filtered = filtered.filter(product => {
-        const price = parseFloat(product.price);
+        const price = product.price;
         return price >= priceRange.min && price <= priceRange.max;
       });
     }
@@ -114,10 +110,10 @@ const CategoryDetailPage: React.FC = () => {
     // Tri
     switch (sortBy) {
       case 'price-asc':
-        filtered.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+        filtered.sort((a, b) => a.price - b.price);
         break;
       case 'price-desc':
-        filtered.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+        filtered.sort((a, b) => b.price - a.price);
         break;
       case 'name-asc':
         filtered.sort((a, b) => a.name.localeCompare(b.name));
@@ -369,7 +365,7 @@ const CategoryDetailPage: React.FC = () => {
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  {subcategory.name} ({subcategory.products_count || 0})
+                  {subcategory.name}
                 </motion.button>
               ))}
             </div>
