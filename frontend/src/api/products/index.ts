@@ -1,7 +1,10 @@
 import axios from 'axios';
 
-// URL de base de l'API - utiliser l'URL complète pour le développement local
-const API_URL = 'http://localhost:8000/api';
+const API_URL = '/api';
+
+const api = axios.create({
+  baseURL: API_URL,
+});
 
 // Types pour les produits
 export interface Product {
@@ -105,7 +108,7 @@ const safeApiCall = async <T>(apiCall: Promise<{ data: unknown }>): Promise<T[]>
 // Fonctions pour récupérer les données des produits
 export const getProducts = async () => {
   try {
-    return await safeApiCall<Product>(axios.get(`${API_URL}/products/`));
+    return await safeApiCall<Product>(api.get('/products/'));
   } catch (error) {
     console.error('Erreur lors de la récupération des produits:', error);
     return [];
@@ -114,7 +117,7 @@ export const getProducts = async () => {
 
 export const getProductBySlug = async (slug: string) => {
   try {
-    const response = await axios.get<Product>(`${API_URL}/products/${slug}/`);
+    const response = await api.get<Product>(`/products/${slug}/`);
     return response.data;
   } catch (error) {
     console.error(`Erreur lors de la récupération du produit ${slug}:`, error);
@@ -124,7 +127,7 @@ export const getProductBySlug = async (slug: string) => {
 
 export const getFeaturedProducts = async () => {
   try {
-    return await safeApiCall<Product>(axios.get(`${API_URL}/products/featured/`));
+    return await safeApiCall<Product>(api.get('/products/featured/'));
   } catch (error) {
     console.error('Erreur lors de la récupération des produits mis en avant:', error);
     return [];
@@ -133,7 +136,7 @@ export const getFeaturedProducts = async () => {
 
 export const getCategories = async () => {
   try {
-    return await safeApiCall<Category>(axios.get(`${API_URL}/categories/`));
+    return await safeApiCall<Category>(api.get('/categories/'));
   } catch (error) {
     console.error('Erreur lors de la récupération des catégories:', error);
     return [];
@@ -142,7 +145,7 @@ export const getCategories = async () => {
 
 export const getProductsByCategory = async (categorySlug: string) => {
   try {
-    return await safeApiCall<Product>(axios.get(`${API_URL}/categories/${categorySlug}/products/`));
+    return await safeApiCall<Product>(api.get(`/categories/${categorySlug}/products/`));
   } catch (error) {
     console.error(`Erreur lors de la récupération des produits de la catégorie ${categorySlug}:`, error);
     return [];
@@ -152,7 +155,7 @@ export const getProductsByCategory = async (categorySlug: string) => {
 // Fonctions pour les sous-catégories
 export const getSubCategories = async () => {
   try {
-    return await safeApiCall<SubCategory>(axios.get(`${API_URL}/subcategories/`));
+    return await safeApiCall<SubCategory>(api.get('/subcategories/'));
   } catch (error) {
     console.error('Erreur lors de la récupération des sous-catégories:', error);
     return [];
@@ -161,7 +164,7 @@ export const getSubCategories = async () => {
 
 export const getSubCategoriesByCategory = async (categorySlug: string) => {
   try {
-    return await safeApiCall<SubCategory>(axios.get(`${API_URL}/subcategories/by_category/?category=${categorySlug}`));
+    return await safeApiCall<SubCategory>(api.get(`/subcategories/by_category/?category=${categorySlug}`));
   } catch (error) {
     console.error(`Erreur lors de la récupération des sous-catégories de ${categorySlug}:`, error);
     return [];
@@ -170,7 +173,7 @@ export const getSubCategoriesByCategory = async (categorySlug: string) => {
 
 export const getProductsBySubCategory = async (subcategorySlug: string) => {
   try {
-    return await safeApiCall<Product>(axios.get(`${API_URL}/subcategories/${subcategorySlug}/products/`));
+    return await safeApiCall<Product>(api.get(`/subcategories/${subcategorySlug}/products/`));
   } catch (error) {
     console.error(`Erreur lors de la récupération des produits de la sous-catégorie ${subcategorySlug}:`, error);
     return [];
@@ -179,7 +182,7 @@ export const getProductsBySubCategory = async (subcategorySlug: string) => {
 
 export const searchProducts = async (query: string) => {
   try {
-    return await safeApiCall<Product>(axios.get(`${API_URL}/products/search/?q=${query}`));
+    return await safeApiCall<Product>(api.get(`/products/search/?q=${query}`));
   } catch (error) {
     console.error(`Erreur lors de la recherche de produits avec la requête "${query}":`, error);
     return [];

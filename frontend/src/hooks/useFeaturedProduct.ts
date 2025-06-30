@@ -14,7 +14,7 @@ export const useFeaturedProduct = () => {
         setError(null);
         
         // Récupérer tous les produits featured
-        const response = await axios.get('http://localhost:8000/api/products/?featured=true&limit=50');
+        const response = await axios.get('/api/products/?featured=true&limit=50');
         const products = response.data.results || response.data;
         
         if (products && products.length > 0) {
