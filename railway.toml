@@ -1,11 +1,11 @@
 [build]
 builder = "nixpacks"
-buildCommand = "cd backend && pip install --break-system-packages -r requirements.txt && cd ../frontend && npm ci --legacy-peer-deps && npm run build && cd ../backend && python manage.py collectstatic --noinput --clear && mkdir -p staticfiles"
+buildCommand = "cd backend && pip install --break-system-packages -r requirements.txt && cd ../frontend && npm ci --legacy-peer-deps && npm run build && cd ../backend && python manage.py collectstatic --noinput --clear && mkdir -p staticfiles && chmod +x start_railway.sh"
 
 [deploy]
-startCommand = "cd backend && python manage.py migrate --noinput && python -m gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:$PORT --workers=2 --timeout=120 --max-requests=1000 --max-requests-jitter=100"
-healthcheckPath = "/status/"
-healthcheckTimeout = 300
+startCommand = "cd backend && ./start_railway.sh"
+# healthcheckPath = "/status/"  # TEMPORAIREMENT DÉSACTIVÉ POUR DEBUG
+# healthcheckTimeout = 300
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
 
