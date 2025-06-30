@@ -2,8 +2,37 @@ import axios from 'axios';
 
 const API_URL = '/api';
 
+// Fonction pour récupérer un cookie par son nom
+function getCookie(name: string): string | null {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      // Est-ce que ce cookie commence par le nom que nous voulons ?
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
 const api = axios.create({
   baseURL: API_URL,
+});
+
+// Ajouter un intercepteur pour inclure le token CSRF
+api.interceptors.request.use(config => {
+  const csrfToken = getCookie('csrftoken');
+  if (csrfToken) {
+    // Django s'attend à ce que le token soit dans cet en-tête
+    config.headers['X-CSRFToken'] = csrfToken;
+  }
+  return config;
+}, error => {
+  return Promise.reject(error);
 });
 
 // TYPES
