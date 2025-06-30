@@ -25,7 +25,7 @@ class CategoryListAPIView(ListAPIView):
     def get_queryset(self):
         """Récupère la liste de toutes les catégories publiées"""
         return Category.objects.filter(is_published=True).annotate(
-            products_count=Count('product', filter=Q(product__is_published=True))
+            products_count=Count('products', filter=Q(products__is_published=True))
         ).order_by('-products_count')
 
 class CategoryDetailAPIView(APIView):
