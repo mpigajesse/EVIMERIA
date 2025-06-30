@@ -6,34 +6,28 @@ const api = axios.create({
   baseURL: API_URL,
 });
 
-// Types pour les produits
+// TYPES
 export interface Product {
   id: number;
   name: string;
   slug: string;
   description: string;
-  price: string;
+  price: number;
   stock: number;
-  available: boolean;
-  featured: boolean;
-  category: number;
-  category_name: string;
-  subcategory?: number;
-  subcategory_name?: string;
-  images: ProductImage[];
+  is_published: boolean;
   created_at: string;
-  // Propriétés additionnelles
-  discount_percentage?: number;
-  is_new?: boolean;
-  rating?: number;
-  review_count?: number;
+  images: ProductImage[];
+  category: Category;
+  subcategory: SubCategory | null;
+  is_featured: boolean;
+  average_rating: number;
+  review_count: number;
 }
 
 export interface ProductImage {
   id: number;
   image: string;
-  image_url: string;
-  is_main: boolean;
+  thumbnail: string;
 }
 
 export interface Category {
@@ -41,10 +35,8 @@ export interface Category {
   name: string;
   slug: string;
   description: string;
-  image: string;
-  image_url: string;
+  image?: string;
   products_count?: number;
-  subcategories?: SubCategory[];
 }
 
 export interface SubCategory {
@@ -52,66 +44,53 @@ export interface SubCategory {
   name: string;
   slug: string;
   description: string;
-  products_count?: number;
+  category: number;
 }
 
-// Images de secours par catégorie
-const FALLBACK_IMAGES = {
-  'hommes': 'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4',
-  'femmes': 'https://images.unsplash.com/photo-1581044777550-4cfa60707c03',
-  'chaussures': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff',
-  'montres': 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49',
-  'casquettes': 'https://images.unsplash.com/photo-1521369909029-2afed882baee',
-  'baskets': 'https://images.unsplash.com/photo-1552346154-21d32810aba3',
-  'default': 'https://images.unsplash.com/photo-1581044777550-4cfa60707c03'
-};
+export interface User {
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+}
 
-// Helper pour obtenir une URL d'image valide pour une catégorie
-export const getCategoryImageUrl = (category: Category): string => {
-  // Utiliser l'image_url si elle existe
-  if (category.image_url && !category.image_url.includes('null')) {
-    return category.image_url;
-  }
-  
-  // Sinon, utiliser l'image si elle existe
-  if (category.image && !category.image.includes('null')) {
-    return category.image;
-  }
-  
-  // Sinon, utiliser une image de secours en fonction du slug
-  const slug = category.slug.toLowerCase();
-  return FALLBACK_IMAGES[slug as keyof typeof FALLBACK_IMAGES] || FALLBACK_IMAGES.default;
-};
+export class ApiError extends Error {
+  details?: any;
 
-// Fonction utilitaire pour vérifier et traiter les réponses API
-const safeApiCall = async <T>(apiCall: Promise<{ data: unknown }>): Promise<T[]> => {
+  constructor(message: string, details?: any) {
+    super(message);
+    this.name = 'ApiError';
+    this.details = details;
+  }
+}
+
+export interface PaginatedResponse<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+}
+
+// API UTILS
+const safeApiCall = async <T>(apiCall: Promise<{ data: PaginatedResponse<T> }>): Promise<PaginatedResponse<T>> => {
   try {
     const response = await apiCall;
-    // Vérifier si la réponse est un tableau
-    if (Array.isArray(response.data)) {
-      return response.data as T[];
-    }
-    // Si la réponse est un objet JSON valide mais pas un tableau
-    if (response.data && typeof response.data === 'object') {
-      console.warn('API a renvoyé un objet au lieu d\'un tableau:', response.data);
-      return [];
-    }
-    // Si la réponse n'est pas JSON (ex: HTML)
-    console.error('Réponse API invalide (non JSON):', typeof response.data);
-    return [];
+    return response.data;
   } catch (error) {
-    console.error('Erreur lors de l\'appel API:', error);
-    return [];
+    if (axios.isAxiosError(error)) {
+      throw new ApiError('Erreur lors de l\'appel API', error.response?.data);
+    }
+    throw new ApiError('Une erreur inconnue est survenue');
   }
 };
 
-// Fonctions pour récupérer les données des produits
+// API FUNCTIONS
 export const getProducts = async () => {
   try {
     return await safeApiCall<Product>(api.get('/products/'));
   } catch (error) {
     console.error('Erreur lors de la récupération des produits:', error);
-    return [];
+    throw error;
   }
 };
 
@@ -130,7 +109,7 @@ export const getFeaturedProducts = async () => {
     return await safeApiCall<Product>(api.get('/products/featured/'));
   } catch (error) {
     console.error('Erreur lors de la récupération des produits mis en avant:', error);
-    return [];
+    throw error;
   }
 };
 
@@ -139,7 +118,7 @@ export const getCategories = async () => {
     return await safeApiCall<Category>(api.get('/categories/'));
   } catch (error) {
     console.error('Erreur lors de la récupération des catégories:', error);
-    return [];
+    throw error;
   }
 };
 
@@ -148,17 +127,16 @@ export const getProductsByCategory = async (categorySlug: string) => {
     return await safeApiCall<Product>(api.get(`/categories/${categorySlug}/products/`));
   } catch (error) {
     console.error(`Erreur lors de la récupération des produits de la catégorie ${categorySlug}:`, error);
-    return [];
+    throw error;
   }
 };
 
-// Fonctions pour les sous-catégories
 export const getSubCategories = async () => {
   try {
     return await safeApiCall<SubCategory>(api.get('/subcategories/'));
   } catch (error) {
     console.error('Erreur lors de la récupération des sous-catégories:', error);
-    return [];
+    throw error;
   }
 };
 
@@ -167,7 +145,7 @@ export const getSubCategoriesByCategory = async (categorySlug: string) => {
     return await safeApiCall<SubCategory>(api.get(`/subcategories/by_category/?category=${categorySlug}`));
   } catch (error) {
     console.error(`Erreur lors de la récupération des sous-catégories de ${categorySlug}:`, error);
-    return [];
+    throw error;
   }
 };
 
@@ -176,7 +154,7 @@ export const getProductsBySubCategory = async (subcategorySlug: string) => {
     return await safeApiCall<Product>(api.get(`/subcategories/${subcategorySlug}/products/`));
   } catch (error) {
     console.error(`Erreur lors de la récupération des produits de la sous-catégorie ${subcategorySlug}:`, error);
-    return [];
+    throw error;
   }
 };
 
@@ -185,6 +163,18 @@ export const searchProducts = async (query: string) => {
     return await safeApiCall<Product>(api.get(`/products/search/?q=${query}`));
   } catch (error) {
     console.error(`Erreur lors de la recherche de produits avec la requête "${query}":`, error);
-    return [];
+    throw error;
+  }
+};
+
+export const registerUser = async (userData: any) => {
+  try {
+    const response = await api.post<User>('/users/register/', userData);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new ApiError('Erreur lors de l\'inscription', error.response?.data);
+    }
+    throw new ApiError('Une erreur inconnue est survenue');
   }
 };

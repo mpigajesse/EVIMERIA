@@ -27,7 +27,7 @@ export const useFeaturedProduct = () => {
             // Préférer les vêtements, accessoires élégants pour la bannière
             const preferredProducts = productsWithImages.filter((product: Product) => {
               const name = product.name.toLowerCase();
-              const categoryName = product.category_name?.toLowerCase() || '';
+              const categoryName = product.category.name.toLowerCase() || '';
               
               return (
                 name.includes('robe') || 
@@ -62,8 +62,7 @@ export const useFeaturedProduct = () => {
       return null;
     }
     
-    const mainImage = featuredProduct.images.find((img: ProductImage) => img.is_main);
-    return mainImage || featuredProduct.images[0];
+    return featuredProduct.images[0];
   };
 
   return {

@@ -1,32 +1,57 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { components, typography, animations, colors } from '../utils/designSystem';
 import { Card, Button, Badge, SectionTitle } from '../components/ui';
+import { registerUser, ApiError } from '../api/products';
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Validation des champs
+    setError(null);
+
     if (password !== confirmPassword) {
-      alert('Les mots de passe ne correspondent pas.');
+      setError('Les mots de passe ne correspondent pas.');
       return;
     }
     
     if (!agreeTerms) {
-      alert('Vous devez accepter les conditions générales.');
+      setError('Vous devez accepter les conditions générales.');
       return;
     }
     
-    // Ici, on enverrait les informations au backend pour créer le compte
-    console.log('Tentative d\'inscription avec:', { firstName, lastName, email, password });
+    setIsLoading(true);
+    try {
+      await registerUser({
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        password,
+      });
+      // Rediriger vers la page de connexion après une inscription réussie
+      navigate('/login');
+    } catch (err) {
+      if (err instanceof ApiError) {
+        // Gérer les erreurs de l'API (ex: email déjà utilisé)
+        const errorDetails = Object.values(err.details || {}).flat().join(' ');
+        setError(errorDetails || 'Une erreur est survenue lors de l\'inscription.');
+      } else {
+        setError('Une erreur inconnue est survenue.');
+      }
+      console.error('Erreur d\'inscription:', err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -68,6 +93,13 @@ const RegisterPage = () => {
               variants={animations.fadeInUp}
               transition={{ delay: 0.1 }}
             >
+              {error && (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                  <strong className="font-bold">Erreur: </strong>
+                  <span className="block sm:inline">{error}</span>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="first-name" className={`block text-sm font-medium ${typography.body.medium} mb-1`}>
@@ -185,8 +217,9 @@ const RegisterPage = () => {
                     variant="primary"
                     className="px-6 py-2.5 bg-gradient-to-r from-blue-600 via-violet-600 to-green-600 !text-white hover:from-blue-700 hover:via-violet-700 hover:to-green-700"
                     type="submit"
+                    disabled={isLoading}
                   >
-                    Créer un compte
+                    {isLoading ? 'Inscription...' : 'Créer un compte'}
                   </Button>
                 </motion.div>
               </div>
