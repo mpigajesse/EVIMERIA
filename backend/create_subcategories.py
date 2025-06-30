@@ -21,7 +21,6 @@ def create_subcategories():
             ('Vêtements garçons', 'T-shirts, pantalons et vêtements pour garçons'),
             ('Chaussures', 'Sneakers, baskets, sandales et bottes pour enfants'),
             ('Accessoires', 'Ceintures, écharpes et accessoires pour enfants'),
-            ('Jouets', 'Jeux, puzzles et jouets éducatifs')
         ],
         'Femmes': [
             ('Vêtements', 'T-shirts, pulls, chemises, robes et pantalons'),

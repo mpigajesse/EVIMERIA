@@ -43,7 +43,6 @@ def create_categories():
                 'Vêtements filles',
                 'Chaussures',
                 'Accessoires',
-                'Jouets'
             ]
         }
     }

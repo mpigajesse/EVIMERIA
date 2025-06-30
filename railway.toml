@@ -3,7 +3,7 @@ builder = "nixpacks"
 buildCommand = "cd backend && pip install --break-system-packages -r requirements.txt && cd ../frontend && npm ci --legacy-peer-deps && npm run build && ls -la dist/ && cd ../backend && python manage.py collectstatic --noinput --clear && mkdir -p staticfiles"
 
 [deploy]
-startCommand = "cd backend && echo '🚀 EVIMERIA - Démarrage Railway' && echo 'Variables critiques:' && echo \"DATABASE_URL: ${DATABASE_URL:0:50}...\" && echo \"SECRET_KEY: ${SECRET_KEY:0:20}...\" && echo \"DEBUG: $DEBUG\" && echo 'Vérification frontend:' && ls -la /app/frontend/ && ls -la /app/frontend/dist/ && python manage.py migrate --noinput && python manage.py create_admin && python -m gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:$PORT --workers=2 --timeout=120 --max-requests=1000 --max-requests-jitter=100 --access-logfile=- --error-logfile=- --log-level=info"
+startCommand = "cd backend && echo '🚀 EVIMERIA - Démarrage Railway' && echo 'Variables critiques:' && echo \"DATABASE_URL: ${DATABASE_URL:0:50}...\" && echo \"SECRET_KEY: ${SECRET_KEY:0:20}...\" && echo \"DEBUG: $DEBUG\" && echo 'Vérification frontend:' && ls -la /app/frontend/ && ls -la /app/frontend/dist/ && python manage.py migrate --noinput && python manage.py populate_categories && python manage.py create_admin && python -m gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:$PORT --workers=2 --timeout=120 --max-requests=1000 --max-requests-jitter=100 --access-logfile=- --error-logfile=- --log-level=info"
 # healthcheckPath = "/status/"  # TEMPORAIREMENT DÉSACTIVÉ POUR DEBUG
 # healthcheckTimeout = 300
 restartPolicyType = "on_failure"
