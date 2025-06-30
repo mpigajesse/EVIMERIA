@@ -18,8 +18,7 @@ const CategoriesPage: React.FC = () => {
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        const response = await getCategories();
-        const categoriesData = response.results || [];
+        const categoriesData = await getCategories();
         setCategories(categoriesData);
         setFilteredCategories(categoriesData);
         setError(null);
