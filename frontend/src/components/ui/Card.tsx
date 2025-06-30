@@ -113,7 +113,7 @@ const Card = ({
   // Classes de base pour la carte
   const baseClasses = classNames(
     bgColor,
-    'relative w-full',
+    'overflow-hidden relative w-full',
     getRoundedClasses(),
     getElevationClasses(),
     getPaddingClasses(),

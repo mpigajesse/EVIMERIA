@@ -68,7 +68,12 @@ const CurrencySwitcher: React.FC<CurrencySwitcherProps> = ({
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 z-50 overflow-hidden"
+            className="fixed sm:absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 z-[1000] overflow-visible"
+            style={{
+              top: "100%",
+              maxHeight: "80vh",
+              overflowY: "auto"
+            }}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
