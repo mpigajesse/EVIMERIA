@@ -27,7 +27,7 @@ const HomePage = () => {
           variants={animations.staggerChildren}
           className="mb-16"
         >
-          <Card className="overflow-hidden" padding="none" elevation="high">
+          <Card padding="none" elevation="high">
           <div className="flex flex-col md:flex-row">
               <motion.div 
                 className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center"
@@ -94,7 +94,7 @@ const HomePage = () => {
               </motion.div>
               
               <motion.div 
-                className="md:w-1/2 relative overflow-hidden rounded-2xl h-[350px] md:h-[450px] flex-shrink-0"
+                className="md:w-1/2 relative h-[350px] md:h-[450px] flex-shrink-0"
                 variants={animations.scaleIn}
                 style={{
                   height: window.innerWidth < 768 ? '350px' : '450px',
@@ -107,10 +107,10 @@ const HomePage = () => {
                     <div className="text-gray-500 font-medium">Chargement du produit...</div>
                   </div>
                 ) : mainImage ? (
-                  <div className="w-full h-full relative overflow-hidden rounded-2xl featured-product-container">
+                  <div className="w-full h-full relative featured-product-container">
                     {/* Image avec contournement intelligent */}
                 <motion.img
-                      src={mainImage.image_url || mainImage.image}
+                      src={mainImage.image}
                       alt={featuredProduct?.name || "Produit featured"}
                       className="w-full h-full featured-product-image"
                       style={{ 
