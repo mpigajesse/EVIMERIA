@@ -63,22 +63,24 @@ class SubCategoryListAPIView(APIView):
         serializer = SubCategorySerializer(subcategories, many=True)
         return Response(serializer.data)
 
-class SubCategoryByCategoryAPIView(APIView):
+class SubCategoryByCategoryAPIView(ListAPIView):
     permission_classes = [AllowAny]
-    
-    def get(self, request):
-        """Récupère les sous-catégories d'une catégorie spécifique"""
-        category_slug = request.query_params.get('category')
+    serializer_class = SubCategorySerializer
+    pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self):
+        """Récupère les sous-catégories d'une catégorie spécifique."""
+        category_slug = self.request.query_params.get('category')
         if not category_slug:
-            return Response(
-                {"error": "Paramètre 'category' requis"}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
+            return SubCategory.objects.none()
+
         category = get_object_or_404(Category, slug=category_slug, is_published=True)
-        subcategories = SubCategory.objects.filter(category=category, is_published=True)
-        serializer = SubCategorySerializer(subcategories, many=True)
-        return Response(serializer.data)
+        return SubCategory.objects.filter(
+            category=category, 
+            is_published=True
+        ).annotate(
+            products_count=Count('products', filter=Q(products__is_published=True))
+        ).order_by('name')
 
 class SubCategoryDetailAPIView(APIView):
     permission_classes = [AllowAny]

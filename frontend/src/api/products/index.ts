@@ -74,6 +74,7 @@ export interface SubCategory {
   slug: string;
   description: string;
   category: number;
+  products_count?: number;
 }
 
 export interface User {
