@@ -4,30 +4,55 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from datetime import timedelta
-import dj_database_url
 from dotenv import load_dotenv
-
-# Charger les variables d'environnement
-load_dotenv()
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Charger les variables d'environnement
+# Chercher le fichier .env dans le répertoire parent (racine du projet)
+env_path = os.path.join(BASE_DIR.parent, '.env')
+load_dotenv(env_path)
+
 # Chemin vers le dossier du frontend
-FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', 'frontend'))
+FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, 'frontend'))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-c+h11ba43(notowv31(&=+)5^-h&$_2)9@#l4$_04ub5nr=53c')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-evimeria-secret-key-for-development-2024')
+
+# Ensure SECRET_KEY is not empty
+if not SECRET_KEY:
+    SECRET_KEY = 'django-insecure-evimeria-secret-key-for-development-2024'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-# Compatibilité avec les deux noms de variables pour ALLOWED_HOSTS
-ALLOWED_HOSTS = ['*']
+# Hosts autorisés pour la production Railway
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '*.up.railway.app',
+    '*.railway.app',
+    'evimeria-production.up.railway.app',  # Remplacez par votre domaine Railway
+]
+
+# Si on a une variable RAILWAY_STATIC_URL, ajouter le domaine
+railway_url = os.environ.get('RAILWAY_STATIC_URL')
+if railway_url:
+    # Extraire le domaine de l'URL Railway
+    from urllib.parse import urlparse
+    parsed = urlparse(railway_url)
+    if parsed.hostname:
+        ALLOWED_HOSTS.append(parsed.hostname)
+
+# En développement, autoriser tous les hosts
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -64,7 +89,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'products.middleware.CloudinaryRedirectMiddleware',  # Middleware pour rediriger les URLs Cloudinary
 ]
 
 ROOT_URLCONF = 'jaelleshop.urls'
@@ -90,25 +114,27 @@ WSGI_APPLICATION = 'jaelleshop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# Utiliser DATABASE_URL si disponible, sinon utiliser SQLite
+# Configuration de la base de données pour Railway
 DATABASE_URL = os.environ.get('DATABASE_URL')
+
 if DATABASE_URL:
-    # Afficher que la base de données est configurée (sans les informations sensibles)
-    print(f"Utilisation de la base de données configurée via DATABASE_URL")
+    # Configuration pour Railway avec DATABASE_URL
     DATABASES = {
-        'default': dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-            conn_health_checks=True,
-            ssl_require=True
-        )
+        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=True)
     }
 else:
-    print("Aucune variable DATABASE_URL trouvée, utilisation de SQLite")
+    # Configuration par défaut pour le développement local
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('POSTGRES_DB', 'evimeria'),
+            'USER': os.environ.get('POSTGRES_USER', 'postgres'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', ''),
+            'HOST': os.environ.get('PGHOST', 'db'),
+            'PORT': os.environ.get('PGPORT', '5432'),
+            'OPTIONS': {
+                'sslmode': 'disable' if DEBUG else 'require'
+            }
         }
     }
 
@@ -148,9 +174,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [
-    os.path.join(FRONTEND_DIR, 'dist'),
-]
+
+# Configuration des fichiers statiques pour Railway
+STATICFILES_DIRS = []
+if os.path.exists(os.path.join(FRONTEND_DIR, 'dist')):
+    STATICFILES_DIRS.append(os.path.join(FRONTEND_DIR, 'dist'))
 
 # Configuration de Whitenoise pour les fichiers statiques (développement et production)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -173,7 +201,7 @@ CLOUDINARY_STORAGE = {
     'MEDIA_TAG': 'jaelleshop',
     'STATIC_TAG': 'static',
     'STATICFILES_MANIFEST_ROOT': os.path.join(BASE_DIR, 'manifest'),
-    'FOLDER': 'jaelleshop',  # Dossier racine pour tous les uploads
+    'FOLDER': 'jaelleshop',  # Utilise la structure existante jaelleshop/categories/
     'AUTO_CREATE_FOLDERS': True,  # Créer automatiquement les dossiers
 }
 
@@ -181,7 +209,8 @@ CLOUDINARY_STORAGE = {
 cloudinary.config(
     cloud_name=CLOUDINARY_STORAGE['CLOUD_NAME'],
     api_key=CLOUDINARY_STORAGE['API_KEY'],
-    api_secret=CLOUDINARY_STORAGE['API_SECRET']
+    api_secret=CLOUDINARY_STORAGE['API_SECRET'],
+    secure=True  # Forcer HTTPS
 )
 
 # Media files configuration with Cloudinary
@@ -233,30 +262,45 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
 }
 
-# CORS settings
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Vite React frontend
-    "http://127.0.0.1:5173",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-]
-
-CORS_ALLOW_ALL_ORIGINS = True  # Pour le développement seulement
-CORS_ALLOW_CREDENTIALS = True
+# CORS settings pour la production
+if DEBUG:
+    # Configuration CORS pour le développement
+    CORS_ALLOW_ALL_ORIGINS = True
+    CORS_ALLOW_CREDENTIALS = True
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:5173",  # Vite React frontend
+        "http://127.0.0.1:5173",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+    ]
+else:
+    # Configuration CORS sécurisée pour la production
+    CORS_ALLOW_ALL_ORIGINS = False
+    CORS_ALLOW_CREDENTIALS = True
+    CORS_ALLOWED_ORIGINS = [
+        "https://evimeria-production.up.railway.app",  # Remplacez par votre domaine Railway
+    ]
+    
+    # Ajouter automatiquement l'URL Railway si disponible
+    railway_url = os.environ.get('RAILWAY_STATIC_URL')
+    if railway_url:
+        CORS_ALLOWED_ORIGINS.append(railway_url)
 
 # Configuration du modèle utilisateur personnalisé
 AUTH_USER_MODEL = 'users.User'
 
-# URL de base pour l'environnement de production
+# Configuration de sécurité pour la production
 if not DEBUG:
+    # Sécurité HTTPS
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    # Désactivation temporaire des redirections SSL pour le déploiement
-    SECURE_SSL_REDIRECT = False
-    SESSION_COOKIE_SECURE = False
-    CSRF_COOKIE_SECURE = False
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
-
-# Configuration CORS
-CORS_ALLOW_ALL_ORIGINS = True
+    
+    # Cookies sécurisés
+    SECURE_HSTS_SECONDS = 31536000  # 1 an
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True

@@ -21,6 +21,11 @@ const getInitialState = (): CartState => {
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
       const parsedCart = JSON.parse(savedCart) as CartState;
+      // S'assurer que les prix sont des nombres
+      parsedCart.items = parsedCart.items.map(item => ({
+        ...item,
+        price: typeof item.price === 'string' ? parseFloat(item.price) : item.price
+      }));
       return parsedCart;
     }
   } catch (error) {

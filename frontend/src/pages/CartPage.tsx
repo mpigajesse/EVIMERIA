@@ -134,7 +134,7 @@ const CartPage = () => {
                       <div className="flex-grow sm:ml-6 flex flex-col sm:flex-row sm:items-center justify-between">
                         <div>
                           <h3 className={typography.headings.h4}>{item.name}</h3>
-                          <p className="text-primary-600 font-bold">{item.price.toFixed(2)} €</p>
+                          <p className="text-primary-600 font-bold">{typeof item.price === 'number' ? item.price.toFixed(2) : parseFloat(item.price).toFixed(2)} €</p>
                         </div>
                         <div className="flex items-center mt-4 sm:mt-0">
                           <div className="flex mr-6">
@@ -191,7 +191,7 @@ const CartPage = () => {
                 <div className="space-y-4">
                   <div className="flex justify-between border-b border-gray-200 pb-4">
                     <span className={typography.body.medium}>Sous-total</span>
-                    <span className={typography.body.medium}>{totalAmount.toFixed(2)} €</span>
+                    <span className={typography.body.medium}>{typeof totalAmount === 'number' ? totalAmount.toFixed(2) : parseFloat(totalAmount).toFixed(2)} €</span>
                   </div>
                   <div className="flex justify-between border-b border-gray-200 pb-4">
                     <span className={typography.body.medium}>Frais de livraison</span>
@@ -199,7 +199,7 @@ const CartPage = () => {
                   </div>
                   <div className="flex justify-between font-semibold text-lg">
                     <span>Total</span>
-                    <span className="text-primary-600">{totalAmount.toFixed(2)} €</span>
+                    <span className="text-primary-600">{typeof totalAmount === 'number' ? totalAmount.toFixed(2) : parseFloat(totalAmount).toFixed(2)} €</span>
                   </div>
                 </div>
                 

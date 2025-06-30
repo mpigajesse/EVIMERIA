@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ['python3', 'python3Packages.pip', 'postgresql', 'gcc', 'nodejs']
+nixPkgs = ['python3', 'python3Packages.pip', 'postgresql', 'gcc', 'nodejs', 'nodejs-18_x']
 
 [phases.install]
 cmds = [
@@ -15,4 +15,4 @@ cmds = [
 ]
 
 [start]
-cmd = 'cd backend && python manage.py migrate --noinput && python -m gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:$PORT' 
+cmd = 'cd backend && python manage.py migrate --noinput && python -m gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:$PORT --workers=2 --timeout=120 --max-requests=1000 --max-requests-jitter=100' 

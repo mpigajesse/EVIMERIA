@@ -6,8 +6,13 @@ import { components, typography, animations, colors } from '../utils/designSyste
 import { Button, Card, Input, Badge, SectionTitle } from '../components/ui';
 import ProductRecommendations from '../components/ProductRecommendations';
 import PromoSection from '../components/PromoSection';
+import { useFeaturedProduct } from '../hooks/useFeaturedProduct';
+
+
 
 const HomePage = () => {
+  const { featuredProduct, loading: productLoading, mainImage } = useFeaturedProduct();
+
   return (
     <div className={components.containers.page}>
       {/* Éléments décoratifs d'arrière-plan */}
@@ -89,16 +94,69 @@ const HomePage = () => {
               </motion.div>
               
               <motion.div 
-                className="md:w-1/2 relative h-96 md:h-auto overflow-hidden"
+                className="md:w-1/2 relative overflow-hidden rounded-2xl h-[350px] md:h-[450px] flex-shrink-0"
                 variants={animations.scaleIn}
+                style={{
+                  height: window.innerWidth < 768 ? '350px' : '450px',
+                  minHeight: window.innerWidth < 768 ? '350px' : '450px',
+                  maxHeight: window.innerWidth < 768 ? '350px' : '450px'
+                }}
               >
+                {productLoading ? (
+                  <div className="w-full h-full featured-loading flex items-center justify-center rounded-2xl">
+                    <div className="text-gray-500 font-medium">Chargement du produit...</div>
+                  </div>
+                ) : mainImage ? (
+                  <div className="w-full h-full relative overflow-hidden rounded-2xl featured-product-container">
+                    {/* Image avec contournement intelligent */}
                 <motion.img
-                src="https://res.cloudinary.com/dmcaguchx/image/upload/v1746496377/jaelleshop/products/photo-1556306535-0f09a537f0a3.jpg"
-                alt="Featured product"
-                className="w-full h-full object-cover object-center"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.7 }}
-              />
+                      src={mainImage.image_url || mainImage.image}
+                      alt={featuredProduct?.name || "Produit featured"}
+                      className="w-full h-full featured-product-image"
+                      style={{ 
+                        objectFit: 'contain',
+                        objectPosition: 'center',
+                        padding: '20px',
+                        maxWidth: '100%',
+                        maxHeight: '100%'
+                      }}
+                      whileHover={{ scale: 1.03 }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                      onLoad={(e) => {
+                        // Ajuster dynamiquement selon les proportions de l'image
+                        const img = e.target as HTMLImageElement;
+                        const aspectRatio = img.naturalWidth / img.naturalHeight;
+                        
+                        if (aspectRatio > 1.5) {
+                          // Image très large
+                          img.style.objectFit = 'contain';
+                          img.style.padding = '30px 20px';
+                        } else if (aspectRatio < 0.8) {
+                          // Image très haute
+                          img.style.objectFit = 'contain';
+                          img.style.padding = '20px 40px';
+                        } else {
+                          // Proportions normales
+                          img.style.objectFit = 'contain';
+                          img.style.padding = '25px';
+                        }
+                      }}
+                    />
+                    
+                    {/* Effet de brillance subtil */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none"></div>
+                    
+                    {/* Overlay décoratif très discret */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/5 pointer-events-none"></div>
+                  </div>
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex flex-col items-center justify-center rounded-2xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-20 w-20 text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <p className="text-gray-500 font-medium">Aucune image disponible</p>
+                  </div>
+                )}
                 {/* Badges flottants avec animation */}
                 <motion.div 
                   className="absolute top-8 right-8 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg"
@@ -106,7 +164,9 @@ const HomePage = () => {
                   transition={{ delay: 0.3 }}
                   animate={animations.float}
                 >
-                  <span className="font-bold text-primary-600">Collection limitée</span>
+                  <span className="font-bold text-primary-600">
+                    {featuredProduct?.name || "Collection limitée"}
+                  </span>
                 </motion.div>
                 
                 {/* Cercles décoratifs */}

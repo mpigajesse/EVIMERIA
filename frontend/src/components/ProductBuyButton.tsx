@@ -54,9 +54,12 @@ const ProductBuyButton: React.FC<ProductBuyButtonProps> = ({
     dispatch(addToCart({
       id: product.id,
       name: product.name,
-      price: product.price,
-      image: product.image_url,
-      quantity
+      price: parseFloat(product.price),
+      image: product.images && product.images.length > 0 
+        ? product.images.find(img => img.is_main)?.image_url || product.images[0].image_url
+        : '',
+      quantity,
+      slug: product.slug
     }));
   };
   

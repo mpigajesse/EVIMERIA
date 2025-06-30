@@ -79,13 +79,6 @@ def debug_info(request):
     logger.info("Debug info endpoint accessed")
     env_vars = {k: v for k, v in os.environ.items() if not k.startswith('SECRET') and not 'PASSWORD' in k.upper()}
     
-    # Ajouter des informations sur la base de données (sans mot de passe)
-    database_url = os.environ.get('DATABASE_URL', '')
-    if database_url:
-        # Masquer le mot de passe dans l'URL
-        masked_url = database_url.replace('//', '//<masked>@' if '@' in database_url else '//')
-        env_vars['DATABASE_URL_MASKED'] = masked_url
-    
     info = {
         "environment": env_vars,
         "settings": {
@@ -152,17 +145,18 @@ def serve_react_app(request):
         )
 
 urlpatterns = [
+    # Admin doit être en premier
+    path('admin/', admin.site.urls),
+    
     # Route de test simple
     path('test/', simple_test, name='simple-test'),
     
     # API endpoints
-    path('api/', api_root_view),
     path('api-info/', api_root_view, name='api-info'),
     path('health/', simplified_health_check, name='health'),
     path('status/', minimal_status, name='status'),
     path('debug-info/', debug_info, name='debug-info'),
     path('db-tables/', db_tables, name='db-tables'),
-    path('admin/', admin.site.urls),
     path('api/', include('products.api.urls')),
     path('api/users/', include('users.urls')),
     # path('api/orders/', include('orders.urls')),

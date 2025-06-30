@@ -15,6 +15,8 @@ export interface Product {
   featured: boolean;
   category: number;
   category_name: string;
+  subcategory?: number;
+  subcategory_name?: string;
   images: ProductImage[];
   created_at: string;
   // Propriétés additionnelles
@@ -38,6 +40,15 @@ export interface Category {
   description: string;
   image: string;
   image_url: string;
+  products_count?: number;
+  subcategories?: SubCategory[];
+}
+
+export interface SubCategory {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
   products_count?: number;
 }
 
@@ -134,6 +145,34 @@ export const getProductsByCategory = async (categorySlug: string) => {
     return await safeApiCall<Product>(axios.get(`${API_URL}/categories/${categorySlug}/products/`));
   } catch (error) {
     console.error(`Erreur lors de la récupération des produits de la catégorie ${categorySlug}:`, error);
+    return [];
+  }
+};
+
+// Fonctions pour les sous-catégories
+export const getSubCategories = async () => {
+  try {
+    return await safeApiCall<SubCategory>(axios.get(`${API_URL}/subcategories/`));
+  } catch (error) {
+    console.error('Erreur lors de la récupération des sous-catégories:', error);
+    return [];
+  }
+};
+
+export const getSubCategoriesByCategory = async (categorySlug: string) => {
+  try {
+    return await safeApiCall<SubCategory>(axios.get(`${API_URL}/subcategories/by_category/?category=${categorySlug}`));
+  } catch (error) {
+    console.error(`Erreur lors de la récupération des sous-catégories de ${categorySlug}:`, error);
+    return [];
+  }
+};
+
+export const getProductsBySubCategory = async (subcategorySlug: string) => {
+  try {
+    return await safeApiCall<Product>(axios.get(`${API_URL}/subcategories/${subcategorySlug}/products/`));
+  } catch (error) {
+    console.error(`Erreur lors de la récupération des produits de la sous-catégorie ${subcategorySlug}:`, error);
     return [];
   }
 };

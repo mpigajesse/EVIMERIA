@@ -6,15 +6,16 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count
 from django.conf import settings
+from django.core.management import call_command
 
-from products.models import Category, Product, ProductImage
+from products.models import Category, SubCategory, Product, ProductImage
 from products.serializers import (
     CategorySerializer,
+    SubCategorySerializer,
     ProductSerializer, 
     ProductDetailSerializer,
     ProductImageSerializer
 )
-from .product_seeder import run_seeder
 
 class CategoryListAPIView(APIView):
     permission_classes = [AllowAny]
@@ -41,6 +42,51 @@ class CategoryProductsAPIView(APIView):
         """Récupère tous les produits d'une catégorie spécifique publiée"""
         category = get_object_or_404(Category, slug=slug, is_published=True)
         products = Product.objects.filter(category=category, available=True, is_published=True)
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+
+class SubCategoryListAPIView(APIView):
+    permission_classes = [AllowAny]
+    
+    def get(self, request):
+        """Récupère la liste de toutes les sous-catégories publiées"""
+        subcategories = SubCategory.objects.filter(is_published=True)
+        serializer = SubCategorySerializer(subcategories, many=True)
+        return Response(serializer.data)
+
+class SubCategoryByCategoryAPIView(APIView):
+    permission_classes = [AllowAny]
+    
+    def get(self, request):
+        """Récupère les sous-catégories d'une catégorie spécifique"""
+        category_slug = request.query_params.get('category')
+        if not category_slug:
+            return Response(
+                {"error": "Paramètre 'category' requis"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        category = get_object_or_404(Category, slug=category_slug, is_published=True)
+        subcategories = SubCategory.objects.filter(category=category, is_published=True)
+        serializer = SubCategorySerializer(subcategories, many=True)
+        return Response(serializer.data)
+
+class SubCategoryDetailAPIView(APIView):
+    permission_classes = [AllowAny]
+    
+    def get(self, request, slug):
+        """Récupère les détails d'une sous-catégorie spécifique publiée"""
+        subcategory = get_object_or_404(SubCategory, slug=slug, is_published=True)
+        serializer = SubCategorySerializer(subcategory)
+        return Response(serializer.data)
+
+class SubCategoryProductsAPIView(APIView):
+    permission_classes = [AllowAny]
+    
+    def get(self, request, slug):
+        """Récupère tous les produits d'une sous-catégorie spécifique publiée"""
+        subcategory = get_object_or_404(SubCategory, slug=slug, is_published=True)
+        products = Product.objects.filter(subcategory=subcategory, available=True, is_published=True)
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
 
@@ -129,7 +175,8 @@ class ProductSearchAPIView(APIView):
 def seed_products(request):
     """Endpoint pour peupler la base de données avec des produits de démonstration"""
     try:
-        run_seeder()
+        # Utilise notre nouvelle commande de seeding
+        call_command('seed_products')
         return Response(
             {"message": "Base de données peuplée avec succès"}, 
             status=status.HTTP_200_OK

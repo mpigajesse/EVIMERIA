@@ -5,9 +5,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
-from .models import Category, Product, ProductImage
+from .models import Category, SubCategory, Product, ProductImage
 from .serializers import (
     CategorySerializer,
+    SubCategorySerializer,
     ProductSerializer,
     ProductDetailSerializer,
     ProductImageSerializer
@@ -40,6 +41,43 @@ class CategoryViewSet(viewsets.ModelViewSet):
         
         serializer = ProductSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
+
+class SubCategoryViewSet(viewsets.ModelViewSet):
+    queryset = SubCategory.objects.filter(is_published=True)
+    serializer_class = SubCategorySerializer
+    lookup_field = 'slug'
+    
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            permission_classes = [permissions.AllowAny]
+        else:
+            permission_classes = [permissions.IsAdminUser]
+        return [permission() for permission in permission_classes]
+    
+    @action(detail=True, methods=['get'])
+    def products(self, request, slug=None):
+        subcategory = self.get_object()
+        products = Product.objects.filter(subcategory=subcategory, available=True)
+        
+        paginator = StandardResultsSetPagination()
+        result_page = paginator.paginate_queryset(products, request)
+        
+        serializer = ProductSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def by_category(self, request):
+        category_slug = request.query_params.get('category', None)
+        if category_slug:
+            subcategories = SubCategory.objects.filter(
+                category__slug=category_slug, 
+                is_published=True
+            )
+        else:
+            subcategories = self.get_queryset()
+        
+        serializer = self.get_serializer(subcategories, many=True)
+        return Response(serializer.data)
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.filter(available=True)

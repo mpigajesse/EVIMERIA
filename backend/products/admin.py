@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, ProductImage
+from .models import Category, SubCategory, Product, ProductImage
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
@@ -24,13 +24,32 @@ class CategoryAdmin(admin.ModelAdmin):
         self.message_user(request, f"{queryset.count()} catégories ont été dépubliées.")
     unpublish_categories.short_description = "Dépublier les catégories sélectionnées"
 
+@admin.register(SubCategory)
+class SubCategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'category', 'slug', 'is_published', 'created_at']
+    list_filter = ['is_published', 'category', 'created_at', 'updated_at']
+    list_editable = ['is_published']
+    prepopulated_fields = {'slug': ('name',)}
+    search_fields = ['name', 'description', 'category__name']
+    actions = ['publish_subcategories', 'unpublish_subcategories']
+    
+    def publish_subcategories(self, request, queryset):
+        queryset.update(is_published=True)
+        self.message_user(request, f"{queryset.count()} sous-catégories ont été publiées.")
+    publish_subcategories.short_description = "Publier les sous-catégories sélectionnées"
+    
+    def unpublish_subcategories(self, request, queryset):
+        queryset.update(is_published=False)
+        self.message_user(request, f"{queryset.count()} sous-catégories ont été dépubliées.")
+    unpublish_subcategories.short_description = "Dépublier les sous-catégories sélectionnées"
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug', 'price', 'stock', 'available', 'featured', 'is_published', 'created_at']
-    list_filter = ['is_published', 'available', 'featured', 'created_at', 'updated_at', 'category']
+    list_display = ['name', 'category', 'subcategory', 'price', 'stock', 'available', 'featured', 'is_published', 'created_at']
+    list_filter = ['is_published', 'available', 'featured', 'created_at', 'updated_at', 'category', 'subcategory']
     list_editable = ['price', 'stock', 'available', 'featured', 'is_published']
     prepopulated_fields = {'slug': ('name',)}
-    search_fields = ['name', 'description']
+    search_fields = ['name', 'description', 'category__name', 'subcategory__name']
     inlines = [ProductImageInline]
     actions = ['publish_products', 'unpublish_products']
     
