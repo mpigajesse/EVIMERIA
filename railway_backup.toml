@@ -4,8 +4,6 @@ buildCommand = "cd backend && pip install --break-system-packages -r requirement
 
 [deploy]
 startCommand = "cd backend && echo '🚀 EVIMERIA - Démarrage Railway' && echo 'Variables critiques:' && echo \"DATABASE_URL: ${DATABASE_URL:0:50}...\" && echo \"SECRET_KEY: ${SECRET_KEY:0:20}...\" && echo \"DEBUG: $DEBUG\" && python manage.py migrate --noinput && python -m gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:$PORT --workers=2 --timeout=120 --max-requests=1000 --max-requests-jitter=100 --access-logfile=- --error-logfile=- --log-level=info"
-# healthcheckPath = "/status/"  # TEMPORAIREMENT DÉSACTIVÉ POUR DEBUG
-# healthcheckTimeout = 300
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
 
@@ -14,14 +12,6 @@ PORT = "8000"
 PYTHONUNBUFFERED = "1"
 NODE_ENV = "production"
 
-[phases.setup]
-nixPkgs = ['python3', 'python3Packages.pip', 'postgresql', 'gcc', 'nodejs']
-
 [[services]]
 name = "backend"
-envs = { STATIC_DIR = "../frontend/dist" }
-
-[[volumes]]
-name = "postgres_data"
-mountPath = "/var/lib/postgresql/data"
-engine = "postgres" 
+envs = { STATIC_DIR = "../frontend/dist" } 
