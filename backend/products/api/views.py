@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count
 from django.conf import settings
@@ -18,9 +19,15 @@ from products.serializers import (
     ProductImageSerializer
 )
 
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 100
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
 class CategoryListAPIView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = CategorySerializer
+    pagination_class = StandardResultsSetPagination
     
     def get_queryset(self):
         """Récupère la liste de toutes les catégories publiées"""

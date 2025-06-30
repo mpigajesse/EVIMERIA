@@ -37,13 +37,16 @@ class ProductSerializer(serializers.ModelSerializer):
         ]
 
 class CategorySerializer(serializers.ModelSerializer):
-    products_count = serializers.IntegerField(read_only=True)
+    products_count = serializers.SerializerMethodField()
     image_url = serializers.SerializerMethodField()
     subcategories = SubCategorySerializer(many=True, read_only=True)
     
     class Meta:
         model = Category
         fields = ['id', 'name', 'slug', 'description', 'image', 'image_url', 'products_count', 'subcategories']
+    
+    def get_products_count(self, obj):
+        return obj.products.filter(is_published=True).count()
         
     def get_image_url(self, obj):
         # Utiliser la méthode get_image_url du modèle
