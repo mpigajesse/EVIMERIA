@@ -46,6 +46,10 @@ railway_url = os.environ.get('RAILWAY_STATIC_URL')
 if railway_url:
     # Extraire le domaine de l'URL Railway
     from urllib.parse import urlparse
+    # S'assurer que l'URL a un schéma pour le parsing
+    if not railway_url.startswith(('http://', 'https://')):
+        railway_url = f'https://{railway_url}'
+    
     parsed = urlparse(railway_url)
     if parsed.hostname:
         ALLOWED_HOSTS.append(parsed.hostname)
@@ -277,14 +281,21 @@ else:
     # Configuration CORS sécurisée pour la production
     CORS_ALLOW_ALL_ORIGINS = False
     CORS_ALLOW_CREDENTIALS = True
-    CORS_ALLOWED_ORIGINS = [
-        "https://evimeria-production.up.railway.app",  # Remplacez par votre domaine Railway
-    ]
+    CORS_ALLOWED_ORIGINS = []
     
     # Ajouter automatiquement l'URL Railway si disponible
     railway_url = os.environ.get('RAILWAY_STATIC_URL')
     if railway_url:
+        # S'assurer que l'URL a le bon schéma
+        if not railway_url.startswith(('http://', 'https://')):
+            railway_url = f'https://{railway_url}'
         CORS_ALLOWED_ORIGINS.append(railway_url)
+    
+    # Ajouter l'URL par défaut si aucune variable n'est définie
+    if not CORS_ALLOWED_ORIGINS:
+        CORS_ALLOWED_ORIGINS = [
+            "https://evimeria-production.up.railway.app",
+        ]
 
 # Configuration du modèle utilisateur personnalisé
 AUTH_USER_MODEL = 'users.User'
