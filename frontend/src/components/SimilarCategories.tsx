@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Category, getCategories, getCategoryImageUrl } from '../api/products';
+import { Category, getCategories } from '../api/products';
 import { animations, typography } from '../utils/designSystem';
 import { Badge, Card, Loader, ActionButton } from './ui';
 
@@ -23,24 +23,20 @@ const SimilarCategories: React.FC<SimilarCategoriesProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchSimilarCategories = async () => {
+      if (!categoryId) return;
+      
       try {
         setLoading(true);
-        // Récupérer toutes les catégories
-        const data = await getCategories();
+        const response = await getCategories();
+        const allCategories = response.results || [];
         
-        // Filtrer les catégories similaires (ici on exclut simplement la catégorie actuelle)
-        // Dans une implémentation réelle, on pourrait avoir une API spécifique pour récupérer les catégories similaires
-        let similarCategories = data;
-        
-        if (excludeId) {
-          similarCategories = data.filter(cat => cat.id !== excludeId);
-        }
-        
-        // Limiter le nombre de catégories
-        const limitedCategories = similarCategories.slice(0, limit);
-        
-        setCategories(limitedCategories);
+        // Exclure la catégorie actuelle et prendre les 4 premières
+        const similar = allCategories
+          .filter(cat => cat.id !== categoryId)
+          .slice(0, 4);
+          
+        setCategories(similar);
         setError(null);
       } catch (err) {
         console.error('Erreur lors du chargement des catégories similaires:', err);
@@ -50,8 +46,8 @@ const SimilarCategories: React.FC<SimilarCategoriesProps> = ({
       }
     };
 
-    fetchCategories();
-  }, [categoryId, excludeId, limit]);
+    fetchSimilarCategories();
+  }, [categoryId]);
 
   if (loading) {
     return (
@@ -95,31 +91,12 @@ const SimilarCategories: React.FC<SimilarCategoriesProps> = ({
                 className="h-full flex flex-col overflow-hidden transform transition-all duration-300 hover:shadow-xl"
               >
                 {/* Conteneur d'image avec ratio 1:1 fixe */}
-                <div className="relative aspect-square w-full overflow-hidden">
-                  <div className="absolute inset-0 bg-gray-100">
-                    <img 
-                      src={getCategoryImageUrl(category)} 
-                      alt={category.name}
-                      className="w-full h-[300px] object-cover object-center transition-transform duration-500 group-hover:scale-110" 
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = `https://via.placeholder.com/400x400?text=${category.name}`;
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/60"></div>
-                  </div>
-                  
-                  {category.products_count && (
-                    <div className="absolute top-3 right-3 z-10">
-                      <Badge 
-                        variant="primary" 
-                        size="sm" 
-                        className="bg-primary-500 text-white shadow-md"
-                      >
-                        {category.products_count} produits
-                      </Badge>
-                    </div>
-                  )}
+                <div className="relative h-40 sm:h-48">
+                  <img 
+                    src={category.image || `https://via.placeholder.com/400x300?text=${category.name}`}
+                    alt={category.name} 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 
                 {/* Zone de texte de hauteur fixe */}
