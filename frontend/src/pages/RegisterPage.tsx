@@ -37,6 +37,7 @@ const RegisterPage = () => {
         last_name: lastName,
         email,
         password,
+        password2: confirmPassword,
       });
       // Rediriger vers la page de connexion après une inscription réussie
       navigate('/login');
