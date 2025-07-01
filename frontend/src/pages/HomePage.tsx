@@ -7,7 +7,6 @@ import { Button, Card, Input, Badge, SectionTitle } from '../components/ui';
 import ProductRecommendations from '../components/ProductRecommendations';
 import PromoSection from '../components/PromoSection';
 import { useFeaturedProduct } from '../hooks/useFeaturedProduct';
-import CurrencySwitcher from '../components/CurrencySwitcher';
 
 
 
@@ -194,15 +193,16 @@ const HomePage = () => {
           <div className={`${components.decorations.blobs} w-64 h-64 bg-amber-300 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}></div>
           
           <Card className={components.containers.glass}>
-            <div className="flex items-center justify-between mb-6">
-              <SectionTitle
-                title="Produits en vedette"
-                badge="Populaire"
-                badgeVariant="warning"
-                size="lg"
-              />
-              <CurrencySwitcher className="ml-4" />
-            </div>
+            <SectionTitle
+              title="Produits en vedette"
+              badge="Populaire"
+              badgeVariant="warning"
+              size="lg"
+              action={{
+                label: "Voir tout",
+                to: "/products"
+              }}
+            />
           
           <ProductsGrid featuredOnly={true} limit={4} title="" />
           </Card>
