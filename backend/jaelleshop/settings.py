@@ -40,6 +40,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-evimeria-secret-key-f
 # Ensure SECRET_KEY is not empty
 if not SECRET_KEY:
     SECRET_KEY = 'django-insecure-evimeria-secret-key-for-development-2024'
+# En production, la clé de développement (publique dans ce dépôt) est refusée :
+# elle signe les jetons JWT, qui seraient alors forgeables par n'importe qui.
+if os.environ.get('DEBUG', 'False').lower() != 'true' and SECRET_KEY.startswith('django-insecure'):
+    from django.core.exceptions import ImproperlyConfigured
+    raise ImproperlyConfigured("SECRET_KEY doit être définie en production.")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
@@ -67,6 +72,11 @@ if railway_url:
         ALLOWED_HOSTS.append(parsed.hostname)
 
 # En développement, autoriser tous les hosts
+# Hébergement (Render) : hôte injecté par Render, et hôtes supplémentaires.
+if os.environ.get('RENDER_EXTERNAL_HOSTNAME'):
+    ALLOWED_HOSTS.append(os.environ['RENDER_EXTERNAL_HOSTNAME'])
+ALLOWED_HOSTS += [h.strip() for h in os.environ.get('ALLOWED_HOSTS_EXTRA', '').split(',') if h.strip()]
+
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 
@@ -136,7 +146,8 @@ DATABASE_URL = os.environ.get('DATABASE_URL')
 if DATABASE_URL:
     # Configuration pour Railway avec DATABASE_URL
     DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=True)
+        # SSL exigé pour PostgreSQL (Neon), sans objet pour une URL sqlite:// locale.
+        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=DATABASE_URL.startswith('postgres'))
     }
 else:
     # Configuration par défaut pour le développement local
@@ -212,9 +223,9 @@ WHITENOISE_SKIP_COMPRESS_EXTENSIONS = []  # Comprimer tous les types de fichiers
 
 # Cloudinary settings
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dmcaguchx'),
-    'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '238869761337271'),
-    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', 'G1AQ85xIMHSFSLgPOXeNsGFnfJA'),
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', ''),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY', ''),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', ''),
     'MEDIA_TAG': 'jaelleshop',
     'STATIC_TAG': 'static',
     'STATICFILES_MANIFEST_ROOT': os.path.join(BASE_DIR, 'manifest'),
@@ -231,7 +242,10 @@ cloudinary.config(
 )
 
 # Media files configuration with Cloudinary
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# Cloudinary n'est utilisé que pour téléverser : le catalogue stocke des URL.
+# Sans identifiants (démo), on garde le stockage disque par défaut.
+if CLOUDINARY_STORAGE['API_SECRET']:
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -304,6 +318,9 @@ else:
             railway_url = f'https://{railway_url}'
         CORS_ALLOWED_ORIGINS.append(railway_url)
     
+    # Frontend hébergé ailleurs (Vercel) : origines séparées par des virgules.
+    CORS_ALLOWED_ORIGINS += [o.strip() for o in os.environ.get('CORS_ALLOWED_ORIGINS', '').split(',') if o.strip()]
+
     # Ajouter l'URL par défaut si aucune variable n'est définie
     if not CORS_ALLOWED_ORIGINS:
         CORS_ALLOWED_ORIGINS = [

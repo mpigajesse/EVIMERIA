@@ -181,8 +181,7 @@ urlpatterns = [
     path('api-info/', api_root_view, name='api-info'),
     path('health/', simplified_health_check, name='health'),
     path('status/', minimal_status, name='status'),
-    path('debug-info/', debug_info, name='debug-info'),
-    path('db-tables/', db_tables, name='db-tables'),
+
     path('api/', include('products.api.urls')),
     path('api/users/', include('users.urls')),
     path('api/orders/', include('orders.urls')),
