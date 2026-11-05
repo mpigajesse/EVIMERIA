@@ -1,0 +1,21 @@
+# Blueprint Render — API Django d'EVIMERIA (offre gratuite).
+# Render > New > Blueprint > ce dépôt. Voir DEPLOIEMENT.md.
+services:
+  - type: web
+    name: evimeria-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    # seed_demo ne remplit le catalogue que si la base est vide.
+    startCommand: python manage.py migrate --noinput && python manage.py seed_demo && gunicorn jaelleshop.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 60
+    healthCheckPath: /health/
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL   # chaîne Neon (postgresql://…?sslmode=require)
+        sync: false

@@ -21,7 +21,10 @@ def create_admin_user():
     # Identifiants par défaut
     username = 'admin'
     email = 'admin@evimeria.com'
-    password = 'admin123456'  # Changez ce mot de passe !
+    # Jamais de mot de passe par défaut dans un dépôt public : variable
+    # d'environnement, sinon saisie au clavier (sans écho).
+    import getpass
+    password = os.environ.get('DJANGO_SUPERUSER_PASSWORD') or getpass.getpass('Mot de passe admin : ')
     
     print("🔐 Création du Superuser EVIMERIA")
     print("=" * 40)
